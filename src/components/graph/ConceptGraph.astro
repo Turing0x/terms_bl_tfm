@@ -1,0 +1,264 @@
+---
+import { getTerminos, getRelaciones, getGrupos } from '../../lib/glosario'
+
+const terminos   = getTerminos()
+const relaciones = getRelaciones()
+const grupos     = getGrupos()
+
+const nodes = terminos.map(t => ({
+  id:              t.id,
+  label:           t.nombre,
+  tipo:            t.tipo,
+  grupo:           t.grupo,
+  definicionCorta: t.definicionCorta,
+}))
+
+const links = relaciones.map(r => ({
+  source: r.desde,
+  target: r.hasta,
+  tipo:   r.tipo,
+}))
+
+const grupoColors: Record<string, string> = {}
+grupos.forEach(g => { grupoColors[g.id] = g.color })
+
+// Serialise into a data attribute — read by the module script below
+const graphPayload = JSON.stringify({ nodes, links, grupoColors })
+---
+
+<!-- The SVG carries the data payload so the module script can read it -->
+<div
+  id="graph-data"
+  data-payload={graphPayload}
+  style="display:none;"
+></div>
+
+<script>
+  import * as d3 from 'd3'
+
+  // ── Read data from DOM ────────────────────────────────────────────────────
+
+  const dataEl = document.getElementById('graph-data')
+  if (!dataEl) throw new Error('graph-data element not found')
+
+  const { nodes, links, grupoColors } = JSON.parse(dataEl.dataset.payload!)
+
+  function getColor(grupoId: string): string {
+    return (grupoColors as Record<string, string>)[grupoId] ?? '#64748b'
+  }
+
+  // ── Setup SVG ─────────────────────────────────────────────────────────────
+
+  const svgEl = document.getElementById('concept-graph') as SVGSVGElement | null
+  if (!svgEl) throw new Error('concept-graph SVG not found')
+
+  const svg = d3.select(svgEl)
+  let { width, height } = svgEl.getBoundingClientRect()
+  if (!width)  width  = 800
+  if (!height) height = 600
+
+  svg.selectAll('*').remove()
+
+  const defs = svg.append('defs')
+  const usedGrupos = [...new Set((nodes as any[]).map((n: any) => n.grupo))]
+  usedGrupos.forEach(grupoId => {
+    const col = getColor(grupoId as string)
+    defs.append('marker')
+      .attr('id', `arrow-${grupoId}`)
+      .attr('viewBox', '0 -5 10 10')
+      .attr('refX', 20)
+      .attr('refY', 0)
+      .attr('markerWidth', 5)
+      .attr('markerHeight', 5)
+      .attr('orient', 'auto')
+      .append('path')
+        .attr('d', 'M0,-5L10,0L0,5')
+        .attr('fill', col)
+        .attr('opacity', 0.45)
+  })
+
+  const g = svg.append('g').attr('class', 'graph-root')
+
+  // ── Force simulation ──────────────────────────────────────────────────────
+
+  // Spread initial positions randomly to avoid explosive repulsion at t=0
+  const rand = d3.randomUniform.source(d3.randomLcg(42))
+  const nodeById = new Map(
+    (nodes as any[]).map((n: any) => [n.id, {
+      ...n,
+      x: width  / 2 + rand(-1, 1)() * (width  * 0.35),
+      y: height / 2 + rand(-1, 1)() * (height * 0.35),
+    }])
+  )
+
+  const simLinks = (links as any[])
+    .map((l: any) => ({ ...l, source: nodeById.get(l.source), target: nodeById.get(l.target) }))
+    .filter((l: any) => l.source && l.target)
+
+  const simNodes = [...nodeById.values()]
+
+  const simulation = d3.forceSimulation(simNodes as any)
+    .force('link',    d3.forceLink(simLinks).id((d: any) => d.id).distance(70).strength(0.5))
+    .force('charge',  d3.forceManyBody().strength(-120).distanceMax(300))
+    .force('center',  d3.forceCenter(width / 2, height / 2).strength(0.08))
+    .force('collide', d3.forceCollide(22))
+    .force('x',       d3.forceX(width  / 2).strength(0.04))
+    .force('y',       d3.forceY(height / 2).strength(0.04))
+    .alphaDecay(0.02)
+
+  // ── Links ─────────────────────────────────────────────────────────────────
+
+  const linkEl = g.append('g')
+    .selectAll('line')
+    .data(simLinks)
+    .join('line')
+      .attr('stroke-width', 1.2)
+      .attr('stroke-opacity', 0.3)
+      .attr('stroke', (d: any) => getColor(d.source.grupo))
+      .attr('marker-end', (d: any) => `url(#arrow-${d.source.grupo})`)
+
+  // ── Nodes ─────────────────────────────────────────────────────────────────
+
+  const drag = d3.drag<SVGGElement, any>()
+    .on('start', (event, d) => {
+      if (!event.active) simulation.alphaTarget(0.3).restart()
+      d.fx = d.x; d.fy = d.y
+    })
+    .on('drag', (event, d) => { d.fx = event.x; d.fy = event.y })
+    .on('end', (event, d) => {
+      if (!event.active) simulation.alphaTarget(0)
+      d.fx = null; d.fy = null
+    })
+
+  const nodeG = g.append('g')
+    .selectAll<SVGGElement, any>('g')
+    .data(simNodes)
+    .join('g')
+      .attr('class', 'node')
+      .attr('data-id', (d: any) => d.id)
+      .style('cursor', 'pointer')
+      .call(drag)
+
+  nodeG.append('circle')
+    .attr('r',            (d: any) => d.tipo === 'principal' ? 10 : 7)
+    .attr('fill',         (d: any) => getColor(d.grupo))
+    .attr('fill-opacity', 0.8)
+    .attr('stroke',       (d: any) => getColor(d.grupo))
+    .attr('stroke-width', 2)
+    .attr('stroke-opacity', 0.5)
+
+  nodeG.append('text')
+    .attr('dy', (d: any) => d.tipo === 'principal' ? -14 : -11)
+    .attr('text-anchor', 'middle')
+    .attr('font-size',   (d: any) => d.tipo === 'principal' ? '9px' : '8px')
+    .attr('font-family', 'Space Mono, monospace')
+    .attr('fill',        (d: any) => getColor(d.grupo))
+    .attr('fill-opacity', 0.9)
+    .attr('pointer-events', 'none')
+    .text((d: any) => d.label.length > 20 ? d.label.slice(0, 18) + '…' : d.label)
+
+  // ── Tick ──────────────────────────────────────────────────────────────────
+
+  simulation.on('tick', () => {
+    linkEl
+      .attr('x1', (d: any) => d.source.x)
+      .attr('y1', (d: any) => d.source.y)
+      .attr('x2', (d: any) => d.target.x)
+      .attr('y2', (d: any) => d.target.y)
+
+    nodeG.attr('transform', (d: any) => `translate(${d.x},${d.y})`)
+  })
+
+  // ── Zoom / pan ────────────────────────────────────────────────────────────
+
+  const zoom = d3.zoom<SVGSVGElement, unknown>()
+    .scaleExtent([0.15, 5])
+    .on('zoom', event => g.attr('transform', event.transform))
+
+  svg.call(zoom)
+
+  document.getElementById('graph-zoom-in')?.addEventListener('click', () =>
+    svg.transition().duration(300).call(zoom.scaleBy, 1.4))
+  document.getElementById('graph-zoom-out')?.addEventListener('click', () =>
+    svg.transition().duration(300).call(zoom.scaleBy, 0.7))
+  document.getElementById('graph-reset')?.addEventListener('click', () =>
+    svg.transition().duration(400).call(zoom.transform, d3.zoomIdentity))
+
+  // ── Hover highlight ───────────────────────────────────────────────────────
+
+  const tooltip    = document.getElementById('graph-tooltip')
+  const tooltipNom = document.getElementById('tooltip-nombre')
+  const tooltipDef = document.getElementById('tooltip-def')
+
+  nodeG
+    .on('mouseenter', (event, d: any) => {
+      const connected = new Set([d.id])
+      simLinks.forEach((l: any) => {
+        if (l.source.id === d.id) connected.add(l.target.id)
+        if (l.target.id === d.id) connected.add(l.source.id)
+      })
+
+      nodeG.selectAll('circle')
+        .attr('fill-opacity',   (nd: any) => connected.has(nd.id) ? 1  : 0.12)
+        .attr('stroke-opacity', (nd: any) => connected.has(nd.id) ? 1  : 0.08)
+      nodeG.selectAll('text')
+        .attr('fill-opacity',   (nd: any) => connected.has(nd.id) ? 1  : 0.08)
+      linkEl.attr('stroke-opacity', (l: any) =>
+        (l.source.id === d.id || l.target.id === d.id) ? 0.75 : 0.04)
+
+      if (tooltip && tooltipNom && tooltipDef) {
+        tooltipNom.textContent = d.label
+        tooltipDef.textContent = d.definicionCorta?.slice(0, 90) +
+          (d.definicionCorta?.length > 90 ? '…' : '')
+        tooltip.style.opacity = '1'
+        tooltip.style.left = (event.clientX + 14) + 'px'
+        tooltip.style.top  = (event.clientY - 8)  + 'px'
+      }
+    })
+    .on('mousemove', (event) => {
+      if (tooltip) {
+        tooltip.style.left = (event.clientX + 14) + 'px'
+        tooltip.style.top  = (event.clientY - 8)  + 'px'
+      }
+    })
+    .on('mouseleave', () => {
+      nodeG.selectAll('circle').attr('fill-opacity', 0.8).attr('stroke-opacity', 0.5)
+      nodeG.selectAll('text').attr('fill-opacity', 0.9)
+      linkEl.attr('stroke-opacity', 0.3)
+      if (tooltip) tooltip.style.opacity = '0'
+    })
+    .on('click', (_: any, d: any) => {
+      ;(window as any).__bioNavigate?.('ficha', d.id)
+    })
+
+  // ── Group filter ──────────────────────────────────────────────────────────
+
+  document.querySelectorAll<HTMLButtonElement>('.graph-filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const grupoId = btn.dataset.grupoFilter ?? 'all'
+      document.querySelectorAll('.graph-filter-btn').forEach(b => b.classList.remove('active'))
+      btn.classList.add('active')
+
+      if (grupoId === 'all') {
+        nodeG.style('display', null)
+        linkEl.style('display', null)
+      } else {
+        const vis = new Set(simNodes.filter((n: any) => n.grupo === grupoId).map((n: any) => n.id))
+        nodeG.style('display', (d: any) => vis.has(d.id) ? null : 'none')
+        linkEl.style('display', (l: any) =>
+          vis.has(l.source.id) && vis.has(l.target.id) ? null : 'none')
+      }
+    })
+  })
+
+  // ── Resize ────────────────────────────────────────────────────────────────
+
+  const ro = new ResizeObserver(() => {
+    const rect = svgEl.getBoundingClientRect()
+    width  = rect.width  || 800
+    height = rect.height || 600
+    simulation.force('center', d3.forceCenter(width / 2, height / 2))
+    simulation.alpha(0.15).restart()
+  })
+  ro.observe(svgEl)
+</script>

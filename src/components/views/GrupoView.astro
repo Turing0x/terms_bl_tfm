@@ -1,0 +1,141 @@
+---
+import type { Grupo, Termino } from '../../types'
+import ConceptCard from '../ui/ConceptCard.astro'
+import TermTag from '../ui/TermTag.astro'
+
+export interface Props {
+  grupos: Grupo[]
+  terminosByGrupo: Record<string, Termino[]>
+}
+
+const { grupos, terminosByGrupo } = Astro.props
+---
+
+<div class="overflow-y-auto flex-1">
+  <div class="max-w-5xl mx-auto px-4 py-6 flex flex-col gap-6">
+
+    <!-- Grid de grupos -->
+    <div id="grupos-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+      {grupos.map((grupo, i) => {
+        const terminos = terminosByGrupo[grupo.id] ?? []
+        const total = grupo.terminosPrincipales.length + grupo.terminosSecundarios.length
+        return (
+          <button
+            class="card-hover text-left rounded-xl p-4 border flex flex-col gap-3 stagger-item"
+            style={`
+              background: var(--bg-card);
+              border-color: ${grupo.color}30;
+              animation-delay: ${i * 0.07}s;
+              box-shadow: 0 0 20px ${grupo.color}10;
+            `}
+            data-action="navigate"
+            data-view="grupos"
+            data-grupo-id={grupo.id}
+            data-expand-grupo={grupo.id}
+          >
+            <div class="flex items-center gap-2">
+              <span class="text-2xl">{grupo.emoji}</span>
+              <div class="flex-1 min-w-0">
+                <div class="font-mono text-xs font-bold leading-tight truncate" style={`color: ${grupo.color}`}>
+                  {grupo.nombre}
+                </div>
+                <div class="text-xs mt-0.5 leading-tight" style="color: var(--text-muted);">
+                  {total} términos
+                </div>
+              </div>
+            </div>
+            <p class="text-xs leading-relaxed" style="color: var(--text-muted);">
+              {grupo.subtitulo}
+            </p>
+            <div class="flex flex-wrap gap-1 mt-auto">
+              {terminos.slice(0, 4).map(t => (
+                <span
+                  class="inline-block text-xs px-2 py-0.5 rounded-full font-mono"
+                  style={`background: ${grupo.color}15; color: ${grupo.color}; border: 1px solid ${grupo.color}30;`}
+                >
+                  {t.nombre}
+                </span>
+              ))}
+              {terminos.length > 4 && (
+                <span class="text-xs px-2 py-0.5 rounded-full" style="background: var(--bg-secondary); color: var(--text-muted);">
+                  +{terminos.length - 4}
+                </span>
+              )}
+            </div>
+          </button>
+        )
+      })}
+    </div>
+
+    <!-- Paneles individuales de cada grupo -->
+    {grupos.map(grupo => {
+      const terminos = terminosByGrupo[grupo.id] ?? []
+      const principales = terminos.filter(t => t.tipo === 'principal')
+      const secundarios = terminos.filter(t => t.tipo === 'secundario')
+      return (
+        <div
+          id={`grupo-panel-${grupo.id}`}
+          class="grupo-panel hidden flex-col gap-5"
+        >
+          <!-- Group header -->
+          <div class="flex items-center gap-3">
+            <button
+              class="flex items-center gap-1 text-xs font-mono px-2 py-1 rounded-lg transition-colors"
+              style="background: var(--bg-card); border: 1px solid var(--border); color: var(--text-muted);"
+              data-action="show-grupos-grid"
+            >
+              ← Todos los grupos
+            </button>
+          </div>
+
+          <div
+            class="rounded-xl p-5 border"
+            style={`background: var(--bg-card); border-color: ${grupo.color}30; box-shadow: 0 0 30px ${grupo.color}10;`}
+          >
+            <div class="flex items-start gap-3 mb-2">
+              <span class="text-3xl">{grupo.emoji}</span>
+              <div>
+                <h2 class="font-mono text-lg font-bold" style={`color: ${grupo.color}`}>{grupo.nombre}</h2>
+                <p class="text-sm mt-1" style="color: var(--text-muted);">{grupo.subtitulo}</p>
+              </div>
+            </div>
+          </div>
+
+          {principales.length > 0 && (
+            <div>
+              <h3 class="font-mono text-xs mb-3 uppercase tracking-wider" style="color: var(--text-muted);">
+                Términos principales
+              </h3>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {principales.map((t, i) => (
+                  <div class="stagger-item" style={`animation-delay: ${i * 0.06}s;`}>
+                    <ConceptCard termino={t} grupo={grupo} />
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {secundarios.length > 0 && (
+            <div>
+              <h3 class="font-mono text-xs mb-3 uppercase tracking-wider" style="color: var(--text-muted);">
+                Términos secundarios
+              </h3>
+              <div class="flex flex-wrap gap-2">
+                {secundarios.map(t => (
+                  <TermTag id={t.id} nombre={t.nombre} tipo={t.tipo} grupoColor={grupo.color} />
+                ))}
+              </div>
+            </div>
+          )}
+
+          <!-- Navegación entre grupos -->
+          <div class="flex items-center justify-between pt-2">
+            <div id={`prev-grupo-${grupo.id}`}></div>
+            <div id={`next-grupo-${grupo.id}`}></div>
+          </div>
+        </div>
+      )
+    })}
+  </div>
+</div>

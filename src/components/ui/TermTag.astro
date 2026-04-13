@@ -1,0 +1,21 @@
+---
+export interface Props {
+  id: string
+  nombre: string
+  tipo: 'principal' | 'secundario'
+  grupoColor?: string
+}
+
+const { id, nombre, tipo, grupoColor } = Astro.props
+const pillClass = tipo === 'principal' ? 'pill-principal' : 'pill-secundario'
+---
+
+<span
+  class={`pill ${pillClass}`}
+  data-action="navigate-ficha"
+  data-id={id}
+  title={nombre}
+  style={grupoColor ? `border-color: ${grupoColor}40; color: ${grupoColor}` : ''}
+>
+  {nombre}
+</span>

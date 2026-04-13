@@ -1,0 +1,29 @@
+---
+export interface Props {
+  items: Array<{ label: string; action?: string; params?: Record<string, string> }>
+}
+
+const { items } = Astro.props
+---
+
+<nav class="flex items-center gap-1 text-xs font-mono" aria-label="Breadcrumb" style="color: var(--text-muted);">
+  {items.map((item, i) => (
+    <>
+      {i > 0 && <span class="mx-1 opacity-40">/</span>}
+      {item.action ? (
+        <button
+          class="hover:text-accent-cyan transition-colors"
+          style="color: var(--text-muted);"
+          data-action={item.action}
+          data-params={item.params ? JSON.stringify(item.params) : ''}
+        >
+          {item.label}
+        </button>
+      ) : (
+        <span style={i === items.length - 1 ? 'color: var(--text-primary)' : ''}>
+          {item.label}
+        </span>
+      )}
+    </>
+  ))}
+</nav>

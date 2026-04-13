@@ -1,0 +1,177 @@
+---
+import type { Termino, Grupo, Relacion } from '../../types'
+import { parseLinks } from '../../lib/parseLinks'
+import { getTerminoById } from '../../lib/glosario'
+import TermTag from '../ui/TermTag.astro'
+import RelationBadge from '../ui/RelationBadge.astro'
+
+export interface Props {
+  termino: Termino
+  grupo: Grupo | undefined
+  relacionados: Termino[]
+  relaciones: Relacion[]
+}
+
+const { termino, grupo, relacionados, relaciones } = Astro.props
+const htmlExplicacion = parseLinks(termino.explicacion)
+const isPrincipal = termino.tipo === 'principal'
+const accentColor = grupo?.color ?? 'var(--accent-cyan)'
+
+// Términos en los que aparece este
+const aparecen = termino.apareceComo
+  .map(id => getTerminoById(id))
+  .filter(t => t !== undefined)
+---
+
+<div
+  id={`ficha-${termino.id}`}
+  class="ficha-panel hidden overflow-y-auto"
+  data-termino-id={termino.id}
+>
+  <div class="max-w-2xl mx-auto px-4 py-6 flex flex-col gap-6">
+
+    <!-- Breadcrumb placeholder (rendered dynamically via JS) -->
+    <div class="ficha-breadcrumb text-xs font-mono" style="color: var(--text-muted);">
+      <button data-action="navigate" data-view="mapa" class="hover:text-accent-cyan transition-colors" style="color:var(--text-muted)">Mapa</button>
+      <span class="mx-1 opacity-40">/</span>
+      {grupo && (
+        <button
+          data-action="navigate"
+          data-view="grupos"
+          data-grupo-id={grupo.id}
+          class="hover:text-accent-cyan transition-colors"
+          style="color:var(--text-muted)"
+        >{grupo.emoji} {grupo.nombre}</button>
+      )}
+      <span class="mx-1 opacity-40">/</span>
+      <span style="color: var(--text-primary);">{termino.nombre}</span>
+    </div>
+
+    <!-- Header -->
+    <div class="rounded-xl p-5 border" style={`background: var(--bg-card); border-color: ${accentColor}30;`}>
+      <div class="flex items-start justify-between gap-3 mb-3">
+        <h1 class="font-mono text-xl font-bold leading-tight" style={`color: ${accentColor}`}>
+          {termino.nombre}
+        </h1>
+        <div class="flex flex-col items-end gap-1 shrink-0">
+          <span
+            class="pill"
+            style={isPrincipal
+              ? 'background: rgba(0,229,255,0.1); color: var(--accent-cyan); border: 1px solid rgba(0,229,255,0.3);'
+              : 'background: rgba(255,179,0,0.1); color: var(--accent-amber); border: 1px solid rgba(255,179,0,0.3);'
+            }
+          >
+            {isPrincipal ? 'principal' : 'secundario'}
+          </span>
+          {grupo && (
+            <button
+              class="pill"
+              data-action="navigate"
+              data-view="grupos"
+              data-grupo-id={grupo.id}
+              style={`background: ${grupo.color}18; color: ${grupo.color}; border: 1px solid ${grupo.color}40;`}
+            >
+              {grupo.emoji} {grupo.nombre}
+            </button>
+          )}
+        </div>
+      </div>
+
+      <!-- Definición corta -->
+      <blockquote
+        class="rounded-lg p-3 text-sm leading-relaxed border-l-4"
+        style={`background: ${accentColor}0a; border-left-color: ${accentColor}; color: var(--text-primary);`}
+      >
+        {termino.definicionCorta}
+      </blockquote>
+    </div>
+
+    <!-- Explicación -->
+    <section>
+      <h2 class="font-mono text-xs mb-3 uppercase tracking-wider" style="color: var(--text-muted);">
+        Explicación
+      </h2>
+      <div
+        class="text-sm leading-relaxed rounded-xl p-4 border"
+        style="background: var(--bg-card); border-color: var(--border); color: var(--text-primary);"
+        set:html={htmlExplicacion}
+      />
+    </section>
+
+    <!-- Relaciones directas -->
+    {relaciones.length > 0 && (
+      <section>
+        <h2 class="font-mono text-xs mb-3 uppercase tracking-wider" style="color: var(--text-muted);">
+          Relaciones directas
+        </h2>
+        <div class="flex flex-col gap-2">
+          {relaciones.map(rel => {
+            const esOrigen = rel.desde === termino.id
+            const otherId = esOrigen ? rel.hasta : rel.desde
+            const other = getTerminoById(otherId)
+            return (
+              <div
+                class="flex items-center gap-2 rounded-lg px-3 py-2 text-sm"
+                style="background: var(--bg-card); border: 1px solid var(--border);"
+              >
+                {!esOrigen && (
+                  <span class="font-mono text-xs" style="color: var(--text-muted);">← </span>
+                )}
+                <RelationBadge tipo={rel.tipo} descripcion={rel.descripcion} />
+                {esOrigen && (
+                  <span class="font-mono text-xs" style="color: var(--text-muted);"> →</span>
+                )}
+                {other ? (
+                  <button
+                    class="text-sm hover:underline transition-colors"
+                    style="color: var(--accent-purple);"
+                    data-action="navigate-ficha"
+                    data-id={other.id}
+                  >
+                    {other.nombre}
+                  </button>
+                ) : (
+                  <span style="color: var(--text-muted);">{otherId}</span>
+                )}
+                {rel.descripcion && (
+                  <span class="text-xs hidden sm:inline" style="color: var(--text-muted);">
+                    — {rel.descripcion}
+                  </span>
+                )}
+              </div>
+            )
+          })}
+        </div>
+      </section>
+    )}
+
+    <!-- Términos relacionados -->
+    {relacionados.length > 0 && (
+      <section>
+        <h2 class="font-mono text-xs mb-3 uppercase tracking-wider" style="color: var(--text-muted);">
+          Términos relacionados
+        </h2>
+        <div class="flex flex-wrap gap-2">
+          {relacionados.map(r => (
+            <TermTag id={r.id} nombre={r.nombre} tipo={r.tipo} />
+          ))}
+        </div>
+      </section>
+    )}
+
+    <!-- Aparece en -->
+    {aparecen.length > 0 && (
+      <section>
+        <h2 class="font-mono text-xs mb-3 uppercase tracking-wider" style="color: var(--text-muted);">
+          Aparece en las fichas de
+        </h2>
+        <div class="flex flex-wrap gap-2">
+          {aparecen.map(t => (
+            <TermTag id={t!.id} nombre={t!.nombre} tipo={t!.tipo} />
+          ))}
+        </div>
+      </section>
+    )}
+
+  </div>
+</div>

@@ -1,0 +1,667 @@
+{
+  "meta": {
+    "titulo": "BioGlosario — Biopsia Líquida y Parasitología",
+    "version": "1.0",
+    "fuente": "TFM: Biopsia líquida y su potencial diagnóstico. Uso en enfermedades parasitarias",
+    "autora": "Ana María Cárdenas Sánchez",
+    "tutora": "María Inmaculada Ramírez Macías",
+    "universidad": "Universidad de Granada — Máster en Análisis Biológico y Diagnóstico de Laboratorio",
+    "totalTerminos": 58,
+    "totalGrupos": 8
+  },
+
+  "grupos": [
+    {
+      "id": "grupo-1",
+      "nombre": "El origen del material circulante",
+      "subtitulo": "¿De dónde viene todo lo que detectamos en sangre?",
+      "emoji": "🔬",
+      "color": "#00e5ff",
+      "terminosPrincipales": ["celula-tumoral-circulante", "celula-neoplasica", "apoptosis", "lisis-celular"],
+      "terminosSecundarios": ["membrana-lipidica", "espacio-extracelular", "nucleo-celular"]
+    },
+    {
+      "id": "grupo-2",
+      "nombre": "El ADN que viaja en sangre",
+      "subtitulo": "cfDNA, su tamaño, su vida corta y por qué sobrevive",
+      "emoji": "🧬",
+      "color": "#39ff14",
+      "terminosPrincipales": ["cfDNA", "ctDNA", "fragmento-nucleosomal", "dnasas-plasmaticas"],
+      "terminosSecundarios": ["plasma-suero", "nucleosoma", "sangre-periferica", "lisis-leucocitaria"]
+    },
+    {
+      "id": "grupo-3",
+      "nombre": "Otros mensajeros circulantes",
+      "subtitulo": "Lo que el parásito o la célula enferma secreta activamente",
+      "emoji": "📡",
+      "color": "#b388ff",
+      "terminosPrincipales": ["vesicula-extracelular", "exovesiculas-sericas", "microARN", "metabolito", "analito"],
+      "terminosSecundarios": ["membrana-lipidica", "espacio-extracelular"]
+    },
+    {
+      "id": "grupo-4",
+      "nombre": "Las ómicas",
+      "subtitulo": "Leer el organismo completo de una sola vez",
+      "emoji": "🔭",
+      "color": "#ff6e40",
+      "terminosPrincipales": ["omica", "proteomica", "metabolomica", "vesiculomica", "miARNomica", "metaboloma"],
+      "terminosSecundarios": ["analito", "plasma-suero", "degradacion-enzimatica-plasmatica"]
+    },
+    {
+      "id": "grupo-5",
+      "nombre": "Extracción y preparación de muestra",
+      "subtitulo": "Del tubo de sangre al ácido nucleico puro",
+      "emoji": "⚗️",
+      "color": "#ffb300",
+      "terminosPrincipales": ["sangre-periferica", "plasma-suero", "lisis-leucocitaria", "columna-membrana-silice", "tampones-lisis-caotropica"],
+      "terminosSecundarios": ["fragmento-nucleosomal", "cfDNA", "dnasas-plasmaticas"]
+    },
+    {
+      "id": "grupo-6",
+      "nombre": "Técnicas de detección y amplificación",
+      "subtitulo": "Las herramientas que convierten una señal débil en un resultado",
+      "emoji": "🛠️",
+      "color": "#00e676",
+      "terminosPrincipales": ["NGS", "metagenómica-clinica", "deplecion-genoma", "sistema-crispr-cas", "nucleasas-cas", "LAMP", "RPA", "RPA-flujo-lateral", "ADN-polimerasa", "electroforesis", "fluorometros"],
+      "terminosSecundarios": ["cfDNA", "fragmento-nucleosomal", "analito"]
+    },
+    {
+      "id": "grupo-7",
+      "nombre": "Biología parasitaria circulante",
+      "subtitulo": "Entender al parásito para entender qué deja en sangre",
+      "emoji": "🦠",
+      "color": "#ea80fc",
+      "terminosPrincipales": ["diversidad-taxonomica", "protozoo-hematico", "ciclo-intraeritrocitario", "nematodo-intestinal", "helminto-tisular", "parasitemia-periferica", "ADN-kinetoplasto"],
+      "terminosSecundarios": ["lisis-celular", "cfDNA", "vesicula-extracelular", "espacio-extracelular"]
+    },
+    {
+      "id": "grupo-8",
+      "nombre": "Contexto clínico",
+      "subtitulo": "Términos del mundo clínico que rodean al diagnóstico",
+      "emoji": "🏥",
+      "color": "#40c4ff",
+      "terminosPrincipales": ["recidiva", "iatrogenia", "sangre-periferica"],
+      "terminosSecundarios": ["parasitemia-periferica", "apoptosis", "lisis-celular"]
+    }
+  ],
+
+  "relaciones": [
+    { "desde": "cfDNA", "hasta": "apoptosis", "tipo": "originado-por", "descripcion": "La apoptosis libera fragmentos de ADN al plasma que se convierten en cfDNA" },
+    { "desde": "cfDNA", "hasta": "lisis-celular", "tipo": "originado-por", "descripcion": "La lisis celular también libera ADN al torrente circulatorio" },
+    { "desde": "cfDNA", "hasta": "plasma-suero", "tipo": "vive-en", "descripcion": "El cfDNA circula en el plasma sanguíneo en forma extracelular" },
+    { "desde": "cfDNA", "hasta": "dnasas-plasmaticas", "tipo": "degradado-por", "descripcion": "Las DNasas plasmáticas degradan el cfDNA con una semivida de 16-30 min" },
+    { "desde": "cfDNA", "hasta": "fragmento-nucleosomal", "tipo": "determina-tamano", "descripcion": "La degradación por DNasas deja fragmentos del tamaño del nucleosoma (150-200 pb)" },
+    { "desde": "fragmento-nucleosomal", "hasta": "nucleosoma", "tipo": "protegido-por", "descripcion": "El tamaño del fragmento coincide con la unidad mononucleosomal del ADN empaquetado" },
+    { "desde": "ctDNA", "hasta": "cfDNA", "tipo": "es-subtipo-de", "descripcion": "El ctDNA es ADN libre circulante de origen tumoral, una fracción específica del cfDNA total" },
+    { "desde": "ctDNA", "hasta": "celula-neoplasica", "tipo": "procede-de", "descripcion": "El ctDNA es liberado por células tumorales al plasma mediante apoptosis o necrosis" },
+    { "desde": "vesicula-extracelular", "hasta": "membrana-lipidica", "tipo": "compuesta-de", "descripcion": "Las vesículas extracelulares son partículas rodeadas de membrana lipídica bicapa" },
+    { "desde": "vesicula-extracelular", "hasta": "microARN", "tipo": "contiene", "descripcion": "Las VEs transportan microARN encapsulado protegido de la degradación enzimática" },
+    { "desde": "vesicula-extracelular", "hasta": "metabolito", "tipo": "contiene", "descripcion": "Las VEs también pueden transportar metabolitos de origen parasitario" },
+    { "desde": "vesicula-extracelular", "hasta": "vesiculomica", "tipo": "estudiada-por", "descripcion": "La vesiculómica estudia el conjunto de vesículas extracelulares en una muestra biológica" },
+    { "desde": "microARN", "hasta": "miARNomica", "tipo": "estudiado-por", "descripcion": "La miARNómica estudia el perfil completo de microARN circulantes" },
+    { "desde": "metabolito", "hasta": "metabolomica", "tipo": "estudiado-por", "descripcion": "La metabolómica analiza el conjunto de metabolitos presentes en una muestra" },
+    { "desde": "metaboloma", "hasta": "metabolomica", "tipo": "objeto-de-estudio-de", "descripcion": "El metaboloma es el objeto de estudio de la metabolómica" },
+    { "desde": "omica", "hasta": "proteomica", "tipo": "engloba", "descripcion": "La proteómica es una rama de las ciencias ómicas aplicada a proteínas" },
+    { "desde": "omica", "hasta": "metabolomica", "tipo": "engloba", "descripcion": "La metabolómica es una rama ómica aplicada a metabolitos" },
+    { "desde": "omica", "hasta": "vesiculomica", "tipo": "engloba", "descripcion": "La vesiculómica es una rama ómica aplicada a vesículas extracelulares" },
+    { "desde": "omica", "hasta": "miARNomica", "tipo": "engloba", "descripcion": "La miARNómica es una rama ómica aplicada a microARNs" },
+    { "desde": "NGS", "hasta": "deplecion-genoma", "tipo": "requiere", "descripcion": "El mNGS requiere eliminar las lecturas humanas para identificar las del patógeno" },
+    { "desde": "NGS", "hasta": "cfDNA", "tipo": "analiza", "descripcion": "El NGS secuencia masivamente todos los fragmentos de cfDNA en la muestra" },
+    { "desde": "NGS", "hasta": "metagenómica-clinica", "tipo": "habilita", "descripcion": "El NGS es la tecnología sobre la que se basa la metagenómica clínica no invasiva" },
+    { "desde": "sistema-crispr-cas", "hasta": "nucleasas-cas", "tipo": "utiliza", "descripcion": "El sistema CRISPR-Cas emplea nucleasas Cas para reconocer y cortar secuencias diana" },
+    { "desde": "LAMP", "hasta": "ADN-polimerasa", "tipo": "usa", "descripcion": "LAMP utiliza una ADN polimerasa con actividad de desplazamiento de cadena" },
+    { "desde": "RPA", "hasta": "RPA-flujo-lateral", "tipo": "combinable-con", "descripcion": "El resultado de RPA puede leerse mediante una tira de flujo lateral sin instrumentación" },
+    { "desde": "ADN-kinetoplasto", "hasta": "cfDNA", "tipo": "es-subtipo-de", "descripcion": "El kDNA de tripanosomátidos es una forma específica de cfDNA parasitario en suero" },
+    { "desde": "parasitemia-periferica", "hasta": "sangre-periferica", "tipo": "detectada-en", "descripcion": "La parasitemia periférica se cuantifica en sangre periférica" },
+    { "desde": "lisis-leucocitaria", "hasta": "cfDNA", "tipo": "contamina", "descripcion": "La lisis de leucocitos introduce ADN genómico de alto peso molecular que enmascara el cfDNA parasitario" },
+    { "desde": "apoptosis", "hasta": "membrana-lipidica", "tipo": "altera", "descripcion": "Durante la apoptosis la membrana se reorganiza formando cuerpos apoptóticos" },
+    { "desde": "lisis-celular", "hasta": "espacio-extracelular", "tipo": "libera-contenido-a", "descripcion": "La lisis vuelca el contenido celular al espacio extracelular" },
+    { "desde": "exovesiculas-sericas", "hasta": "vesicula-extracelular", "tipo": "es-subtipo-de", "descripcion": "Las exovesículas séricas son vesículas extracelulares presentes en el suero del paciente" },
+    { "desde": "celula-neoplasica", "hasta": "celula-tumoral-circulante", "tipo": "origina", "descripcion": "Las células neoplásicas del tumor primario son el origen de las CTCs que se detectan en sangre" },
+    { "desde": "columna-membrana-silice", "hasta": "tampones-lisis-caotropica", "tipo": "trabaja-con", "descripcion": "Las columnas de sílice usan tampones caotrópicos para la unión y elución del cfDNA" },
+    { "desde": "degradacion-enzimatica-plasmatica", "hasta": "dnasas-plasmaticas", "tipo": "realizada-por", "descripcion": "Las DNasas plasmáticas son las principales responsables de la degradación enzimática del cfDNA" }
+  ],
+
+  "terminos": [
+
+    {
+      "id": "celula-tumoral-circulante",
+      "nombre": "Célula tumoral circulante (CTC)",
+      "tipo": "principal",
+      "grupo": "grupo-1",
+      "definicionCorta": "Célula cancerosa que se desprende del tumor y viaja por el torrente sanguíneo.",
+      "explicacion": "Imagina que un tumor es como una colonia de células que, en algún momento, algunas de ellas se desprenden y se escapan al torrente sanguíneo. Esas células que viajan por la sangre lejos de su tumor de origen son las células tumorales circulantes. Su importancia diagnóstica radica en que, con una simple extracción de [[sangre-periferica]], se puede obtener información sobre un tumor sin necesidad de operar al paciente para tomar una muestra del tejido directamente. Fueron precisamente estas células las que dieron origen al concepto de biopsia líquida a principios de los años 2010, cuando Pantel y Alix-Panabières las describieron como alternativa no invasiva a la biopsia tisular convencional en el seguimiento de pacientes oncológicos.",
+      "relacionados": ["celula-neoplasica", "cfDNA", "sangre-periferica", "plasma-suero"],
+      "apareceComo": []
+    },
+
+    {
+      "id": "celula-neoplasica",
+      "nombre": "Célula neoplásica",
+      "tipo": "principal",
+      "grupo": "grupo-1",
+      "definicionCorta": "Célula que ha sufrido una transformación tumoral y ha perdido el control normal de su crecimiento.",
+      "explicacion": "Una célula neoplásica es, en esencia, una célula que ha salido del control. En condiciones normales, las células del cuerpo saben cuándo crecer, cuándo detenerse y cuándo morir. Una célula neoplásica ha acumulado mutaciones en su [[nucleo-celular]] que le hacen ignorar esas señales: crece sin límite, no muere cuando debería y puede invadir tejidos cercanos. La palabra neoplásica viene del griego y significa literalmente 'nuevo crecimiento'. Lo que la hace relevante en el contexto de la biopsia líquida es que, durante su actividad y su muerte, libera material molecular propio al [[espacio-extracelular]] y al [[plasma-suero]]: fragmentos de su ADN mutado (el [[ctDNA]]), [[vesicula-extracelular]] y [[microARN]]. Esas señales son la base del diagnóstico molecular no invasivo en oncología, y el mismo principio se traslada luego a la parasitología.",
+      "relacionados": ["celula-tumoral-circulante", "ctDNA", "apoptosis", "lisis-celular"],
+      "apareceComo": []
+    },
+
+    {
+      "id": "apoptosis",
+      "nombre": "Apoptosis",
+      "tipo": "principal",
+      "grupo": "grupo-1",
+      "definicionCorta": "Muerte celular programada y controlada que el propio organismo activa de forma ordenada.",
+      "explicacion": "La apoptosis es, básicamente, el suicidio controlado de una célula. El organismo la activa cuando una célula ya no es útil, está dañada o representa un peligro. A diferencia de una muerte accidental, la apoptosis sigue un protocolo ordenado: la célula desmonta su propio [[nucleo-celular]], fragmenta su ADN en trozos de un tamaño muy concreto, envuelve esos fragmentos en pequeñas bolsas rodeadas de [[membrana-lipidica]] llamadas cuerpos apoptóticos, y los emite al [[espacio-extracelular]] para que el sistema inmunitario los elimine limpiamente. Esos fragmentos de ADN que quedan flotando en el [[plasma-suero]] después de este proceso son uno de los orígenes principales del [[cfDNA]]. El tamaño tan específico de esos fragmentos, alrededor de 150-200 pares de bases, no es casualidad: corresponde exactamente al [[fragmento-nucleosomal]], la unidad mínima de empaquetamiento del ADN antes de ser cortado.",
+      "relacionados": ["lisis-celular", "cfDNA", "fragmento-nucleosomal", "membrana-lipidica", "nucleo-celular"],
+      "apareceComo": ["cfDNA", "celula-neoplasica", "grupo-8"]
+    },
+
+    {
+      "id": "lisis-celular",
+      "nombre": "Lisis celular",
+      "tipo": "principal",
+      "grupo": "grupo-1",
+      "definicionCorta": "Ruptura brusca de la membrana celular que vuelca el contenido de la célula al exterior.",
+      "explicacion": "Si la [[apoptosis]] es un suicidio ordenado, la lisis celular sería más bien una explosión. La [[membrana-lipidica]] que rodea a la célula se rompe de golpe, ya sea por ataque del sistema inmunitario, por acción de un patógeno, por cambios osmóticos o por el propio ciclo vital del parásito. Todo el contenido interno, incluyendo el ADN del [[nucleo-celular]], las proteínas y los organelos, se vuelca al [[espacio-extracelular]] de manera desordenada. Este ADN liberado de forma brusca también acaba en el [[plasma-suero]] y forma parte del [[cfDNA]], aunque los fragmentos tienden a ser más irregulares en tamaño que los producidos por [[apoptosis]]. En parasitología, la lisis es especialmente relevante: cuando el sistema inmunitario ataca a un parásito intraeritrocitario como el Plasmodium al romperse el glóbulo rojo, libera material parasitario directamente al torrente sanguíneo, lo que facilita su detección como cfDNA.",
+      "relacionados": ["apoptosis", "cfDNA", "membrana-lipidica", "espacio-extracelular"],
+      "apareceComo": ["cfDNA", "celula-neoplasica", "grupo-8"]
+    },
+
+    {
+      "id": "membrana-lipidica",
+      "nombre": "Membrana lipídica",
+      "tipo": "secundario",
+      "grupo": "grupo-1",
+      "definicionCorta": "Envoltura de doble capa de lípidos que rodea a las células y a las vesículas extracelulares.",
+      "explicacion": "La membrana lipídica es la frontera que separa el interior de una célula o vesícula del mundo exterior. Está formada por una doble capa de moléculas de grasa (lípidos) dispuestas con las cabezas hidrofílicas hacia afuera y las colas hidrofóbicas hacia adentro. Esta estructura no solo actúa como barrera física sino que también regula qué entra y qué sale. En el contexto de la biopsia líquida es importante por dos razones: primero, porque su ruptura durante la [[lisis-celular]] es lo que libera el contenido de la célula al [[espacio-extracelular]]; segundo, porque las [[vesicula-extracelular]] están también rodeadas de esta misma membrana, lo que protege su cargo molecular de la [[degradacion-enzimatica-plasmatica]].",
+      "relacionados": ["vesicula-extracelular", "apoptosis", "lisis-celular", "espacio-extracelular"],
+      "apareceComo": ["vesicula-extracelular", "apoptosis", "lisis-celular"]
+    },
+
+    {
+      "id": "espacio-extracelular",
+      "nombre": "Espacio extracelular",
+      "tipo": "secundario",
+      "grupo": "grupo-1",
+      "definicionCorta": "El espacio fuera de las células donde circulan los biomarcadores antes de llegar al plasma.",
+      "explicacion": "El espacio extracelular es todo lo que hay fuera de las células dentro de un tejido u órgano: el fluido intersticial, las proteínas de la matriz y, crucialmente para la biopsia líquida, los biomarcadores que las células liberan. Cuando un parásito secreta activamente [[vesicula-extracelular]] o cuando una célula muere por [[apoptosis]] o [[lisis-celular]], el material liberado entra primero en este espacio y desde allí puede llegar al sistema linfático y finalmente al torrente sanguíneo, donde se convierte en [[cfDNA]], [[microARN]] o proteínas detectables en [[plasma-suero]].",
+      "relacionados": ["plasma-suero", "cfDNA", "vesicula-extracelular", "lisis-celular"],
+      "apareceComo": ["lisis-celular", "cfDNA", "celula-neoplasica"]
+    },
+
+    {
+      "id": "nucleo-celular",
+      "nombre": "Núcleo celular",
+      "tipo": "secundario",
+      "grupo": "grupo-1",
+      "definicionCorta": "Compartimento interno de la célula donde se almacena el ADN organizado en cromosomas.",
+      "explicacion": "El núcleo celular es el centro de mando de la célula. Dentro de él está el ADN, organizado y empaquetado alrededor de proteínas llamadas histonas que forman el [[nucleosoma]]. Cuando una célula muere, ya sea por [[apoptosis]] o [[lisis-celular]], el contenido del núcleo se libera, y ese ADN en distintos grados de fragmentación acaba en el [[plasma-suero]] como [[cfDNA]]. En parasitología esto es relevante porque cada parásito tiene también su propio núcleo, cuyo ADN puede ser detectado en sangre cuando el parásito muere o libera material genético durante su ciclo vital.",
+      "relacionados": ["cfDNA", "fragmento-nucleosomal", "nucleosoma", "apoptosis"],
+      "apareceComo": ["apoptosis", "lisis-celular", "cfDNA"]
+    },
+
+    {
+      "id": "cfDNA",
+      "nombre": "ADN libre circulante (cfDNA)",
+      "tipo": "principal",
+      "grupo": "grupo-2",
+      "definicionCorta": "Fragmentos de ADN que flotan libres en el plasma sanguíneo, sin estar dentro de ninguna célula.",
+      "explicacion": "El cfDNA, del inglés cell-free DNA, es uno de los biomarcadores más estudiados en biopsia líquida. Cuando una célula, ya sea humana o parasitaria, muere por [[apoptosis]] o por [[lisis-celular]], libera fragmentos de su ADN al [[espacio-extracelular]] y eventualmente al [[plasma-suero]]. Esos fragmentos flotan libres, sin ninguna célula que los contenga, y eso es exactamente el cfDNA. El plasma contiene enzimas llamadas [[dnasas-plasmaticas]] que degradan este ADN de forma muy eficiente, con una semivida de apenas 16 a 30 minutos, así que lo que logra detectarse son fragmentos que escaparon a esa degradación. Tienen un tamaño muy específico: entre 135 y 200 pares de bases, que corresponde al [[fragmento-nucleosomal]], la unidad mínima de empaquetamiento del ADN. En parasitología, lo importante es que los parásitos también liberan su propio cfDNA al torrente circulatorio del huésped, y ese cfDNA parasitario es detectable con técnicas moleculares como qPCR o ddPCR. Las concentraciones son extraordinariamente bajas, en el orden de 67 picogramos por microlitro en infecciones no complicadas según Vera et al. (2020), y representan una fracción mínima del cfDNA total del huésped.",
+      "relacionados": ["ctDNA", "apoptosis", "lisis-celular", "dnasas-plasmaticas", "fragmento-nucleosomal", "plasma-suero", "NGS"],
+      "apareceComo": []
+    },
+
+    {
+      "id": "ctDNA",
+      "nombre": "ADN tumoral circulante (ctDNA)",
+      "tipo": "principal",
+      "grupo": "grupo-2",
+      "definicionCorta": "Fracción del cfDNA que proviene específicamente de células tumorales y contiene sus mutaciones características.",
+      "explicacion": "El ctDNA es, en términos simples, la parte del [[cfDNA]] total que procede de [[celula-neoplasica]]. Cuando un tumor está activo, sus células mueren constantemente por [[apoptosis]] o necrosis, y liberan fragmentos de ADN con las mutaciones propias del tumor. Esos fragmentos se mezclan en el [[plasma-suero]] con el cfDNA de todas las células normales del cuerpo. La proporción de ctDNA respecto al total puede ser muy pequeña, lo que hace que su detección sea técnicamente exigente. Históricamente fue el primer biomarcador de biopsia líquida estudiado en oncología, y sus características de fragmentación, distribución y modificaciones de bases han servido de punto de referencia para entender luego el cfDNA de origen parasitario, que sigue patrones biológicos similares aunque con sus propias peculiaridades.",
+      "relacionados": ["cfDNA", "celula-neoplasica", "celula-tumoral-circulante", "NGS"],
+      "apareceComo": ["celula-neoplasica"]
+    },
+
+    {
+      "id": "fragmento-nucleosomal",
+      "nombre": "Fragmento nucleosomal",
+      "tipo": "principal",
+      "grupo": "grupo-2",
+      "definicionCorta": "Trozo de ADN de 150-200 pares de bases que corresponde a la unidad mínima de empaquetamiento del ADN en el núcleo.",
+      "explicacion": "El ADN dentro del [[nucleo-celular]] no está suelto, sino enrollado alrededor de unas proteínas llamadas histonas. Cada vuelta completa de ADN alrededor de un grupo de histonas forma una unidad llamada [[nucleosoma]], y el tramo de ADN que la envuelve mide entre 147 y 200 pares de bases. Cuando una célula muere por [[apoptosis]], sus enzimas internas cortan el ADN de forma ordenada justo en los puntos entre nucleosomas, liberando al [[plasma-suero]] fragmentos de ese tamaño tan preciso. Como si cortaras un collar de cuentas por los hilos entre ellas, los trozos siempre tendrían el mismo tamaño. Esos fragmentos que sobreviven a la acción de las [[dnasas-plasmaticas]] son los fragmentos nucleosomales. Su tamaño característico de alrededor de 135-200 pares de bases es una firma diagnóstica: Ji et al. (2020) documentaron que el cfDNA de Echinococcus multilocularis mostraba un pico de distribución a 135 pares de bases, coherente con este patrón, lo que permite saber que es ADN de origen parasitario y no contaminante.",
+      "relacionados": ["nucleosoma", "cfDNA", "apoptosis", "dnasas-plasmaticas", "nucleo-celular"],
+      "apareceComo": ["cfDNA", "columna-membrana-silice"]
+    },
+
+    {
+      "id": "dnasas-plasmaticas",
+      "nombre": "DNasas plasmáticas",
+      "tipo": "principal",
+      "grupo": "grupo-2",
+      "definicionCorta": "Enzimas presentes en el plasma que degradan el ADN libre circulante de forma muy rápida.",
+      "explicacion": "Las DNasas son proteínas cuya función específica es cortar el ADN. En el plasma sanguíneo existen varias de estas enzimas circulando constantemente, y su trabajo es eliminar el ADN libre que aparece como resultado de la muerte celular normal. Son tan eficientes que la vida media del [[cfDNA]] en el plasma es de apenas 16 a 30 minutos. Esto explica por qué el procesamiento de las muestras en biopsia líquida es tan crítico: si la sangre no se procesa rápidamente después de la extracción, las DNasas de los leucocitos que se lisan en el tubo siguen trabajando y destruyen el cfDNA que queremos detectar. Por eso existen tubos especiales con inhibidores de DNasas (como los Cell-Free DNA BCT de Streck) que permiten conservar la muestra durante horas sin que el cfDNA se degrade. Los fragmentos que logran sobrevivir a las DNasas son precisamente los [[fragmento-nucleosomal]], protegidos dentro de la estructura del [[nucleosoma]].",
+      "relacionados": ["cfDNA", "fragmento-nucleosomal", "lisis-leucocitaria", "degradacion-enzimatica-plasmatica"],
+      "apareceComo": ["cfDNA"]
+    },
+
+    {
+      "id": "plasma-suero",
+      "nombre": "Plasma y suero",
+      "tipo": "secundario",
+      "grupo": "grupo-2",
+      "definicionCorta": "Las fracciones líquidas de la sangre sin células. El plasma conserva los factores de coagulación; el suero no.",
+      "explicacion": "La sangre tiene dos componentes principales: las células (glóbulos rojos, blancos y plaquetas) y la parte líquida. Esa parte líquida, cuando se separa por centrifugación antes de que la sangre coagule, se llama plasma. Si se deja coagular primero y luego se separa, lo que queda es el suero. La diferencia práctica es que el plasma conserva los factores de coagulación y el suero no. Para la biopsia líquida, el plasma es la matriz de elección para extracción de [[cfDNA]], porque el proceso de coagulación necesario para obtener suero favorece la lisis de leucocitos, lo que libera ADN genómico de alto peso molecular que contamina la muestra y dificulta la detección del cfDNA parasitario minoritario. En cambio, para la detección de antígenos circulantes o proteínas, tanto plasma como suero son válidos según el ensayo.",
+      "relacionados": ["cfDNA", "sangre-periferica", "lisis-leucocitaria", "dnasas-plasmaticas"],
+      "apareceComo": ["cfDNA", "dnasas-plasmaticas", "columna-membrana-silice"]
+    },
+
+    {
+      "id": "nucleosoma",
+      "nombre": "Nucleosoma",
+      "tipo": "secundario",
+      "grupo": "grupo-2",
+      "definicionCorta": "Unidad básica de empaquetamiento del ADN formada por ADN enrollado alrededor de proteínas histonas.",
+      "explicacion": "Si el ADN de una sola célula humana estuviera estirado en línea recta mediría aproximadamente 2 metros. Para caber dentro del [[nucleo-celular]], que es miles de veces más pequeño, el ADN necesita compactarse de forma extraordinaria. El primer nivel de esa compactación es el nucleosoma: el ADN se enrolla alrededor de un grupo de 8 proteínas llamadas histonas, formando algo parecido a un carrete de hilo. Cada nucleosoma abarca unos 147 pares de bases de ADN, y entre un nucleosoma y el siguiente hay un pequeño tramo de ADN linker de unos 20-80 pares de bases adicionales. Esta estructura es la que determina el tamaño tan específico del [[fragmento-nucleosomal]] que se detecta en el plasma después de la [[apoptosis]].",
+      "relacionados": ["fragmento-nucleosomal", "nucleo-celular", "cfDNA", "apoptosis"],
+      "apareceComo": ["fragmento-nucleosomal", "dnasas-plasmaticas"]
+    },
+
+    {
+      "id": "sangre-periferica",
+      "nombre": "Sangre periférica",
+      "tipo": "secundario",
+      "grupo": "grupo-2",
+      "definicionCorta": "La sangre que circula por los vasos sanguíneos accesibles, fuera de los órganos centrales como el corazón.",
+      "explicacion": "Cuando en laboratorio se habla de sangre periférica se hace referencia a la sangre que se extrae de los vasos superficiales, típicamente de una vena del brazo. Se diferencia de la sangre que circula dentro de órganos específicos como la médula ósea o el hígado. Es la muestra de elección en biopsia líquida porque es accesible con una punción venosa simple. Lo relevante en parasitología es que el [[plasma-suero]] de esta sangre actúa como un espejo del estado parasitológico del organismo: el [[cfDNA]], los antígenos circulantes y las [[vesicula-extracelular]] liberados por los parásitos en cualquier órgano profundo del cuerpo llegan eventualmente a esta sangre y pueden detectarse. La [[parasitemia-periferica]] también se mide en sangre periférica como indicador directo de la carga de parásitos en circulación.",
+      "relacionados": ["plasma-suero", "parasitemia-periferica", "cfDNA", "lisis-leucocitaria"],
+      "apareceComo": ["cfDNA", "plasma-suero"]
+    },
+
+    {
+      "id": "lisis-leucocitaria",
+      "nombre": "Lisis leucocitaria",
+      "tipo": "secundario",
+      "grupo": "grupo-2",
+      "definicionCorta": "Ruptura de los glóbulos blancos durante el procesamiento de la muestra, que libera ADN genómico contaminante.",
+      "explicacion": "Los leucocitos, o glóbulos blancos, son células grandes que contienen mucho ADN en su [[nucleo-celular]]. Cuando la muestra de sangre no se procesa rápidamente o no se usa el tubo adecuado, estas células empiezan a romperse por [[lisis-celular]] dentro del tubo. Al hacerlo, liberan enormes cantidades de ADN genómico de alto peso molecular al [[plasma-suero]]. Este ADN contaminante se mezcla con el [[cfDNA]] parasitario que estamos intentando detectar y lo enmascara, como si intentaras oír un susurro en medio de un concierto de rock. Song y colaboradores documentaron que el uso de tubos EDTA con demoras superiores a cuatro horas puede incrementar el ADN contaminante en más de dos órdenes de magnitud. Por eso los protocolos preanalíticos exigen procesamiento rápido o tubos estabilizadores.",
+      "relacionados": ["cfDNA", "plasma-suero", "sangre-periferica", "dnasas-plasmaticas"],
+      "apareceComo": ["plasma-suero", "columna-membrana-silice"]
+    },
+
+    {
+      "id": "vesicula-extracelular",
+      "nombre": "Vesícula extracelular (VE)",
+      "tipo": "principal",
+      "grupo": "grupo-3",
+      "definicionCorta": "Pequeña partícula rodeada de membrana lipídica que las células secretan activamente al espacio extracelular cargada de moléculas informativas.",
+      "explicacion": "Imagina que una célula quiere enviar un paquete a otra célula sin que el contenido se destruya en el camino. Para eso forma una pequeña burbuja rodeada de su propia [[membrana-lipidica]], la carga con proteínas, [[microARN]], fragmentos de ADN y [[metabolito]], y la suelta al [[espacio-extracelular]]. Eso es una vesícula extracelular. A diferencia del [[cfDNA]] libre, que es simplemente ADN flotando expuesto a las [[dnasas-plasmaticas]], las VEs protegen su cargo del entorno. Son productos de secreción activa del parásito, no consecuencia de su muerte, por lo que reflejan el estado metabólico y funcional del organismo que las genera. Según las directrices MISEV2023 de la Sociedad Internacional de Vesículas Extracelulares, se clasifican por tamaño: las pequeñas (sVEs, 30-200 nm) y las medianas y grandes (200-1000 nm). En parasitología, parásitos como Plasmodium, Trypanosoma cruzi, Echinococcus, Schistosoma, Leishmania y Toxoplasma han demostrado secretar VEs con cargo específico detectable en plasma del paciente.",
+      "relacionados": ["exovesiculas-sericas", "microARN", "membrana-lipidica", "vesiculomica", "metabolito", "cfDNA"],
+      "apareceComo": []
+    },
+
+    {
+      "id": "exovesiculas-sericas",
+      "nombre": "Exovesículas séricas",
+      "tipo": "principal",
+      "grupo": "grupo-3",
+      "definicionCorta": "Vesículas extracelulares de pequeño tamaño (exosomas) presentes en el suero del paciente y detectables como biomarcadores.",
+      "explicacion": "Las exovesículas séricas son un subtipo específico de [[vesicula-extracelular]]: las que se forman dentro de la célula mediante la ruta endosomal multivesicular y se secretan al exterior. Cuando se detectan en el suero de un paciente se convierten en biomarcadores de la actividad del organismo que las produjo. En el contexto de la enfermedad de Chagas, Lozano et al. (2023) demostraron que las exovesículas séricas de pacientes con enfermedad crónica contenían tanto ADN mitocondrial como nuclear de Trypanosoma cruzi. Esto fue la primera evidencia directa de que el parásito secreta activamente material genético al suero encapsulado en estas estructuras, lo que añade una dimensión diagnóstica complementaria al [[cfDNA]] libre. La diferencia clave con el cfDNA libre es que el contenido de las exovesículas está protegido de la [[degradacion-enzimatica-plasmatica]] por su [[membrana-lipidica]].",
+      "relacionados": ["vesicula-extracelular", "ADN-kinetoplasto", "membrana-lipidica", "cfDNA"],
+      "apareceComo": []
+    },
+
+    {
+      "id": "microARN",
+      "nombre": "MicroARN (miARN)",
+      "tipo": "principal",
+      "grupo": "grupo-3",
+      "definicionCorta": "Moléculas pequeñas de ARN no codificante de 19-25 nucleótidos que regulan la expresión de genes.",
+      "explicacion": "El ARN mensajero es la copia de un gen que la célula usa para fabricar proteínas. Pero existen otros tipos de ARN cuya función no es fabricar proteínas sino regular cuánto se usa cada gen. Los microARN son moléculas muy pequeñas, de apenas 19 a 25 nucleótidos de longitud, que se unen a los ARN mensajeros y les impiden ser traducidos a proteína, reduciendo así la expresión de genes específicos. En el contexto de la biopsia líquida parasitaria tienen una dimensión doble. Por un lado, el parásito exporta activamente sus propios miARN al suero del huésped encapsulados en [[vesicula-extracelular]]; esas secuencias no están presentes en el genoma humano y son potencialmente muy específicas. Por otro lado, la infección parasitaria altera el perfil de miARN del propio huésped como respuesta inmunitaria. Por ejemplo, Gupta et al. (2021) identificaron que hsa-miR-4497 estaba significativamente elevado en malaria grave por Plasmodium falciparum, correlacionando con la biomasa parasitaria.",
+      "relacionados": ["vesicula-extracelular", "miARNomica", "cfDNA", "metabolito"],
+      "apareceComo": ["vesicula-extracelular"]
+    },
+
+    {
+      "id": "metabolito",
+      "nombre": "Metabolito",
+      "tipo": "principal",
+      "grupo": "grupo-3",
+      "definicionCorta": "Molécula pequeña producida o transformada durante el metabolismo celular.",
+      "explicacion": "El metabolismo es el conjunto de reacciones químicas que ocurren dentro de una célula para obtener energía, construir componentes y eliminar desechos. Cada una de esas reacciones genera productos intermedios y finales que se llaman metabolitos: aminoácidos, azúcares, ácidos grasos, vitaminas, ácidos biliares, etc. Cuando un parásito infecta al huésped, su propio metabolismo altera el perfil de metabolitos del organismo de formas muy específicas. Por ejemplo, en esquistosomiasis crónica avanzada por Schistosoma japonicum, Li et al. (2024) identificaron tres ácidos biliares, el ácido glicocólico, el glicoquenodesoxicolato y el ácido tauroquenodesoxicólico, con un área bajo la curva superior a 0,8 para diferenciar entre estadios de la enfermedad. Estos metabolitos circulantes son el objeto de estudio de la [[metabolomica]] y, dentro del marco de la biopsia líquida, representan una señal detectable en [[plasma-suero]] u orina sin necesidad de ninguna amplificación molecular.",
+      "relacionados": ["metabolomica", "metaboloma", "vesicula-extracelular", "analito"],
+      "apareceComo": ["vesicula-extracelular"]
+    },
+
+    {
+      "id": "analito",
+      "nombre": "Analito",
+      "tipo": "principal",
+      "grupo": "grupo-3",
+      "definicionCorta": "La molécula concreta que se busca y cuantifica en un ensayo analítico.",
+      "explicacion": "En laboratorio clínico, el analito es la sustancia específica que el ensayo está diseñado para detectar o medir. Si haces una qPCR buscando ADN de Leishmania, el analito es el ADN de Leishmania. Si haces un ELISA de antígeno filarial, el analito es la proteína antigénica del parásito. Si haces un análisis metabolómico de ácidos biliares, los analitos son esos ácidos biliares concretos. El concepto es importante porque define qué tipo de técnica necesitas, qué umbral de detección es relevante y cómo interpretas el resultado. En biopsia líquida parasitaria los analitos son extraordinariamente variados: [[cfDNA]], [[microARN]], proteínas antigénicas, [[vesicula-extracelular]] o [[metabolito]], y cada uno requiere una cadena analítica diferente.",
+      "relacionados": ["cfDNA", "microARN", "metabolito", "proteomica", "metabolomica"],
+      "apareceComo": ["metabolito", "proteomica"]
+    },
+
+    {
+      "id": "omica",
+      "nombre": "Ómica",
+      "tipo": "principal",
+      "grupo": "grupo-4",
+      "definicionCorta": "Conjunto de disciplinas científicas que analizan masivamente todos los componentes de una clase molecular en un organismo.",
+      "explicacion": "El sufijo -ómica designa el estudio global y masivo de todos los componentes de un tipo molecular determinado en un sistema biológico. La idea central es que en lugar de medir un solo [[analito]] a la vez, se miden miles o millones simultáneamente para obtener una imagen completa del estado biológico del organismo. De esta raíz nacen varias disciplinas: la [[proteomica]] estudia todas las proteínas, la [[metabolomica]] todos los [[metabolito]], la [[vesiculomica]] todas las [[vesicula-extracelular]] y la [[miARNomica]] todos los [[microARN]]. En biopsia líquida parasitaria, las aproximaciones ómicas son las más recientes y las que ofrecen mayor densidad de información por análisis. Su contrapartida es que generan una complejidad analítica muy alta, requieren infraestructura especializada y son significativamente más caras que las técnicas dirigidas.",
+      "relacionados": ["proteomica", "metabolomica", "vesiculomica", "miARNomica", "metaboloma"],
+      "apareceComo": []
+    },
+
+    {
+      "id": "proteomica",
+      "nombre": "Proteómica",
+      "tipo": "principal",
+      "grupo": "grupo-4",
+      "definicionCorta": "Rama de las ómicas que estudia el conjunto completo de proteínas presentes en una muestra biológica.",
+      "explicacion": "La proteómica es la disciplina que analiza de forma masiva y simultánea todas las proteínas presentes en una muestra, ya sea plasma, suero, orina o extracto tisular. La técnica principal es la espectrometría de masas acoplada a cromatografía líquida (LC-MS/MS), que separa las proteínas, las fragmenta en péptidos y los identifica por su masa. En biopsia líquida parasitaria, la proteómica tiene dos grandes aplicaciones. La primera es el análisis del cargo proteico de [[vesicula-extracelular]] parasitarias: Nicolao et al. (2023) identificaron en las VEs de Echinococcus granulosus más de 500 proteínas, incluyendo 20 antígenos diagnósticos candidatos. La segunda es el análisis del suero del huésped: Huang et al. (2021) identificaron mediante LC-MS cuantitativo 1.144 proteínas en suero de pacientes con fibrosis hepática por Schistosoma japonicum, encontrando proteínas como C1QA y CFD como posibles marcadores de estadificación. El principal reto de la proteómica plasmática es que proteínas muy abundantes como la albúmina y las inmunoglobulinas dominan la señal y enmascaran las proteínas minoritarias de interés, requiriendo un paso de depleción previa.",
+      "relacionados": ["omica", "analito", "vesicula-extracelular", "plasma-suero"],
+      "apareceComo": ["omica"]
+    },
+
+    {
+      "id": "metabolomica",
+      "nombre": "Metabolómica",
+      "tipo": "principal",
+      "grupo": "grupo-4",
+      "definicionCorta": "Rama de las ómicas que estudia el conjunto completo de metabolitos presentes en una muestra biológica.",
+      "explicacion": "La metabolómica analiza de forma global el perfil de [[metabolito]] de bajo peso molecular presentes en una muestra biológica, ya sea plasma, suero, orina o tejido. Es la capa analítica más próxima a la función biológica real del organismo porque los metabolitos son el resultado final de todos los procesos celulares. La técnica dominante es la cromatografía líquida o de gases acoplada a espectrometría de masas (LC-MS o GC-MS). En parasitología, la revisión de Rodrigues et al. (2025) constató que el 75% de los estudios metabolómicos en esquistosomiasis utilizaron LC-MS como plataforma principal. Los metabolitos más consistentemente alterados en infecciones parasitarias incluyen intermediarios del ciclo de Krebs y aminoácidos. La metabolómica urinaria tiene el atractivo adicional de ser completamente no invasiva: Yuan et al. (2023) identificaron siete metabolitos urinarios desregulados en leishmaniasis visceral en modelo animal, con las vías de aminoácidos como las más afectadas.",
+      "relacionados": ["omica", "metaboloma", "metabolito", "analito"],
+      "apareceComo": ["omica", "metabolito"]
+    },
+
+    {
+      "id": "vesiculomica",
+      "nombre": "Vesiculómica",
+      "tipo": "principal",
+      "grupo": "grupo-4",
+      "definicionCorta": "Rama de las ómicas dedicada al estudio masivo de todas las vesículas extracelulares presentes en una muestra.",
+      "explicacion": "La vesiculómica aplica el enfoque global propio de las [[omica]] al análisis de las [[vesicula-extracelular]]. No busca una sola VE o un solo cargo, sino que caracteriza el conjunto completo de VEs presentes en la muestra, su tamaño, su abundancia, su cargo proteico, sus ácidos nucleicos y sus lípidos. Las directrices MISEV2023 son el documento de referencia internacional para estandarizar cómo se estudian las VEs. En parasitología, la vesiculómica permite comparar qué VEs secretan parásitos en distintos estadios de infección: Li et al. (2022) identificaron en ratones infectados con Schistosoma japonicum que el perfil de [[microARN]] en VEs plasmáticas era marcadamente diferente entre la fase pulmonar y la hepática de la infección, lo que apunta hacia la posibilidad de estadificar la enfermedad sin biopsia tisular.",
+      "relacionados": ["omica", "vesicula-extracelular", "miARNomica", "proteomica"],
+      "apareceComo": ["omica", "vesicula-extracelular"]
+    },
+
+    {
+      "id": "miARNomica",
+      "nombre": "miARNómica",
+      "tipo": "principal",
+      "grupo": "grupo-4",
+      "definicionCorta": "Rama de las ómicas que estudia el perfil completo de microARNs circulantes en una muestra.",
+      "explicacion": "La miARNómica es el estudio global de todos los [[microARN]] presentes en una muestra biológica. Utiliza técnicas como el pequeño RNA-seq (secuenciación masiva de ARN pequeño), RT-qPCR o plataformas como NanoString nCounter para cuantificar simultáneamente cientos o miles de miARN diferentes. Su valor en parasitología deriva de que tanto el parásito como el huésped modifican su perfil de miARN durante la infección. Villar et al. (2024) aplicaron secuenciación de ARN pequeño al plasma de pacientes con miocardiopatía chagásica crónica e identificaron cuatro miARN candidatos como biomarcadores mediante análisis de novo, incluyendo secuencias no previamente descritas en el contexto de Chagas. Esto ilustra que el enfoque de descubrimiento sin hipótesis previa que permite la miARNómica puede revelar biomarcadores que los enfoques dirigidos no detectarían.",
+      "relacionados": ["omica", "microARN", "vesicula-extracelular", "vesiculomica"],
+      "apareceComo": ["omica", "microARN"]
+    },
+
+    {
+      "id": "metaboloma",
+      "nombre": "Metaboloma",
+      "tipo": "principal",
+      "grupo": "grupo-4",
+      "definicionCorta": "El conjunto completo de todos los metabolitos presentes en un organismo, tejido o muestra en un momento determinado.",
+      "explicacion": "El metaboloma es el objeto de estudio de la [[metabolomica]]: la totalidad de los [[metabolito]] de bajo peso molecular presentes en un sistema biológico en un instante concreto. Es importante entender que el metaboloma es dinámico; cambia con cada comida, con cada infección, con cada respuesta inflamatoria. Por eso en parasitología tiene tanto valor: la infección por un parásito modifica el metaboloma del huésped de formas características. Zinga et al. (2025) analizaron el metaboloma sérico de niños con malaria asintomática en Tanzania e identificaron concentraciones reducidas de lactato, piruvato y aminoácidos de cadena ramificada en el grupo con infección activa, patrones que reflejan la competición metabólica entre el parásito y el huésped. La captura de esas diferencias en el metaboloma es lo que convierte a la metabolómica en una herramienta diagnóstica con potencial.",
+      "relacionados": ["metabolomica", "metabolito", "omica"],
+      "apareceComo": ["metabolomica"]
+    },
+
+    {
+      "id": "degradacion-enzimatica-plasmatica",
+      "nombre": "Degradación enzimática plasmática",
+      "tipo": "secundario",
+      "grupo": "grupo-4",
+      "definicionCorta": "Proceso por el cual las enzimas presentes en el plasma destruyen moléculas como el ADN libre circulante.",
+      "explicacion": "El plasma no es un medio inerte. Contiene decenas de enzimas activas entre las que destacan las [[dnasas-plasmaticas]], capaces de degradar el [[cfDNA]] en minutos. Esta degradación enzimática es la razón principal por la que las concentraciones de cfDNA parasitario en plasma son tan bajas y por la que los protocolos preanalíticos son tan críticos. Pero la degradación no afecta solo al ADN: también hay ARNasas que degradan el ARN libre, proteasas que degradan proteínas y otras enzimas que modifican metabolitos. Las [[vesicula-extracelular]] han evolucionado precisamente como mecanismo para proteger su cargo de este entorno agresivo: su [[membrana-lipidica]] las aísla del plasma y evita que las enzimas accedan al contenido interno.",
+      "relacionados": ["dnasas-plasmaticas", "cfDNA", "vesicula-extracelular", "membrana-lipidica"],
+      "apareceComo": ["dnasas-plasmaticas", "vesicula-extracelular"]
+    },
+
+    {
+      "id": "columna-membrana-silice",
+      "nombre": "Columna de membrana de sílice",
+      "tipo": "principal",
+      "grupo": "grupo-5",
+      "definicionCorta": "Soporte cromatográfico que retiene el ADN por afinidad en presencia de sales caotrópicas y lo libera con agua o tampón de baja salinidad.",
+      "explicacion": "Una columna de membrana de sílice es el componente central de los kits de extracción de [[cfDNA]] más utilizados, como el QIAamp Circulating Nucleic Acid de Qiagen, que es el estándar de referencia en la comunidad. Funciona así: la muestra de [[plasma-suero]] se mezcla con un tampón de lisis que contiene sales caotrópicas, que son las que utilizan los [[tampones-lisis-caotropica]]. Bajo esas condiciones, el ADN se une con alta afinidad a la membrana de sílice mientras que las proteínas, lípidos y otros contaminantes no se unen y se eliminan con lavados. Finalmente, el ADN se libera de la membrana añadiendo un tampón de baja salinidad o agua pura, y ese eluido contiene el [[cfDNA]] purificado. El reto específico para el cfDNA parasitario es que los [[fragmento-nucleosomal]] son muy cortos (140-170 pares de bases) y algunos kits no están optimizados para recuperar fragmentos tan pequeños, lo que puede reducir la sensibilidad diagnóstica del ensayo posterior.",
+      "relacionados": ["tampones-lisis-caotropica", "cfDNA", "fragmento-nucleosomal", "plasma-suero"],
+      "apareceComo": []
+    },
+
+    {
+      "id": "tampones-lisis-caotropica",
+      "nombre": "Tampones de lisis caotrópica",
+      "tipo": "principal",
+      "grupo": "grupo-5",
+      "definicionCorta": "Soluciones con sales caotrópicas que desnaturalizan proteínas y permiten la unión del ADN a las columnas de sílice.",
+      "explicacion": "Un tampón caotrópico contiene sales como el cloruro de guanidinio o el tiocianato de guanidinio que tienen una propiedad muy particular: alteran la estructura del agua y desnaturalizan las proteínas. En el proceso de extracción de [[cfDNA]], estos tampones cumplen dos funciones. Primero, rompen las estructuras proteicas que puedan estar asociadas al ADN, liberándolo. Segundo, crean las condiciones químicas necesarias para que el ADN se adsorba a la [[columna-membrana-silice]]. La palabra caotrópico viene del griego kaos y tropos, y hace referencia a que estas sales introducen desorden en las estructuras moleculares ordenadas. Son fundamentales en los kits de extracción estándar, y su concentración y composición varía entre los diferentes kits comerciales disponibles, lo que explica parte de la variabilidad en los rendimientos de extracción observada en la literatura.",
+      "relacionados": ["columna-membrana-silice", "cfDNA", "proteomica"],
+      "apareceComo": ["columna-membrana-silice"]
+    },
+
+    {
+      "id": "NGS",
+      "nombre": "Secuenciación masiva de nueva generación (NGS)",
+      "tipo": "principal",
+      "grupo": "grupo-6",
+      "definicionCorta": "Tecnología que secuencia millones de fragmentos de ADN simultáneamente, generando información genómica masiva en pocas horas.",
+      "explicacion": "Las primeras tecnologías de secuenciación de ADN, como el método de Sanger, leían una sola secuencia a la vez. NGS, del inglés Next-Generation Sequencing, supuso una revolución: en lugar de leer de forma secuencial, lee decenas o cientos de millones de fragmentos al mismo tiempo en paralelo. Plataformas como Illumina (MiSeq, NextSeq) generan lecturas cortas de alta precisión (75-300 pares de bases) de toda la muestra a la vez. En biopsia líquida parasitaria, la aplicación más potente del NGS es la metagenómica, conocida como [[metagenómica-clinica]], donde se secuencia todo el [[cfDNA]] del plasma, incluyendo el humano y el parasitario, y luego se realiza una [[deplecion-genoma]] bioinformática para separar las lecturas de origen parásito de las del huésped. El resultado es un diagnóstico sin hipótesis previa: no necesitas saber qué parásito buscas para encontrarlo. La contrapartida es su coste (500-1.500 euros por muestra) y la necesidad de infraestructura bioinformática especializada.",
+      "relacionados": ["metagenómica-clinica", "deplecion-genoma", "cfDNA", "ctDNA"],
+      "apareceComo": []
+    },
+
+    {
+      "id": "metagenómica-clinica",
+      "nombre": "Metagenómica clínica no invasiva (mNGS)",
+      "tipo": "principal",
+      "grupo": "grupo-6",
+      "definicionCorta": "Aplicación diagnóstica del NGS que secuencia todos los ácidos nucleicos del plasma para identificar cualquier patógeno sin hipótesis previa.",
+      "explicacion": "La metagenómica clínica no invasiva es, en términos diagnósticos, la técnica más revolucionaria disponible actualmente. Mientras que la qPCR te dice si está presente el parásito que tú sospechas, el mNGS te dice qué hay en la muestra con independencia de lo que esperes encontrar. Funciona secuenciando masivamente con [[NGS]] todos los fragmentos de ácido nucleico presentes en el [[plasma-suero]] del paciente. La inmensa mayoría son humanos, pero tras la [[deplecion-genoma]] bioinformática quedan las lecturas de origen no humano, que se comparan con bases de datos de referencia de bacterias, virus, hongos y parásitos para identificar al patógeno. Esse y colaboradores (2025) documentaron que en una cohorte de pacientes con infecciones graves de etiología incierta, el mNGS plasmático tuvo impacto terapéutico directo en el 13,6% de los casos, incluyendo la identificación de Leishmania infantum que había pasado desapercibida para todos los métodos convencionales. Su limitación principal no es técnica sino práctica: coste, tiempo de respuesta de dos días y necesidad de bioinformática especializada.",
+      "relacionados": ["NGS", "deplecion-genoma", "cfDNA", "sangre-periferica"],
+      "apareceComo": ["NGS"]
+    },
+
+    {
+      "id": "deplecion-genoma",
+      "nombre": "Depleción del genoma huésped",
+      "tipo": "principal",
+      "grupo": "grupo-6",
+      "definicionCorta": "Paso bioinformático o experimental que elimina las lecturas de ADN humano para revelar las lecturas de origen patógeno.",
+      "explicacion": "Cuando haces [[metagenómica-clinica]] de [[plasma-suero]], más del 99% de los fragmentos de [[cfDNA]] que secuencias son humanos. Solo una fracción mínima pertenece al parásito. Si no eliminas las lecturas humanas, el parásito queda completamente enterrado bajo ese volumen de información. La depleción del genoma huésped es el proceso por el cual se identifican y eliminan todas las lecturas que alinean con el genoma humano de referencia, dejando solo las lecturas que no corresponden al huésped. Esto se hace bioinformáticamente después de la secuenciación, comparando cada lectura contra el genoma humano. Las lecturas que no alinean son las candidatas a ser de origen microbiano o parasitario y se someten a clasificación taxonómica. La calidad y la cobertura de las bases de datos de referencia parasitarias es un factor limitante reconocido: si el genoma del parásito no está bien representado en la base de datos, sus lecturas no serán identificadas correctamente.",
+      "relacionados": ["NGS", "metagenómica-clinica", "cfDNA"],
+      "apareceComo": ["NGS", "metagenómica-clinica"]
+    },
+
+    {
+      "id": "sistema-crispr-cas",
+      "nombre": "Sistema CRISPR-Cas",
+      "tipo": "principal",
+      "grupo": "grupo-6",
+      "definicionCorta": "Sistema molecular de reconocimiento y corte de ADN/ARN que se usa en diagnóstico para detectar secuencias específicas con alta sensibilidad.",
+      "explicacion": "CRISPR-Cas es originalmente un sistema inmune bacteriano que las bacterias usan para reconocer y destruir ADN viral. En diagnóstico molecular, se aprovecha una propiedad fascinante de algunas de sus proteínas: cuando una nucleasa Cas reconoce su secuencia diana exacta, se activa y empieza a cortar ácidos nucleicos aleatoriamente a su alrededor, lo que se llama actividad trans-cleavage o corte colateral. Si esos cortes colaterales liberan una molécula reportera fluorescente, obtienes una señal visible que indica que la diana estaba presente. Las plataformas diagnósticas basadas en este principio alcanzan límites de detección attomolares, operan a temperatura ambiente o con calor moderado y producen resultados en menos de dos horas a un coste de pocos euros por test. Las más relevantes en parasitología son SHERLOCK (usa [[nucleasas-cas]] tipo Cas13a), validada para tripanosomiasis africana, y CATSH, validada para Schistosoma haematobium.",
+      "relacionados": ["nucleasas-cas", "LAMP", "RPA", "cfDNA"],
+      "apareceComo": []
+    },
+
+    {
+      "id": "nucleasas-cas",
+      "nombre": "Nucleasas Cas",
+      "tipo": "principal",
+      "grupo": "grupo-6",
+      "definicionCorta": "Proteínas del sistema CRISPR que reconocen y cortan secuencias específicas de ADN o ARN guiadas por un ARN guía.",
+      "explicacion": "Las nucleasas Cas son las proteínas ejecutoras del [[sistema-crispr-cas]]. Su nombre viene de CRISPR-associated. Necesitan dos componentes para funcionar: la proteína nucleasa en sí y un ARN guía que tiene una secuencia complementaria a la diana que se quiere detectar. Cuando el ARN guía lleva a la nucleasa hasta su diana exacta, la proteína se activa y corta. En diagnóstico parasitario se usan principalmente dos tipos: Cas12a, utilizada en la plataforma DETECTR, que actúa sobre ADN, y Cas13a, utilizada en SHERLOCK, que actúa sobre ARN. Ambas exhiben esa actividad de corte colateral que genera la señal detectable. La especificidad del sistema es muy alta porque requiere una coincidencia casi perfecta entre el ARN guía y la diana para que la nucleasa se active.",
+      "relacionados": ["sistema-crispr-cas", "ADN-polimerasa", "RPA"],
+      "apareceComo": ["sistema-crispr-cas"]
+    },
+
+    {
+      "id": "LAMP",
+      "nombre": "LAMP — Amplificación isotérmica mediada por bucle",
+      "tipo": "principal",
+      "grupo": "grupo-6",
+      "definicionCorta": "Técnica de amplificación de ADN que funciona a temperatura constante, sin necesidad de termociclador.",
+      "explicacion": "LAMP, del inglés Loop-mediated Isothermal Amplification, fue descrita por Notomi y colaboradores en el año 2000 y se ha convertido en la técnica de amplificación molecular con mayor potencial para entornos de recursos limitados. Su principio es elegante: usa una [[ADN-polimerasa]] con actividad de desplazamiento de cadena y un sistema de cuatro a seis cebadores que reconocen entre seis y ocho regiones distintas de la secuencia diana. Todo esto ocurre a temperatura constante, típicamente entre 60 y 65 grados Celsius, lo que significa que no necesitas un termociclador. Un baño de agua o un bloque calentador de bajo coste es suficiente. El producto de amplificación se genera en cantidades enormes (hasta 10 elevado a 9 copias en 30-60 minutos) y puede visualizarse a simple vista como un precipitado blanco, o con colorantes fluorescentes, sin necesidad de [[electroforesis]]. El metaanálisis en leishmaniasis publicado por Erber et al. (2022) documentó sensibilidades y especificidades superiores al 90% con equipamiento mínimo de laboratorio.",
+      "relacionados": ["RPA", "sistema-crispr-cas", "ADN-polimerasa", "fluorometros"],
+      "apareceComo": []
+    },
+
+    {
+      "id": "RPA",
+      "nombre": "RPA — Amplificación por polimerasa recombinasa",
+      "tipo": "principal",
+      "grupo": "grupo-6",
+      "definicionCorta": "Técnica de amplificación isotérmica que opera a temperatura corporal (~37-42°C) y produce resultados en 20 minutos.",
+      "explicacion": "RPA, del inglés Recombinase Polymerase Amplification, es quizá la técnica de amplificación molecular más compatible con el diagnóstico de punto de atención en condiciones extremas. Opera a entre 37 y 42 grados Celsius, una temperatura alcanzable incluso con calor corporal, y produce resultados en 10 a 20 minutos. Su principio usa una enzima recombinasa que abre la doble cadena de ADN en la zona donde el cebador va a unirse, sin necesidad de calentamiento para desnaturalizar. A diferencia de [[LAMP]], su diseño de cebadores es más sencillo (solo necesita dos, como la PCR convencional). El sistema ShDraI-RPA para Schistosoma haematobium, descrito por Mesquita et al. (2025), puede detectar un huevo del parásito en veinte minutos sin cadena de frío, lo que lo posiciona como herramienta transformadora para programas de eliminación en campo. Se combina frecuentemente con [[RPA-flujo-lateral]] para lectura visual del resultado.",
+      "relacionados": ["LAMP", "RPA-flujo-lateral", "sistema-crispr-cas", "ADN-polimerasa"],
+      "apareceComo": []
+    },
+
+    {
+      "id": "RPA-flujo-lateral",
+      "nombre": "RPA con flujo lateral (LFA)",
+      "tipo": "principal",
+      "grupo": "grupo-6",
+      "definicionCorta": "Combinación de RPA con una tira reactiva de flujo lateral que permite leer el resultado visualmente como un test de embarazo.",
+      "explicacion": "La tira de flujo lateral, conocida como LFA del inglés Lateral Flow Assay, es el mismo principio que funciona en los tests de embarazo o en los tests rápidos de COVID-19: una tira de membrana con anticuerpos en posiciones específicas que genera una línea visible cuando el analito buscado está presente. Cuando el producto de amplificación de [[RPA]] se aplica a esta tira, si el parásito estaba en la muestra aparece una línea de resultado visible a simple vista. Sin instrumentación, sin [[fluorometros]], sin [[electroforesis]]. En 20 minutos y a temperatura ambiente. Esta combinación RPA-LFA representa el estado del arte del diagnóstico molecular de campo: Mesquita et al. (2025) validaron el sistema ShDraI-RPA-LFA para Schistosoma haematobium demostrando que era estable a temperatura ambiente, no requería cadena de frío y podía ser operado por personal con formación básica.",
+      "relacionados": ["RPA", "LAMP", "sistema-crispr-cas"],
+      "apareceComo": ["RPA"]
+    },
+
+    {
+      "id": "ADN-polimerasa",
+      "nombre": "ADN polimerasa",
+      "tipo": "principal",
+      "grupo": "grupo-6",
+      "definicionCorta": "Enzima que sintetiza nuevas cadenas de ADN copiando una cadena molde, base a base.",
+      "explicacion": "La ADN polimerasa es la enzima que fabrica ADN nuevo. Funciona leyendo una cadena de ADN existente (la cadena molde) y construyendo una cadena complementaria añadiendo nucleótidos uno a uno en el orden indicado por la secuencia molde. En todas las técnicas de amplificación molecular, tanto PCR como [[LAMP]] como [[RPA]], una ADN polimerasa es el componente central que realiza la copia. Lo que varía entre técnicas es el tipo de polimerasa empleada: la PCR usa polimerasas termoestables como la Taq que soportan los ciclos de calentamiento; la LAMP usa polimerasas con actividad de desplazamiento de cadena que pueden copiar sin necesidad de separar previamente las dos hebras de ADN; y la RPA usa una combinación de recombinasa y polimerasa que trabajan juntas a temperatura baja.",
+      "relacionados": ["LAMP", "RPA", "electroforesis"],
+      "apareceComo": ["LAMP", "RPA"]
+    },
+
+    {
+      "id": "electroforesis",
+      "nombre": "Electroforesis",
+      "tipo": "principal",
+      "grupo": "grupo-6",
+      "definicionCorta": "Técnica que separa moléculas de ADN por tamaño aplicando un campo eléctrico sobre un gel de agarosa.",
+      "explicacion": "La electroforesis en gel de agarosa es el método clásico para visualizar productos de amplificación de ADN. Funciona así: el ADN tiene carga negativa, así que si aplicas un campo eléctrico a un gel de agarosa (una matriz porosa similar a una gelatina), los fragmentos de ADN migran hacia el polo positivo. Los fragmentos pequeños avanzan más rápido que los grandes, por lo que al final quedan separados por tamaño. Añadiendo un colorante fluorescente que se intercala en el ADN, los fragmentos se ven como bandas al iluminar con luz ultravioleta. En biopsia líquida parasitaria, la electroforesis es el paso de visualización de la PCR convencional. Su principal inconveniente para el diagnóstico en campo es que requiere equipamiento específico (cubeta, fuente de alimentación, transiluminador UV) y manipulación posterior a la amplificación que aumenta el riesgo de contaminación. Las técnicas más modernas como [[LAMP]] con visualización por colorante o [[RPA-flujo-lateral]] eliminan esta dependencia.",
+      "relacionados": ["ADN-polimerasa", "LAMP", "fluorometros"],
+      "apareceComo": ["ADN-polimerasa"]
+    },
+
+    {
+      "id": "fluorometros",
+      "nombre": "Fluorómetros",
+      "tipo": "principal",
+      "grupo": "grupo-6",
+      "definicionCorta": "Instrumentos que miden la intensidad de fluorescencia emitida por moléculas marcadas con fluoróforos.",
+      "explicacion": "Un fluorómetro es el instrumento que cuantifica la luz emitida por moléculas fluorescentes. En biología molecular, los fluoróforos son colorantes que absorben luz de una longitud de onda específica y emiten luz de otra longitud de onda diferente. Este principio de fluorescencia es la base de la qPCR (que mide la fluorescencia en tiempo real durante la amplificación) y de la lectura de productos de [[LAMP]] con intercalantes fluorescentes. En entornos de campo, la existencia de fluorómetros portátiles de bajo coste ha ampliado considerablemente las posibilidades del diagnóstico molecular fuera del laboratorio. Los nuevos dispositivos de lectura del sistema [[sistema-crispr-cas]] también usan señales fluorescentes. La alternativa a los fluorómetros en campo son los métodos de lectura visual directa, como el precipitado de pirofosfato de magnesio que genera [[LAMP]] o las tiras de [[RPA-flujo-lateral]].",
+      "relacionados": ["LAMP", "electroforesis", "sistema-crispr-cas"],
+      "apareceComo": ["LAMP"]
+    },
+
+    {
+      "id": "diversidad-taxonomica",
+      "nombre": "Diversidad taxonómica",
+      "tipo": "principal",
+      "grupo": "grupo-7",
+      "definicionCorta": "La variedad de especies parasitarias que pertenecen a grupos evolutivos muy distintos entre sí, con biología radicalmente diferente.",
+      "explicacion": "La taxonomía es el sistema de clasificación de los seres vivos. La diversidad taxonómica de los parásitos con relevancia clínica es enorme: hay [[protozoo-hematico]] como Plasmodium, que son organismos unicelulares con acceso directo a la sangre; [[helminto-tisular]] como Echinococcus, que son gusanos que forman quistes en órganos profundos; [[nematodo-intestinal]] como Ascaris, que viven en el intestino; cestodos como Taenia; y trematodos como Schistosoma, que parasitan el sistema vascular. Esta diversidad no es solo una clasificación académica: tiene implicaciones directas para la biopsia líquida. Cada tipo de parásito libera material genético al torrente circulatorio en condiciones y concentraciones muy distintas. Un parásito con acceso directo a la sangre libera mucho más [[cfDNA]] que un [[nematodo-intestinal]] confinado en el intestino, cuya interacción con el sistema vascular es mucho más limitada.",
+      "relacionados": ["protozoo-hematico", "helminto-tisular", "nematodo-intestinal", "cfDNA", "parasitemia-periferica"],
+      "apareceComo": []
+    },
+
+    {
+      "id": "protozoo-hematico",
+      "nombre": "Protozoo hemático",
+      "tipo": "principal",
+      "grupo": "grupo-7",
+      "definicionCorta": "Parásito unicelular que habita en la sangre o tiene acceso directo al torrente circulatorio durante su ciclo vital.",
+      "explicacion": "Los protozoos son organismos unicelulares eucariotas, o sea, con núcleo celular definido, que parasitan a los humanos. Los protozoos hemáticos son específicamente aquellos cuyo ciclo vital incluye una fase en el torrente sanguíneo. Plasmodium, el agente de la malaria, es el ejemplo paradigmático: invade los glóbulos rojos durante parte de su [[ciclo-intraeritrocitario]] y libera [[cfDNA]] directamente al plasma cuando el glóbulo rojo se rompe. Trypanosoma cruzi, el agente de la enfermedad de Chagas, también circula libremente en sangre durante la fase aguda. Leishmania, aunque se localiza preferentemente en células del sistema inmunitario dentro de tejidos, también genera señales detectables en plasma. Esta proximidad al torrente sanguíneo es lo que hace que el cfDNA de estos parásitos sea relativamente más detectable en [[sangre-periferica]] que el de otros grupos.",
+      "relacionados": ["ciclo-intraeritrocitario", "cfDNA", "parasitemia-periferica", "ADN-kinetoplasto", "diversidad-taxonomica"],
+      "apareceComo": ["diversidad-taxonomica"]
+    },
+
+    {
+      "id": "ciclo-intraeritrocitario",
+      "nombre": "Ciclo intraeritrocitario",
+      "tipo": "principal",
+      "grupo": "grupo-7",
+      "definicionCorta": "Fase del ciclo vital de Plasmodium que transcurre dentro de los glóbulos rojos y culmina con su ruptura y liberación de parásitos.",
+      "explicacion": "Intraeritrocitario significa literalmente dentro del eritrocito, o glóbulo rojo. El Plasmodium, el parásito de la malaria, invade los glóbulos rojos del huésped y se reproduce dentro de ellos durante un período de 48 a 72 horas dependiendo de la especie. Al final de ese ciclo, el glóbulo rojo se rompe por [[lisis-celular]] y libera una nueva generación de parásitos al torrente sanguíneo, junto con el contenido del eritrocito destruido. Esa ruptura masiva y sincronizada es la causa de los episodios febriles característicos de la malaria y también el momento en que se libera más [[cfDNA]] parasitario al [[plasma-suero]]. Es por esto que la biopsia líquida funciona especialmente bien en malaria: el parásito, por su propia biología, deposita regularmente material genético directamente en el torrente circulatorio, facilitando su detección.",
+      "relacionados": ["protozoo-hematico", "lisis-celular", "cfDNA", "parasitemia-periferica"],
+      "apareceComo": ["protozoo-hematico"]
+    },
+
+    {
+      "id": "nematodo-intestinal",
+      "nombre": "Nematodo intestinal",
+      "tipo": "principal",
+      "grupo": "grupo-7",
+      "definicionCorta": "Gusano redondo que habita en el intestino delgado o grueso del huésped con escaso contacto con el sistema vascular.",
+      "explicacion": "Los nematodos son gusanos redondos (a diferencia de los planos o platelmintos). Los nematodos intestinales, como Ascaris lumbricoides, Trichuris trichiura y las uncinarias, viven en la luz del tubo digestivo del huésped, donde se alimentan de contenido intestinal o de sangre de la mucosa pero sin acceso significativo al torrente circulatorio sistémico. Esta localización anatómica tiene una consecuencia directa para la biopsia líquida: estos parásitos liberan cantidades mínimas de [[cfDNA]] al torrente circulatorio sistémico, lo que limita la sensibilidad de todas las plataformas de detección en [[plasma-suero]] o [[sangre-periferica]]. Para estas parasitosis, los métodos coprológicos convencionales como Kato-Katz y la concentración formalina-éter siguen siendo los más eficaces. Es una de las limitaciones transversales más claras de la biopsia líquida parasitaria: funciona mucho mejor en parásitos con fase tisular activa que en helmintos intestinales.",
+      "relacionados": ["helminto-tisular", "cfDNA", "diversidad-taxonomica", "parasitemia-periferica"],
+      "apareceComo": ["diversidad-taxonomica"]
+    },
+
+    {
+      "id": "helminto-tisular",
+      "nombre": "Helminto tisular",
+      "tipo": "principal",
+      "grupo": "grupo-7",
+      "definicionCorta": "Gusano parásito que se aloja en tejidos u órganos profundos del huésped, como hígado, pulmón o cerebro.",
+      "explicacion": "Los helmintos tisulares son gusanos parásitos que no viven en el intestino sino dentro de tejidos u órganos profundos del cuerpo: quistes hepáticos de Echinococcus, larvas de Taenia solium en el cerebro (neurocisticercosis), larvas de Toxocara en el hígado y el ojo, o gusanos adultos de Schistosoma en el sistema vascular. A diferencia de los [[nematodo-intestinal]], estos parásitos tienen una mayor interfaz con el sistema vascular del huésped, y su actividad metabólica, su muerte o la respuesta inflamatoria que generan libera [[cfDNA]] y [[vesicula-extracelular]] que pueden alcanzar el [[plasma-suero]]. La equinococosis es el ejemplo paradigmático: Fan et al. (2021) detectaron cfDNA plasmático de Echinococcus multilocularis en el 100% de los pacientes con equinococosis alveolar preoperatoria. Esto convierte a la biopsia líquida en especialmente valiosa para estos parásitos, precisamente porque acceder a ellos por biopsia tisular convencional es de alta complejidad o directamente peligroso (la punción de un quiste hidatídico puede causar anafilaxia).",
+      "relacionados": ["nematodo-intestinal", "cfDNA", "vesicula-extracelular", "iatrogenia", "diversidad-taxonomica"],
+      "apareceComo": ["diversidad-taxonomica"]
+    },
+
+    {
+      "id": "parasitemia-periferica",
+      "nombre": "Parasitemia periférica",
+      "tipo": "principal",
+      "grupo": "grupo-7",
+      "definicionCorta": "Número de parásitos por unidad de volumen de sangre periférica, usado como indicador de la carga parasitaria.",
+      "explicacion": "La parasitemia periférica es la medida directa de cuántos parásitos hay circulando en la sangre del paciente. Se expresa habitualmente como parásitos por microlitro de sangre. La microscopía convencional, que es el método gold standard en malaria, tiene un umbral de detección de unos 50 a 100 parásitos por microlitro. Por debajo de ese nivel, la técnica no puede confirmar la infección aunque el parásito esté presente. La qPCR para [[cfDNA]] de Plasmodium, en cambio, detecta infecciones con menos de un parásito por microlitro. Esta diferencia es decisiva en los programas de eliminación de malaria, donde existen portadores asintomáticos con parasitemias submicroscópicas que son epidemiológicamente activos pero invisibles para la microscopía. La [[sangre-periferica]] es la muestra a partir de la cual se mide tanto la parasitemia directa como el [[cfDNA]] parasitario.",
+      "relacionados": ["sangre-periferica", "cfDNA", "protozoo-hematico", "ciclo-intraeritrocitario"],
+      "apareceComo": ["protozoo-hematico", "sangre-periferica"]
+    },
+
+    {
+      "id": "ADN-kinetoplasto",
+      "nombre": "ADN del kinetoplasto (kDNA)",
+      "tipo": "principal",
+      "grupo": "grupo-7",
+      "definicionCorta": "ADN mitocondrial de estructura única y altamente repetitiva presente exclusivamente en tripanosomátidos, usado como diana diagnóstica de alta sensibilidad.",
+      "explicacion": "El kinetoplasto es una estructura mitocondrial única de los tripanosomátidos, el grupo que incluye a Trypanosoma y Leishmania. Contiene una red de miles de moléculas circulares de ADN entrelazadas: los minicírculos (hasta 10.000 copias por parásito) y los maxicírculos (unas 50 copias). Esta multiplicidad de copias lo convierte en una diana diagnóstica de extraordinaria sensibilidad: cada parásito aporta miles de copias de su kDNA al [[plasma-suero]] o [[exovesiculas-sericas]], amplificando enormemente la señal detectable. Lozano et al. (2023) demostraron la detección de kDNA tanto en [[cfDNA]] libre como en exovesículas séricas en el 100% de 50 pacientes con enfermedad de Chagas crónica mediante PCR dirigida al kDNA de Trypanosoma cruzi. En la fase crónica indeterminada de Chagas, donde la [[parasitemia-periferica]] es extremadamente baja y la microscopía tiene menos del 50% de sensibilidad, el kDNA representa la diana más sensible disponible.",
+      "relacionados": ["protozoo-hematico", "cfDNA", "exovesiculas-sericas", "parasitemia-periferica"],
+      "apareceComo": []
+    },
+
+    {
+      "id": "recidiva",
+      "nombre": "Recidiva",
+      "tipo": "principal",
+      "grupo": "grupo-8",
+      "definicionCorta": "Reaparición de una enfermedad después de un período de mejoría o aparente curación.",
+      "explicacion": "Una recidiva es cuando una enfermedad que parecía curada o controlada vuelve a manifestarse. En parasitología es un concepto particularmente importante porque muchas infecciones parasitarias tienen tendencia a reaparecer: la leishmaniasis visceral puede recidivar después del tratamiento, especialmente en pacientes inmunocomprometidos; la equinococosis puede reactivarse si quedan restos de quiste viable; la malaria puede reaparecer con Plasmodium vivax porque este parásito puede permanecer latente en el hígado como hipnozoíto durante meses o años. La biopsia líquida tiene un papel especialmente relevante en la detección de recidivas porque permite detectar enfermedad mínima residual, es decir, la presencia de un nivel mínimo del parásito en el organismo cuando los síntomas clínicos han desaparecido. Una técnica como la ddPCR, capaz de cuantificar [[cfDNA]] con precisión absoluta, puede detectar esa señal mínima antes de que la recidiva se manifieste clínicamente.",
+      "relacionados": ["cfDNA", "parasitemia-periferica", "iatrogenia"],
+      "apareceComo": []
+    },
+
+    {
+      "id": "iatrogenia",
+      "nombre": "Iatrogenia",
+      "tipo": "principal",
+      "grupo": "grupo-8",
+      "definicionCorta": "Daño causado al paciente como consecuencia de una intervención médica o diagnóstica.",
+      "explicacion": "Iatrogenia viene del griego iatros (médico) y genesis (origen): literalmente, daño de origen médico. No implica necesariamente negligencia; puede ser el daño inherente a un procedimiento necesario. En parasitología existe un riesgo iatrogénico específico que no tiene equivalente en otros contextos: la diseminación parasitaria durante la biopsia. Puncionar un quiste hidatídico de [[helminto-tisular]] como Echinococcus puede provocar el derrame de su contenido, desencadenando una reacción anafiláctica grave o la siembra peritoneal de protoescólices viables. La neurocisticercosis cerebral presenta riesgos similares. Este riesgo iatrogénico es uno de los argumentos más poderosos a favor de la biopsia líquida en parasitología: la sustitución de una biopsia tisular de alto riesgo por una extracción venosa ambulatoria elimina de raíz ese tipo de complicación.",
+      "relacionados": ["helminto-tisular", "recidiva", "sangre-periferica"],
+      "apareceComo": []
+    }
+
+  ]
+}

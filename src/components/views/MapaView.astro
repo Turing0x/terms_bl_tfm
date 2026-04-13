@@ -1,0 +1,105 @@
+---
+import type { Grupo } from '../../types'
+
+export interface Props {
+  grupos: Grupo[]
+}
+
+const { grupos } = Astro.props
+---
+
+<div class="flex-1 flex flex-col min-h-0 relative">
+  <!-- Controles del grafo -->
+  <div
+    class="absolute top-3 left-3 z-10 flex items-center gap-2 flex-wrap"
+  >
+    <div class="flex items-center gap-1 rounded-lg p-1" style="background: rgba(17,24,39,0.9); border: 1px solid var(--border);">
+      <button id="graph-zoom-in"  class="graph-ctrl-btn" title="Zoom +">＋</button>
+      <button id="graph-zoom-out" class="graph-ctrl-btn" title="Zoom −">－</button>
+      <button id="graph-reset"    class="graph-ctrl-btn" title="Reset">⌖</button>
+    </div>
+
+    <!-- Filtro por grupo -->
+    <div class="flex items-center gap-1 rounded-lg p-1 flex-wrap" style="background: rgba(17,24,39,0.9); border: 1px solid var(--border);">
+      <button
+        class="graph-filter-btn active"
+        data-grupo-filter="all"
+        style="font-size: 0.65rem; padding: 2px 8px;"
+      >
+        Todos
+      </button>
+      {grupos.map(g => (
+        <button
+          class="graph-filter-btn"
+          data-grupo-filter={g.id}
+          style={`font-size: 0.65rem; padding: 2px 8px; color: ${g.color};`}
+          title={g.nombre}
+        >
+          {g.emoji}
+        </button>
+      ))}
+    </div>
+  </div>
+
+  <!-- Leyenda -->
+  <div
+    class="absolute bottom-3 left-3 z-10 rounded-lg p-3 text-xs"
+    style="background: rgba(17,24,39,0.9); border: 1px solid var(--border); max-width: 200px;"
+  >
+    <div class="font-mono mb-2" style="color: var(--text-muted);">GRUPOS</div>
+    <div class="flex flex-col gap-1">
+      {grupos.map(g => (
+        <div class="flex items-center gap-2">
+          <div class="w-2.5 h-2.5 rounded-full shrink-0" style={`background: ${g.color};`}></div>
+          <span class="truncate" style="color: var(--text-primary);">{g.emoji} {g.nombre}</span>
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <!-- Tooltip D3 -->
+  <div id="graph-tooltip">
+    <div id="tooltip-nombre" class="font-mono text-xs font-bold" style="color: var(--accent-cyan);"></div>
+    <div id="tooltip-def" class="text-xs mt-1" style="color: var(--text-muted);"></div>
+  </div>
+
+  <!-- Canvas SVG -->
+  <svg
+    id="concept-graph"
+    class="flex-1 w-full h-full"
+    style="min-height: 400px;"
+  ></svg>
+</div>
+
+<style>
+  .graph-ctrl-btn {
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    font-size: 1rem;
+    transition: background 0.15s, color 0.15s;
+    color: var(--text-muted);
+    background: transparent;
+  }
+  .graph-ctrl-btn:hover {
+    background: rgba(0, 229, 255, 0.1);
+    color: var(--accent-cyan);
+  }
+  .graph-filter-btn {
+    border-radius: 6px;
+    font-family: "Space Mono", monospace;
+    transition: background 0.15s;
+    color: var(--text-muted);
+    background: transparent;
+    border: 1px solid transparent;
+  }
+  .graph-filter-btn:hover,
+  .graph-filter-btn.active {
+    background: rgba(0, 229, 255, 0.1);
+    border-color: rgba(0, 229, 255, 0.2);
+    color: var(--accent-cyan);
+  }
+</style>

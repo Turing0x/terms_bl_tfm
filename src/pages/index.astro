@@ -1,0 +1,433 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+import Header from '../components/layout/Header.astro'
+import Sidebar from '../components/layout/Sidebar.astro'
+import MapaView from '../components/views/MapaView.astro'
+import GrupoView from '../components/views/GrupoView.astro'
+import FichaView from '../components/views/FichaView.astro'
+import ConceptGraph from '../components/graph/ConceptGraph.astro'
+
+import {
+  getGrupos,
+  getTerminos,
+  getTerminosByGrupo,
+  getRelacionados,
+  getGrupoById,
+  getRelacionesByTermino,
+} from '../lib/glosario'
+
+import '../styles/global.css'
+
+const grupos   = getGrupos()
+const terminos = getTerminos()
+
+// Pre-compute per-group terminos map
+const terminosByGrupo: Record<string, typeof terminos> = {}
+grupos.forEach(g => { terminosByGrupo[g.id] = getTerminosByGrupo(g.id) })
+
+// Pre-compute search data for client
+const searchData = terminos.map(t => ({
+  id:             t.id,
+  nombre:         t.nombre,
+  tipo:           t.tipo,
+  grupo:          t.grupo,
+  definicionCorta: t.definicionCorta,
+}))
+---
+
+<BaseLayout>
+  <div class="flex flex-col h-screen overflow-hidden">
+    <Header />
+
+    <div class="flex flex-1 min-h-0">
+      <Sidebar grupos={grupos} />
+
+      <!-- Main content area -->
+      <main class="flex-1 flex flex-col min-h-0 overflow-hidden">
+
+        <!-- ── Vista: Mapa ─────────────────────────────────── -->
+        <div id="view-mapa" class="view active">
+          <MapaView grupos={grupos} />
+          <ConceptGraph />
+        </div>
+
+        <!-- ── Vista: Grupos ──────────────────────────────── -->
+        <div id="view-grupos" class="view">
+          <GrupoView grupos={grupos} terminosByGrupo={terminosByGrupo} />
+        </div>
+
+        <!-- ── Vista: Ficha ───────────────────────────────── -->
+        <div id="view-ficha" class="view overflow-y-auto">
+          {terminos.map(t => (
+            <FichaView
+              termino={t}
+              grupo={getGrupoById(t.grupo)}
+              relacionados={getRelacionados(t.id)}
+              relaciones={getRelacionesByTermino(t.id)}
+            />
+          ))}
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- ── Search overlay ──────────────────────────────────── -->
+  <div id="search-overlay" role="dialog" aria-label="Búsqueda de términos" aria-modal="true">
+    <div
+      class="w-full max-w-xl rounded-2xl overflow-hidden"
+      style="background: var(--bg-card); border: 1px solid var(--border); box-shadow: 0 0 40px rgba(0,229,255,0.15);"
+    >
+      <div class="flex items-center gap-3 px-4 py-3" style="border-bottom: 1px solid var(--border);">
+        <svg width="16" height="16" fill="none" stroke="var(--text-muted)" stroke-width="2" viewBox="0 0 24 24">
+          <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+        </svg>
+        <input
+          id="search-input"
+          type="text"
+          placeholder="Buscar términos..."
+          class="flex-1 bg-transparent outline-none text-sm"
+          style="color: var(--text-primary);"
+          autocomplete="off"
+          spellcheck="false"
+        />
+        <kbd
+          class="px-1.5 py-0.5 rounded text-xs font-mono"
+          style="background: var(--bg-secondary); border: 1px solid var(--border); color: var(--text-muted);"
+        >
+          Esc
+        </kbd>
+      </div>
+      <div id="search-results" class="overflow-y-auto" style="max-height: 400px;"></div>
+    </div>
+  </div>
+
+</BaseLayout>
+
+<!-- ── Client-side SPA logic ────────────────────────────────────────── -->
+<script define:vars={{ searchData, grupoIds: grupos.map(g => g.id) }}>
+
+  // ── State ─────────────────────────────────────────────────────────────────
+
+  let currentView   = 'mapa'  // 'mapa' | 'grupos' | 'ficha'
+  let currentGrupoId = null   // active group in grupos view
+  let currentFichaId = null   // active term ficha
+
+  // ── Core navigation ───────────────────────────────────────────────────────
+
+  function showView(viewId) {
+    document.querySelectorAll('.view').forEach(v => {
+      v.classList.remove('active')
+      v.classList.add('hidden-view')
+    })
+    const el = document.getElementById(`view-${viewId}`)
+    if (el) {
+      el.classList.remove('hidden-view')
+      el.classList.add('active')
+    }
+  }
+
+  function navigate(view, id = null) {
+    currentView = view
+
+    if (view === 'mapa') {
+      showView('mapa')
+      currentGrupoId = null
+      currentFichaId = null
+      updateNavActive('mapa')
+      window.history.pushState({}, '', '#mapa')
+
+    } else if (view === 'grupos') {
+      showView('grupos')
+      currentFichaId = null
+      updateNavActive('grupos')
+
+      if (id) {
+        currentGrupoId = id
+        showGrupoPanel(id)
+        window.history.pushState({}, '', `#grupos/${id}`)
+      } else {
+        currentGrupoId = null
+        showGruposGrid()
+        window.history.pushState({}, '', '#grupos')
+      }
+
+    } else if (view === 'ficha') {
+      currentFichaId = id
+      showView('ficha')
+      updateNavActive(null)
+      window.history.pushState({}, '', `#termino/${id}`)
+      showFichaPanel(id)
+    }
+
+    updateSidebarActive()
+  }
+
+  // Expose globally for D3 graph click handler
+  window.__bioNavigate = navigate
+
+  // ── View helpers ──────────────────────────────────────────────────────────
+
+  function showGruposGrid() {
+    document.getElementById('grupos-grid')?.classList.remove('hidden')
+    document.querySelectorAll('.grupo-panel').forEach(p => {
+      p.classList.add('hidden')
+      p.classList.remove('flex')
+    })
+  }
+
+  function showGrupoPanel(grupoId) {
+    document.getElementById('grupos-grid')?.classList.add('hidden')
+    document.querySelectorAll('.grupo-panel').forEach(p => {
+      p.classList.add('hidden')
+      p.classList.remove('flex')
+    })
+    const panel = document.getElementById(`grupo-panel-${grupoId}`)
+    if (panel) {
+      panel.classList.remove('hidden')
+      panel.classList.add('flex')
+      // Trigger stagger animations
+      panel.querySelectorAll('.stagger-item').forEach((el, i) => {
+        el.style.animationDelay = `${i * 0.06}s`
+        el.style.opacity = '0'
+        void el.offsetWidth // reflow
+        el.style.animation = 'none'
+        void el.offsetWidth
+        el.style.animation = ''
+      })
+    }
+  }
+
+  function showFichaPanel(fichaId) {
+    document.querySelectorAll('.ficha-panel').forEach(p => p.classList.add('hidden'))
+    const panel = document.getElementById(`ficha-${fichaId}`)
+    if (panel) {
+      panel.classList.remove('hidden')
+      panel.scrollTop = 0
+    }
+  }
+
+  // ── Active states ─────────────────────────────────────────────────────────
+
+  function updateNavActive(which) {
+    document.querySelectorAll('.nav-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.nav === which)
+    })
+  }
+
+  function updateSidebarActive() {
+    document.querySelectorAll('.sidebar-group-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.grupoBtn === currentGrupoId)
+    })
+  }
+
+  // ── Event delegation ──────────────────────────────────────────────────────
+
+  document.addEventListener('click', event => {
+    const target = event.target.closest('[data-action]')
+    if (!target) return
+
+    const action  = target.dataset.action
+    const view    = target.dataset.view
+    const grupoId = target.dataset.grupoId
+    const id      = target.dataset.id
+
+    if (action === 'navigate') {
+      if (grupoId) {
+        navigate('grupos', grupoId)
+      } else if (view) {
+        navigate(view)
+      }
+    }
+
+    if (action === 'navigate-ficha') {
+      navigate('ficha', id)
+    }
+
+    if (action === 'show-grupos-grid') {
+      navigate('grupos')
+    }
+  })
+
+  // term-link clicks (rendered via parseLinks)
+  document.addEventListener('click', event => {
+    const target = event.target.closest('.term-link')
+    if (!target) return
+    navigate('ficha', target.dataset.id)
+  })
+
+  // ── Search (Cmd+K) ────────────────────────────────────────────────────────
+
+  const overlay     = document.getElementById('search-overlay')
+  const searchInput = document.getElementById('search-input')
+  const searchResultsEl = document.getElementById('search-results')
+  let selectedIdx   = -1
+  let filteredResults = []
+
+  function openSearch() {
+    overlay?.classList.add('open')
+    searchInput?.focus()
+    renderSearchResults('')
+  }
+
+  function closeSearch() {
+    overlay?.classList.remove('open')
+    if (searchInput) searchInput.value = ''
+    selectedIdx = -1
+  }
+
+  document.getElementById('search-trigger')?.addEventListener('click', openSearch)
+
+  overlay?.addEventListener('click', event => {
+    if (event.target === overlay) closeSearch()
+  })
+
+  document.addEventListener('keydown', event => {
+    if ((event.metaKey || event.ctrlKey) && event.key === 'k') {
+      event.preventDefault()
+      overlay?.classList.contains('open') ? closeSearch() : openSearch()
+    }
+    if (event.key === 'Escape' && overlay?.classList.contains('open')) {
+      closeSearch()
+    }
+    if (overlay?.classList.contains('open')) {
+      if (event.key === 'ArrowDown') {
+        event.preventDefault()
+        selectedIdx = Math.min(selectedIdx + 1, filteredResults.length - 1)
+        highlightResult(selectedIdx)
+      }
+      if (event.key === 'ArrowUp') {
+        event.preventDefault()
+        selectedIdx = Math.max(selectedIdx - 1, 0)
+        highlightResult(selectedIdx)
+      }
+      if (event.key === 'Enter' && selectedIdx >= 0 && filteredResults[selectedIdx]) {
+        closeSearch()
+        navigate('ficha', filteredResults[selectedIdx].id)
+      }
+    }
+  })
+
+  searchInput?.addEventListener('input', e => {
+    selectedIdx = -1
+    renderSearchResults(e.target.value)
+  })
+
+  function renderSearchResults(query) {
+    const q = query.toLowerCase().trim()
+    filteredResults = q
+      ? searchData.filter(t =>
+          t.nombre.toLowerCase().includes(q) ||
+          t.definicionCorta.toLowerCase().includes(q)
+        )
+      : searchData.slice(0, 12)
+
+    if (!searchResultsEl) return
+
+    if (filteredResults.length === 0) {
+      searchResultsEl.innerHTML = `
+        <p style="padding: 16px 20px; color: var(--text-muted); font-size: 0.85rem; text-align: center;">
+          Sin resultados para "${query}"
+        </p>`
+      return
+    }
+
+    const html = filteredResults.map((t, i) => {
+      const colorStyle = t.tipo === 'principal'
+        ? 'background: rgba(0,229,255,0.1); color: var(--accent-cyan); border: 1px solid rgba(0,229,255,0.3);'
+        : 'background: rgba(255,179,0,0.1); color: var(--accent-amber); border: 1px solid rgba(255,179,0,0.3);'
+      return `
+        <button
+          class="search-result-item w-full text-left px-4 py-3 flex items-start gap-3 transition-colors"
+          data-result-id="${t.id}"
+          data-result-idx="${i}"
+          style="border-bottom: 1px solid var(--border);"
+        >
+          <span class="pill shrink-0 mt-0.5" style="${colorStyle}">${t.tipo}</span>
+          <div>
+            <div class="font-mono text-sm" style="color: var(--text-primary);">${t.nombre}</div>
+            <div class="text-xs mt-0.5 line-clamp-1" style="color: var(--text-muted);">${t.definicionCorta}</div>
+          </div>
+        </button>`
+    }).join('')
+
+    searchResultsEl.innerHTML = html
+
+    searchResultsEl.querySelectorAll('.search-result-item').forEach(btn => {
+      btn.addEventListener('click', () => {
+        closeSearch()
+        navigate('ficha', btn.dataset.resultId)
+      })
+      btn.addEventListener('mouseenter', () => {
+        selectedIdx = parseInt(btn.dataset.resultIdx)
+        highlightResult(selectedIdx)
+      })
+    })
+  }
+
+  function highlightResult(idx) {
+    searchResultsEl?.querySelectorAll('.search-result-item').forEach((btn, i) => {
+      btn.style.background = i === idx ? 'rgba(0,229,255,0.06)' : ''
+    })
+    const active = searchResultsEl?.querySelector(`[data-result-idx="${idx}"]`)
+    active?.scrollIntoView({ block: 'nearest' })
+  }
+
+  // ── Hash-based initial routing ────────────────────────────────────────────
+
+  function routeFromHash() {
+    const hash = window.location.hash.slice(1)
+    if (!hash || hash === 'mapa') {
+      navigate('mapa')
+    } else if (hash === 'grupos') {
+      navigate('grupos')
+    } else if (hash.startsWith('grupos/')) {
+      const grupoId = hash.slice(7)
+      navigate('grupos', grupoId)
+    } else if (hash.startsWith('termino/')) {
+      const fichaId = hash.slice(8)
+      navigate('ficha', fichaId)
+    } else {
+      navigate('mapa')
+    }
+  }
+
+  window.addEventListener('popstate', routeFromHash)
+  routeFromHash()
+
+  // ── Stagger inicial del mapa ──────────────────────────────────────────────
+
+  document.querySelectorAll('#grupos-grid .stagger-item').forEach((el, i) => {
+    el.style.animationDelay = `${i * 0.07}s`
+  })
+
+</script>
+
+<style>
+  /* Override .view to use flex when active */
+  .view {
+    display: none !important;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+  }
+  .view.active {
+    display: flex !important;
+  }
+  .hidden-view {
+    display: none !important;
+  }
+
+  /* Search result hover */
+  .search-result-item:hover {
+    background: rgba(0, 229, 255, 0.05) !important;
+  }
+
+  /* Line clamp utility */
+  .line-clamp-1 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+  }
+</style>
