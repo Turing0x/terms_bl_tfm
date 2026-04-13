@@ -467,54 +467,52 @@ const searchData = terminos.map(t => ({
   import { toPng } from 'html-to-image'
 
   async function exportFicha(terminoId: string, nombre: string, btn: HTMLElement) {
-    // Find the exportable content div
-    const contentEl = document.querySelector<HTMLElement>(`[data-export-content="${terminoId}"]`)
-    if (!contentEl) return
+    // The ficha content is already in the live DOM, fully rendered with
+    // resolved computed styles. We capture it directly — no cloning needed.
+    const panel      = document.getElementById(`ficha-${terminoId}`)
+    const contentEl  = document.querySelector<HTMLElement>(`[data-export-content="${terminoId}"]`)
+    if (!panel || !contentEl) return
 
-    // Update button state
     const label = btn.querySelector('.export-btn-label')
     btn.classList.add('exporting')
     if (label) label.textContent = 'Exportando…'
 
+    // ── 1. Temporarily remove scroll-clipping so full height is captured ──
+    const prevPanelOverflow   = panel.style.overflow
+    const prevPanelHeight     = panel.style.height
+    const prevPanelMaxHeight  = panel.style.maxHeight
+    panel.style.overflow  = 'visible'
+    panel.style.height    = 'auto'
+    panel.style.maxHeight = 'none'
+
+    // ── 2. Hide UI controls that shouldn't appear in the image ─────────
+    const hidden: HTMLElement[] = []
+    contentEl.querySelectorAll<HTMLElement>('[data-action="export-ficha"], .ficha-breadcrumb')
+      .forEach(el => { el.style.visibility = 'hidden'; hidden.push(el) })
+
     try {
-      // Clone the content into an off-screen wrapper so we can
-      // capture the full height without overflow clipping
-      const clone = contentEl.cloneNode(true) as HTMLElement
+      const fullH = contentEl.scrollHeight
 
-      // Remove interactive controls that shouldn't appear in the export
-      clone.querySelectorAll('[data-action="export-ficha"], .ficha-breadcrumb').forEach(el => {
-        (el as HTMLElement).style.display = 'none'
-      })
-
-      const wrapper = document.createElement('div')
-      wrapper.style.cssText = [
-        'position: fixed',
-        'top: -99999px',
-        'left: -99999px',
-        'width: 640px',
-        'padding: 32px',
-        'background: #0a0e1a',
-        'background-image: radial-gradient(circle, #1e3a5f 1px, transparent 1px)',
-        'background-size: 24px 24px',
-        'font-family: "DM Sans", ui-sans-serif, sans-serif',
-        'overflow: visible',
-        'z-index: -1',
-      ].join(';')
-      wrapper.appendChild(clone)
-      document.body.appendChild(wrapper)
-
-      const dataUrl = await toPng(wrapper, {
+      const dataUrl = await toPng(contentEl, {
         backgroundColor: '#0a0e1a',
         pixelRatio: 2,
-        // Let html-to-image compute full natural height
-        style: { overflow: 'visible' },
+        // Force capture of the full scroll height, not just the clipped viewport
+        height: fullH,
+        style: {
+          overflow: 'visible',
+          height:   fullH + 'px',
+        },
       })
 
-      document.body.removeChild(wrapper)
+      // ── 3. Restore DOM state ────────────────────────────────────────
+      panel.style.overflow  = prevPanelOverflow
+      panel.style.height    = prevPanelHeight
+      panel.style.maxHeight = prevPanelMaxHeight
+      hidden.forEach(el => { el.style.visibility = '' })
 
-      // Sanitise filename
+      // ── 4. Trigger download ─────────────────────────────────────────
       const safeName = nombre
-        .normalize('NFD').replace(/[\u0300-\u036f]/g, '')  // strip accents
+        .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
         .replace(/[^a-zA-Z0-9\s-]/g, '')
         .trim().replace(/\s+/g, '-')
         .toLowerCase()
@@ -524,7 +522,6 @@ const searchData = terminos.map(t => ({
       link.href = dataUrl
       link.click()
 
-      // Success state
       btn.classList.remove('exporting')
       btn.classList.add('done')
       if (label) label.textContent = '✓ Descargado'
@@ -534,14 +531,16 @@ const searchData = terminos.map(t => ({
       }, 2500)
 
     } catch (err) {
+      panel.style.overflow  = prevPanelOverflow
+      panel.style.height    = prevPanelHeight
+      panel.style.maxHeight = prevPanelMaxHeight
+      hidden.forEach(el => { el.style.visibility = '' })
       console.error('[BioGlosario] Export error:', err)
-      document.body.querySelector('[data-export-content]') // cleanup if wrapper still attached
       btn.classList.remove('exporting')
       if (label) label.textContent = 'Error — reintentar'
       setTimeout(() => { if (label) label.textContent = 'Exportar' }, 2000)
     }
   }
 
-  // Register on the global proxy set up by the define:vars script
   window.__exportFicha = exportFicha
 </script>
