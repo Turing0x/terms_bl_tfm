@@ -28,23 +28,42 @@ const aparecen = termino.apareceComo
   class="ficha-panel hidden overflow-y-auto"
   data-termino-id={termino.id}
 >
-  <div class="max-w-2xl mx-auto px-4 py-6 flex flex-col gap-6">
+  <div class="max-w-2xl mx-auto px-4 py-6 flex flex-col gap-6" data-export-content={termino.id}>
 
-    <!-- Breadcrumb placeholder (rendered dynamically via JS) -->
-    <div class="ficha-breadcrumb text-xs font-mono" style="color: var(--text-muted);">
-      <button data-action="navigate" data-view="mapa" class="hover:text-accent-cyan transition-colors" style="color:var(--text-muted)">Mapa</button>
-      <span class="mx-1 opacity-40">/</span>
-      {grupo && (
-        <button
-          data-action="navigate"
-          data-view="grupos"
-          data-grupo-id={grupo.id}
-          class="hover:text-accent-cyan transition-colors"
-          style="color:var(--text-muted)"
-        >{grupo.emoji} {grupo.nombre}</button>
-      )}
-      <span class="mx-1 opacity-40">/</span>
-      <span style="color: var(--text-primary);">{termino.nombre}</span>
+    <!-- Breadcrumb + export button row -->
+    <div class="flex items-center justify-between gap-2">
+      <div class="ficha-breadcrumb text-xs font-mono" style="color: var(--text-muted);">
+        <button data-action="navigate" data-view="mapa" class="hover:text-accent-cyan transition-colors" style="color:var(--text-muted)">Mapa</button>
+        <span class="mx-1 opacity-40">/</span>
+        {grupo && (
+          <button
+            data-action="navigate"
+            data-view="grupos"
+            data-grupo-id={grupo.id}
+            class="hover:text-accent-cyan transition-colors"
+            style="color:var(--text-muted)"
+          >{grupo.emoji} {grupo.nombre}</button>
+        )}
+        <span class="mx-1 opacity-40">/</span>
+        <span style="color: var(--text-primary);">{termino.nombre}</span>
+      </div>
+
+      <!-- Export button -->
+      <button
+        class="export-btn flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono shrink-0 transition-all"
+        style="background: var(--bg-card); border: 1px solid var(--border); color: var(--text-muted);"
+        data-action="export-ficha"
+        data-id={termino.id}
+        data-nombre={termino.nombre}
+        title="Exportar ficha como imagen PNG"
+      >
+        <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+          <polyline points="7 10 12 15 17 10"/>
+          <line x1="12" y1="15" x2="12" y2="3"/>
+        </svg>
+        <span class="export-btn-label">Exportar</span>
+      </button>
     </div>
 
     <!-- Header -->

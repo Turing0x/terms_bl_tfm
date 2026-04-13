@@ -247,6 +247,10 @@ const searchData = terminos.map(t => ({
     if (action === 'show-grupos-grid') {
       navigate('grupos')
     }
+
+    if (action === 'export-ficha') {
+      exportFicha(id, target.dataset.nombre, target)
+    }
   })
 
   // term-link clicks (rendered via parseLinks)
@@ -401,6 +405,16 @@ const searchData = terminos.map(t => ({
     el.style.animationDelay = `${i * 0.07}s`
   })
 
+  // ── Export — proxy to the module below ───────────────────────────────────
+
+  window.__exportFicha = null   // filled by the module script below
+
+  function exportFicha(id, nombre, btn) {
+    if (typeof window.__exportFicha === 'function') {
+      window.__exportFicha(id, nombre, btn)
+    }
+  }
+
 </script>
 
 <style>
@@ -430,4 +444,104 @@ const searchData = terminos.map(t => ({
     -webkit-line-clamp: 1;
     -webkit-box-orient: vertical;
   }
+
+  /* Export button active state */
+  .export-btn:hover {
+    border-color: var(--accent-cyan) !important;
+    color: var(--accent-cyan) !important;
+  }
+  .export-btn.exporting {
+    border-color: var(--accent-amber) !important;
+    color: var(--accent-amber) !important;
+    opacity: 0.8;
+    pointer-events: none;
+  }
+  .export-btn.done {
+    border-color: var(--accent-green) !important;
+    color: var(--accent-green) !important;
+  }
 </style>
+
+<!-- ── Export module (separate script — can use import) ──────────────── -->
+<script>
+  import { toPng } from 'html-to-image'
+
+  async function exportFicha(terminoId: string, nombre: string, btn: HTMLElement) {
+    // Find the exportable content div
+    const contentEl = document.querySelector<HTMLElement>(`[data-export-content="${terminoId}"]`)
+    if (!contentEl) return
+
+    // Update button state
+    const label = btn.querySelector('.export-btn-label')
+    btn.classList.add('exporting')
+    if (label) label.textContent = 'Exportando…'
+
+    try {
+      // Clone the content into an off-screen wrapper so we can
+      // capture the full height without overflow clipping
+      const clone = contentEl.cloneNode(true) as HTMLElement
+
+      // Remove interactive controls that shouldn't appear in the export
+      clone.querySelectorAll('[data-action="export-ficha"], .ficha-breadcrumb').forEach(el => {
+        (el as HTMLElement).style.display = 'none'
+      })
+
+      const wrapper = document.createElement('div')
+      wrapper.style.cssText = [
+        'position: fixed',
+        'top: -99999px',
+        'left: -99999px',
+        'width: 640px',
+        'padding: 32px',
+        'background: #0a0e1a',
+        'background-image: radial-gradient(circle, #1e3a5f 1px, transparent 1px)',
+        'background-size: 24px 24px',
+        'font-family: "DM Sans", ui-sans-serif, sans-serif',
+        'overflow: visible',
+        'z-index: -1',
+      ].join(';')
+      wrapper.appendChild(clone)
+      document.body.appendChild(wrapper)
+
+      const dataUrl = await toPng(wrapper, {
+        backgroundColor: '#0a0e1a',
+        pixelRatio: 2,
+        // Let html-to-image compute full natural height
+        style: { overflow: 'visible' },
+      })
+
+      document.body.removeChild(wrapper)
+
+      // Sanitise filename
+      const safeName = nombre
+        .normalize('NFD').replace(/[\u0300-\u036f]/g, '')  // strip accents
+        .replace(/[^a-zA-Z0-9\s-]/g, '')
+        .trim().replace(/\s+/g, '-')
+        .toLowerCase()
+
+      const link = document.createElement('a')
+      link.download = `bioglosario-${safeName}.png`
+      link.href = dataUrl
+      link.click()
+
+      // Success state
+      btn.classList.remove('exporting')
+      btn.classList.add('done')
+      if (label) label.textContent = '✓ Descargado'
+      setTimeout(() => {
+        btn.classList.remove('done')
+        if (label) label.textContent = 'Exportar'
+      }, 2500)
+
+    } catch (err) {
+      console.error('[BioGlosario] Export error:', err)
+      document.body.querySelector('[data-export-content]') // cleanup if wrapper still attached
+      btn.classList.remove('exporting')
+      if (label) label.textContent = 'Error — reintentar'
+      setTimeout(() => { if (label) label.textContent = 'Exportar' }, 2000)
+    }
+  }
+
+  // Register on the global proxy set up by the define:vars script
+  window.__exportFicha = exportFicha
+</script>
