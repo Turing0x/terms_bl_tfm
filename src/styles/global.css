@@ -146,6 +146,15 @@ h1, h2, h3, h4, h5, h6,
 }
 #search-overlay.open { display: flex; }
 
+/* ── Dominado button ── */
+.dominado-btn {
+  transition: color 0.2s, border-color 0.2s, background 0.2s;
+}
+.dominado-btn:hover {
+  border-color: rgba(57,255,20,0.4) !important;
+  color: var(--accent-green) !important;
+}
+
 /* ── D3 graph tooltip ── */
 #graph-tooltip {
   position: fixed;

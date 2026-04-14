@@ -45,8 +45,27 @@ import SearchBar from '../ui/SearchBar.astro'
     </button>
   </nav>
 
-  <!-- Search -->
-  <SearchBar />
+  <!-- Right: search + progress -->
+  <div class="flex items-center gap-3">
+    <!-- Progress pill -->
+    <div
+      id="progreso-pill"
+      class="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-mono"
+      style="background: var(--bg-card); border: 1px solid var(--border);"
+      title="Progreso de estudio"
+    >
+      <div class="relative w-20 h-1.5 rounded-full overflow-hidden" style="background: var(--border);">
+        <div
+          id="progreso-bar"
+          class="absolute inset-y-0 left-0 rounded-full transition-all duration-500"
+          style="width: 0%; background: var(--accent-green);"
+        ></div>
+      </div>
+      <span id="progreso-text" style="color: var(--text-muted);">0 / 49</span>
+    </div>
+
+    <SearchBar />
+  </div>
 </header>
 
 <style>

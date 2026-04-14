@@ -48,22 +48,38 @@ const aparecen = termino.apareceComo
         <span style="color: var(--text-primary);">{termino.nombre}</span>
       </div>
 
-      <!-- Export button -->
-      <button
-        class="export-btn flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono shrink-0 transition-all"
-        style="background: var(--bg-card); border: 1px solid var(--border); color: var(--text-muted);"
-        data-action="export-ficha"
-        data-id={termino.id}
-        data-nombre={termino.nombre}
-        title="Exportar ficha como imagen PNG"
-      >
-        <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-          <polyline points="7 10 12 15 17 10"/>
-          <line x1="12" y1="15" x2="12" y2="3"/>
-        </svg>
-        <span class="export-btn-label">Exportar</span>
-      </button>
+      <div class="flex items-center gap-2 shrink-0">
+        <!-- Dominado toggle -->
+        <button
+          class="dominado-btn flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono transition-all"
+          style="background: var(--bg-card); border: 1px solid var(--border); color: var(--text-muted);"
+          data-action="toggle-dominado"
+          data-id={termino.id}
+          title="Marcar como dominado"
+        >
+          <svg class="dominado-icon" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg>
+          <span class="dominado-label">Dominado</span>
+        </button>
+
+        <!-- Export button -->
+        <button
+          class="export-btn flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono transition-all"
+          style="background: var(--bg-card); border: 1px solid var(--border); color: var(--text-muted);"
+          data-action="export-ficha"
+          data-id={termino.id}
+          data-nombre={termino.nombre}
+          title="Exportar ficha como imagen PNG"
+        >
+          <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/>
+            <line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+          <span class="export-btn-label">Exportar</span>
+        </button>
+      </div>
     </div>
 
     <!-- Header -->

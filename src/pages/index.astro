@@ -251,6 +251,10 @@ const searchData = terminos.map(t => ({
     if (action === 'export-ficha') {
       exportFicha(id, target.dataset.nombre, target)
     }
+
+    if (action === 'toggle-dominado') {
+      window.__toggleDominado?.(id)
+    }
   })
 
   // term-link clicks (rendered via parseLinks)
@@ -407,7 +411,8 @@ const searchData = terminos.map(t => ({
 
   // ── Export — proxy to the module below ───────────────────────────────────
 
-  window.__exportFicha = null   // filled by the module script below
+  window.__exportFicha   = null   // filled by the export module script
+  window.__toggleDominado = null  // filled by the progreso module script
 
   function exportFicha(id, nombre, btn) {
     if (typeof window.__exportFicha === 'function') {
@@ -543,4 +548,90 @@ const searchData = terminos.map(t => ({
   }
 
   window.__exportFicha = exportFicha
+</script>
+
+<!-- ── Progreso de estudio module ────────────────────────────────────── -->
+<script>
+  import { getDominados, toggleDominado, getProgreso } from '../lib/progreso'
+
+  const TOTAL = 49
+
+  // ── Update all UI surfaces that reflect progreso ─────────────────────────
+
+  function updateProgresoUI() {
+    const { dominados, pct } = getProgreso(TOTAL)
+    const dominadosSet = getDominados()
+
+    // Header bar + counter
+    const bar  = document.getElementById('progreso-bar')
+    const text = document.getElementById('progreso-text')
+    const pill = document.getElementById('progreso-pill')
+    if (bar)  bar.style.width = pct + '%'
+    if (text) text.textContent = `${dominados} / ${TOTAL}`
+    if (pill) {
+      pill.classList.remove('hidden')
+      // Color shifts green as pct grows
+      const barEl = bar as HTMLElement | null
+      if (barEl) {
+        barEl.style.background = pct === 100
+          ? 'var(--accent-cyan)'
+          : pct > 60
+            ? 'var(--accent-green)'
+            : 'var(--accent-amber)'
+      }
+      const textEl = text as HTMLElement | null
+      if (textEl) {
+        textEl.style.color = pct === 100 ? 'var(--accent-cyan)' : 'var(--text-muted)'
+      }
+    }
+
+    // Dominado buttons on all visible fichas
+    document.querySelectorAll<HTMLButtonElement>('[data-action="toggle-dominado"]').forEach(btn => {
+      const id = btn.dataset.id!
+      const yes = dominadosSet.has(id)
+      applyDominadoBtn(btn, yes)
+    })
+
+    // Dot on ConceptCards
+    document.querySelectorAll<HTMLElement>('[data-action="navigate-ficha"]').forEach(card => {
+      const id = card.dataset.id!
+      const dot = card.querySelector<HTMLElement>('.dominado-dot')
+      if (dot) dot.style.display = dominadosSet.has(id) ? 'block' : 'none'
+    })
+  }
+
+  function applyDominadoBtn(btn: HTMLButtonElement, isDone: boolean) {
+    const label = btn.querySelector('.dominado-label') as HTMLElement | null
+    if (isDone) {
+      btn.style.borderColor = 'var(--accent-green)'
+      btn.style.color       = 'var(--accent-green)'
+      btn.style.background  = 'rgba(57,255,20,0.08)'
+      if (label) label.textContent = '✓ Dominado'
+    } else {
+      btn.style.borderColor = 'var(--border)'
+      btn.style.color       = 'var(--text-muted)'
+      btn.style.background  = 'var(--bg-card)'
+      if (label) label.textContent = 'Dominado'
+    }
+  }
+
+  // ── Toggle handler ────────────────────────────────────────────────────────
+
+  function handleToggleDominado(id: string) {
+    toggleDominado(id)
+    updateProgresoUI()
+  }
+
+  // ── Init ─────────────────────────────────────────────────────────────────
+
+  // Run on load + every time navigate happens
+  window.__toggleDominado = handleToggleDominado
+  updateProgresoUI()
+
+  // Re-run after navigation so newly-visible fichas get correct state
+  const _origNavigate = (window as any).__bioNavigate
+  ;(window as any).__bioNavigate = (view: string, id?: string) => {
+    _origNavigate?.(view, id)
+    requestAnimationFrame(updateProgresoUI)
+  }
 </script>
