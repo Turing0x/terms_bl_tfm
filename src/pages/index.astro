@@ -5,6 +5,7 @@ import Sidebar from '../components/layout/Sidebar.astro'
 import MapaView from '../components/views/MapaView.astro'
 import GrupoView from '../components/views/GrupoView.astro'
 import FichaView from '../components/views/FichaView.astro'
+import QuizView from '../components/views/QuizView.astro'
 import ConceptGraph from '../components/graph/ConceptGraph.astro'
 
 import {
@@ -66,6 +67,11 @@ const searchData = terminos.map(t => ({
               relaciones={getRelacionesByTermino(t.id)}
             />
           ))}
+        </div>
+
+        <!-- ── Vista: Quiz ────────────────────────────────── -->
+        <div id="view-quiz" class="view overflow-hidden">
+          <QuizView grupos={grupos} />
         </div>
 
       </main>
@@ -158,13 +164,26 @@ const searchData = terminos.map(t => ({
       updateNavActive(null)
       window.history.pushState({}, '', `#termino/${id}`)
       showFichaPanel(id)
+
+    } else if (view === 'quiz') {
+      showView('quiz')
+      updateNavActive('quiz')
+      if (id) {
+        // id = grupoId, extra = mode — start quiz directly
+        window.__quizStart?.(id, arguments[2] || 'flashcard')
+        window.history.pushState({}, '', `#quiz/${id}/${arguments[2] || 'flashcard'}`)
+      } else {
+        window.__quizSetup?.()
+        window.history.pushState({}, '', '#quiz')
+      }
     }
 
     updateSidebarActive()
   }
 
-  // Expose globally for D3 graph click handler
+  // Expose globally for D3 graph click handler and quiz module
   window.__bioNavigate = navigate
+  window.searchData = searchData
 
   // ── View helpers ──────────────────────────────────────────────────────────
 
@@ -423,6 +442,11 @@ const searchData = terminos.map(t => ({
     } else if (hash.startsWith('termino/')) {
       const fichaId = hash.slice(8)
       navigate('ficha', fichaId)
+    } else if (hash === 'quiz') {
+      navigate('quiz')
+    } else if (hash.startsWith('quiz/')) {
+      const parts = hash.split('/')
+      navigate('quiz', parts[1], parts[2])
     } else {
       navigate('mapa')
     }
@@ -658,8 +682,330 @@ const searchData = terminos.map(t => ({
 
   // Re-run after navigation so newly-visible fichas get correct state
   const _origNavigate = (window as any).__bioNavigate
-  ;(window as any).__bioNavigate = (view: string, id?: string) => {
-    _origNavigate?.(view, id)
+  ;(window as any).__bioNavigate = (view: string, id?: string, extra?: string) => {
+    _origNavigate?.(view, id, extra)
     requestAnimationFrame(updateProgresoUI)
   }
+</script>
+
+<!-- ── Quiz module ────────────────────────────────────────────────────── -->
+<script>
+  import { generateQuestions, shuffle } from '../lib/quiz'
+  import type { QuizMode, Question, QuizTerm } from '../lib/quiz'
+  import { getDominados, toggleDominado } from '../lib/progreso'
+
+  // ── State ─────────────────────────────────────────────────────────────────
+
+  interface QuizState {
+    mode: QuizMode
+    grupoId: string
+    grupoNombre: string
+    questions: Question[]
+    current: number
+    revealed: boolean
+    score: { ok: number; fail: number }
+    wrongTerms: { nombre: string; answer: string }[]
+  }
+
+  const state: QuizState = {
+    mode: 'flashcard',
+    grupoId: '',
+    grupoNombre: '',
+    questions: [],
+    current: 0,
+    revealed: false,
+    score: { ok: 0, fail: 0 },
+    wrongTerms: [],
+  }
+
+  ;(window as any).__quizState = state
+
+  // ── DOM helpers ───────────────────────────────────────────────────────────
+
+  function showScreen(id: 'quiz-setup' | 'quiz-question' | 'quiz-results') {
+    document.querySelectorAll<HTMLElement>('.quiz-screen').forEach(s => {
+      s.classList.toggle('active', s.id === id)
+    })
+  }
+
+  function updateProgressBar() {
+    const total = state.questions.length
+    const done = state.current
+    const pct = total > 0 ? Math.round((done / total) * 100) : 0
+    const bar = document.getElementById('quiz-progress-bar')
+    const text = document.getElementById('quiz-progress-text')
+    if (bar) bar.style.width = pct + '%'
+    if (text) text.textContent = `${done} / ${total}`
+  }
+
+  // ── Setup screen ──────────────────────────────────────────────────────────
+
+  function showSetup() {
+    showScreen('quiz-setup')
+    // Reset group selection
+    document.querySelectorAll<HTMLElement>('.quiz-group-btn').forEach(btn => {
+      btn.classList.remove('selected')
+    })
+    const modeSection = document.getElementById('quiz-mode-section')
+    if (modeSection) {
+      modeSection.classList.add('opacity-30', 'pointer-events-none')
+    }
+    state.grupoId = ''
+  }
+
+  ;(window as any).__quizSetup = showSetup
+
+  function selectGroup(grupoId: string) {
+    state.grupoId = grupoId
+    document.querySelectorAll<HTMLElement>('.quiz-group-btn').forEach(btn => {
+      btn.classList.toggle('selected', btn.dataset.grupoId === grupoId)
+    })
+    const modeSection = document.getElementById('quiz-mode-section')
+    if (modeSection) {
+      modeSection.classList.remove('opacity-30', 'pointer-events-none')
+    }
+  }
+
+  // ── Start quiz ────────────────────────────────────────────────────────────
+
+  function startQuiz(grupoId: string, mode: QuizMode) {
+    // searchData is injected by define:vars in the main script block
+    const allTerms: QuizTerm[] = (window as any).searchData ?? []
+    const groupTerms = allTerms.filter((t: QuizTerm) => t.grupo === grupoId)
+
+    if (groupTerms.length === 0) return
+
+    // Find group name from a button
+    const groupBtn = document.querySelector<HTMLElement>(`[data-grupo-id="${grupoId}"]`)
+    const nombre = groupBtn?.querySelector('.font-semibold')?.textContent ?? grupoId
+
+    state.mode = mode
+    state.grupoId = grupoId
+    state.grupoNombre = nombre
+    state.questions = generateQuestions(groupTerms, allTerms, mode)
+    state.current = 0
+    state.revealed = false
+    state.score = { ok: 0, fail: 0 }
+    state.wrongTerms = []
+
+    showScreen('quiz-question')
+    renderQuestion()
+  }
+
+  ;(window as any).__quizStart = startQuiz
+
+  // ── Render question ───────────────────────────────────────────────────────
+
+  function renderQuestion() {
+    const q = state.questions[state.current]
+    if (!q) { showResults(); return }
+
+    updateProgressBar()
+
+    const modeLabel = document.getElementById('quiz-mode-label')
+    const flashcard = document.getElementById('quiz-flashcard')
+    const mc = document.getElementById('quiz-mc')
+
+    const modeNames: Record<QuizMode, string> = {
+      flashcard: '🃏 Flashcards',
+      'def-to-term': '💡 Definición → Término',
+      'term-to-def': '📖 Término → Definición',
+    }
+    if (modeLabel) modeLabel.textContent = modeNames[q.mode]
+
+    if (q.mode === 'flashcard') {
+      flashcard?.classList.remove('hidden')
+      mc?.classList.add('hidden')
+      renderFlashcard(q)
+    } else {
+      flashcard?.classList.add('hidden')
+      mc?.classList.remove('hidden')
+      renderMC(q)
+    }
+  }
+
+  function renderFlashcard(q: Question) {
+    state.revealed = false
+    const front = document.getElementById('quiz-card-front')
+    const back = document.getElementById('quiz-card-back')
+    const term = document.getElementById('quiz-card-term')
+    const def = document.getElementById('quiz-card-def')
+    const btns = document.getElementById('quiz-flashcard-btns')
+
+    if (front) front.classList.remove('hidden')
+    if (back) back.classList.add('hidden')
+    if (btns) btns.classList.add('hidden')
+    if (btns) btns.classList.remove('flex')
+    if (term) term.textContent = q.prompt
+    if (def) def.textContent = q.answer
+  }
+
+  function flipCard() {
+    if (state.revealed) return
+    state.revealed = true
+    const front = document.getElementById('quiz-card-front')
+    const back = document.getElementById('quiz-card-back')
+    const btns = document.getElementById('quiz-flashcard-btns')
+    if (front) front.classList.add('hidden')
+    if (back) back.classList.remove('hidden')
+    if (btns) { btns.classList.remove('hidden'); btns.classList.add('flex') }
+  }
+
+  function renderMC(q: Question) {
+    const label = document.getElementById('quiz-mc-label')
+    const prompt = document.getElementById('quiz-mc-prompt')
+    const opts = document.getElementById('quiz-mc-options')
+    if (!opts) return
+
+    const promptLabel: Record<QuizMode, string> = {
+      flashcard: '',
+      'def-to-term': 'Definición',
+      'term-to-def': 'Término',
+    }
+    if (label) label.textContent = promptLabel[q.mode]
+    if (prompt) prompt.textContent = q.prompt
+
+    opts.innerHTML = q.options.map(opt => `
+      <button class="mc-option" data-action="quiz-mc-answer" data-value="${encodeURIComponent(opt)}">
+        ${opt}
+      </button>
+    `).join('')
+  }
+
+  function handleMCAnswer(value: string) {
+    const q = state.questions[state.current]
+    if (!q) return
+
+    const opts = document.querySelectorAll<HTMLButtonElement>('.mc-option')
+    opts.forEach(btn => {
+      btn.disabled = true
+      const v = decodeURIComponent(btn.dataset.value ?? '')
+      if (v === q.answer) btn.classList.add('correct')
+      else if (v === value) btn.classList.add('wrong')
+    })
+
+    const correct = value === q.answer
+    if (correct) {
+      state.score.ok++
+    } else {
+      state.score.fail++
+      state.wrongTerms.push({ nombre: q.termNombre, answer: q.answer })
+    }
+
+    setTimeout(() => {
+      state.current++
+      renderQuestion()
+    }, 900)
+  }
+
+  function handleFlashcardAnswer(correct: boolean) {
+    const q = state.questions[state.current]
+    if (!q) return
+
+    if (correct) {
+      state.score.ok++
+      // Mark as dominado if not already
+      const dominados = getDominados()
+      if (!dominados.has(q.termId)) {
+        toggleDominado(q.termId)
+        ;(window as any).__toggleDominado?.(q.termId)
+      }
+    } else {
+      state.score.fail++
+      state.wrongTerms.push({ nombre: q.termNombre, answer: q.answer })
+    }
+
+    state.current++
+    renderQuestion()
+  }
+
+  // ── Results ───────────────────────────────────────────────────────────────
+
+  function showResults() {
+    showScreen('quiz-results')
+
+    const total = state.questions.length
+    const ok = state.score.ok
+    const pct = total > 0 ? Math.round((ok / total) * 100) : 0
+
+    const emoji = document.getElementById('quiz-result-emoji')
+    const score = document.getElementById('quiz-result-score')
+    const bar = document.getElementById('quiz-result-bar')
+    const pctEl = document.getElementById('quiz-result-pct')
+    const grupoEl = document.getElementById('quiz-result-grupo')
+    const errorsEl = document.getElementById('quiz-result-errors')
+    const errorsList = document.getElementById('quiz-result-errors-list')
+
+    if (emoji) emoji.textContent = pct === 100 ? '🏆' : pct >= 70 ? '🎉' : '💪'
+    if (score) {
+      score.textContent = `${ok} / ${total}`
+      score.style.color = pct === 100 ? 'var(--accent-cyan)' : pct >= 70 ? 'var(--accent-green)' : 'var(--accent-amber)'
+    }
+    if (grupoEl) grupoEl.textContent = `${state.grupoNombre} · ${state.mode === 'flashcard' ? 'Flashcards' : state.mode === 'def-to-term' ? 'Definición → Término' : 'Término → Definición'}`
+    if (bar) {
+      setTimeout(() => { if (bar) bar.style.width = pct + '%' }, 50)
+      bar.style.background = pct === 100 ? 'var(--accent-cyan)' : pct >= 70 ? 'var(--accent-green)' : 'var(--accent-amber)'
+    }
+    if (pctEl) pctEl.textContent = `${pct}% de acierto`
+
+    if (state.wrongTerms.length > 0 && errorsEl && errorsList) {
+      errorsEl.classList.remove('hidden')
+      errorsEl.classList.add('flex')
+      errorsList.innerHTML = state.wrongTerms.map(w => `
+        <div class="flex flex-col gap-0.5 px-4 py-3 rounded-xl" style="background: var(--bg-card); border: 1px solid var(--border);">
+          <span class="font-mono text-sm font-semibold" style="color: var(--text-primary);">${w.nombre}</span>
+          <span class="text-xs" style="color: var(--text-muted);">${w.answer}</span>
+        </div>
+      `).join('')
+    } else if (errorsEl) {
+      errorsEl.classList.add('hidden')
+      errorsEl.classList.remove('flex')
+    }
+  }
+
+  // ── Event delegation (quiz actions) ──────────────────────────────────────
+
+  document.addEventListener('click', event => {
+    const target = (event.target as Element).closest('[data-action]') as HTMLElement | null
+    if (!target) return
+
+    const action = target.dataset.action
+
+    if (action === 'quiz-select-group') {
+      selectGroup(target.dataset.grupoId ?? '')
+    }
+
+    if (action === 'quiz-start') {
+      if (!state.grupoId) return
+      const mode = (target.dataset.mode ?? 'flashcard') as QuizMode
+      startQuiz(state.grupoId, mode)
+      window.history.replaceState({}, '', `#quiz/${state.grupoId}/${mode}`)
+    }
+
+    if (action === 'quiz-flip') {
+      flipCard()
+    }
+
+    if (action === 'quiz-flashcard-answer') {
+      const correct = target.dataset.correct === 'true'
+      handleFlashcardAnswer(correct)
+    }
+
+    if (action === 'quiz-mc-answer') {
+      const value = decodeURIComponent(target.dataset.value ?? '')
+      handleMCAnswer(value)
+    }
+
+    if (action === 'quiz-exit') {
+      ;(window as any).__bioNavigate?.('quiz')
+    }
+
+    if (action === 'quiz-retry') {
+      startQuiz(state.grupoId, state.mode)
+    }
+
+    if (action === 'quiz-change-group') {
+      ;(window as any).__bioNavigate?.('quiz')
+    }
+  })
 </script>
