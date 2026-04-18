@@ -1,12 +1,12 @@
 {
   "meta": {
     "titulo": "BioGlosario — Biopsia Líquida y Parasitología",
-    "version": "1.1",
+    "version": "1.2",
     "fuente": "TFM: Biopsia líquida y su potencial diagnóstico. Uso en enfermedades parasitarias",
     "autora": "Ana María Cárdenas Sánchez",
     "tutora": "María Inmaculada Ramírez Macías",
     "universidad": "Universidad de Granada — Máster en Análisis Biológico y Diagnóstico de Laboratorio",
-    "totalTerminos": 57,
+    "totalTerminos": 59,
     "totalGrupos": 9
   },
   "grupos": [
@@ -120,7 +120,13 @@
         "electroforesis",
         "fluorometros"
       ],
-      "terminosSecundarios": ["cfDNA", "fragmento-nucleosomal", "analito"]
+      "terminosSecundarios": [
+        "cfDNA",
+        "fragmento-nucleosomal",
+        "analito",
+        "NHGRI",
+        "repositorios-institucionales"
+      ]
     },
     {
       "id": "grupo-7",
@@ -458,6 +464,30 @@
       "hasta": "parasitosis-submicroscopica",
       "tipo": "no-detecta",
       "descripcion": "El gold standard falla sistemáticamente en infecciones de baja carga parasitaria"
+    },
+    {
+      "desde": "NHGRI",
+      "hasta": "NGS",
+      "tipo": "sostiene",
+      "descripcion": "El NHGRI mantiene las bases de datos genómicas de referencia que hacen posible la clasificación taxonómica en NGS"
+    },
+    {
+      "desde": "NHGRI",
+      "hasta": "repositorios-institucionales",
+      "tipo": "es-un",
+      "descripcion": "El NHGRI es un ejemplo de repositorio institucional de datos genómicos"
+    },
+    {
+      "desde": "repositorios-institucionales",
+      "hasta": "deplecion-genoma",
+      "tipo": "habilita",
+      "descripcion": "Las bases de datos genómicas en repositorios institucionales hacen posible la depleción del genoma huésped en mNGS"
+    },
+    {
+      "desde": "repositorios-institucionales",
+      "hasta": "metagenómica-clinica",
+      "tipo": "sostiene",
+      "descripcion": "La clasificación taxonómica del mNGS depende de la calidad y completitud de los repositorios de referencia genómica"
     }
   ],
   "terminos": [
@@ -1276,6 +1306,36 @@
         "cfDNA"
       ],
       "apareceComo": []
+    },
+    {
+      "id": "NHGRI",
+      "nombre": "NHGRI — National Human Genome Research Institute",
+      "tipo": "secundario",
+      "grupo": "grupo-6",
+      "definicionCorta": "Instituto nacional de investigación del genoma humano de EE.UU. que mantiene bases de datos genómicas de referencia esenciales para el diagnóstico molecular.",
+      "explicacion": "El NHGRI, del inglés National Human Genome Research Institute, es el instituto de los Institutos Nacionales de Salud (NIH) de Estados Unidos dedicado a la investigación genómica. En el TFM aparece citado directamente como fuente de referencia institucional, junto a la OMS y la OCDE, en la consulta de datos del Genome Sequencing Program (GSP). Su relevancia para la biopsia líquida no es directamente clínica sino infraestructural: las técnicas de [[NGS]] y [[metagenómica-clinica]] dependen de bases de datos genómicas de referencia bien curadas y actualizadas. Cuando el mNGS plasmático secuencia todos los fragmentos de [[cfDNA]] de una muestra y necesita identificar cuáles son de origen parasitario, lo hace comparando cada lectura contra genomas de referencia alojados en [[repositorios-institucionales]] como los que financia y mantiene el NHGRI. Sin esa infraestructura de datos, la [[deplecion-genoma]] y la clasificación taxonómica que hacen posible el diagnóstico metagenómico no existirían con la precisión actual.",
+      "relacionados": [
+        "NGS",
+        "metagenómica-clinica",
+        "deplecion-genoma",
+        "repositorios-institucionales"
+      ],
+      "apareceComo": []
+    },
+    {
+      "id": "repositorios-institucionales",
+      "nombre": "Repositorios institucionales",
+      "tipo": "secundario",
+      "grupo": "grupo-6",
+      "definicionCorta": "Bases de datos y plataformas digitales mantenidas por organismos de referencia que publican datos científicos, informes técnicos y registros genómicos de acceso público.",
+      "explicacion": "Un repositorio institucional es una plataforma de almacenamiento y acceso público de datos científicos gestionada por un organismo de referencia reconocido. En el TFM se mencionan explícitamente como fuentes complementarias a PubMed y Google Scholar durante la estrategia de búsqueda bibliográfica: se consultaron repositorios de la OMS para informes globales sobre enfermedades tropicales desatendidas, del [[NHGRI]] para datos de secuenciación genómica, y de la OCDE para datos epidemiológicos y económicos. Su papel en biopsia líquida es doble. Por un lado, son la fuente de los datos epidemiológicos de prevalencia que justifican la investigación: sin los informes de la OMS sobre los 63 millones de casos anuales de enfermedades tropicales desatendidas, no habría base para argumentar la urgencia de nuevas herramientas diagnósticas. Por otro lado, son el sostén de las bases de datos de referencia genómica contra las que las plataformas de [[NGS]] comparan sus lecturas durante el proceso de [[deplecion-genoma]] y clasificación taxonómica en [[metagenómica-clinica]]. La completitud y actualización de esos repositorios es un factor limitante reconocido del mNGS: si el genoma de un parásito no está registrado en la base de datos de referencia, sus lecturas no serán identificadas aunque estén presentes en la muestra.",
+      "relacionados": [
+        "NHGRI",
+        "NGS",
+        "metagenómica-clinica",
+        "deplecion-genoma"
+      ],
+      "apareceComo": ["NHGRI"]
     }
   ]
 }
