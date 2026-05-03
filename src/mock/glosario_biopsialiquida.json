@@ -1,12 +1,12 @@
 {
   "meta": {
     "titulo": "BioGlosario — Biopsia Líquida y Parasitología",
-    "version": "1.2",
+    "version": "1.3",
     "fuente": "TFM: Biopsia líquida y su potencial diagnóstico. Uso en enfermedades parasitarias",
     "autora": "Ana María Cárdenas Sánchez",
     "tutora": "María Inmaculada Ramírez Macías",
     "universidad": "Universidad de Granada — Máster en Análisis Biológico y Diagnóstico de Laboratorio",
-    "totalTerminos": 59,
+    "totalTerminos": 68,
     "totalGrupos": 9
   },
   "grupos": [
@@ -60,7 +60,10 @@
         "metabolito",
         "analito"
       ],
-      "terminosSecundarios": ["membrana-lipidica", "espacio-extracelular"]
+      "terminosSecundarios": [
+        "membrana-lipidica",
+        "espacio-extracelular"
+      ]
     },
     {
       "id": "grupo-4",
@@ -93,12 +96,21 @@
         "plasma-suero",
         "lisis-leucocitaria",
         "columna-membrana-silice",
-        "tampones-lisis-caotropica"
+        "tampones-lisis-caotropica",
+        "agente-caotropico",
+        "kit-qiAamp",
+        "kit-magmax",
+        "kit-maxwell",
+        "kit-epiquik"
       ],
       "terminosSecundarios": [
         "fragmento-nucleosomal",
         "cfDNA",
-        "dnasas-plasmaticas"
+        "dnasas-plasmaticas",
+        "particulas-magneticas",
+        "automatizacion-extraccion",
+        "resina-silice",
+        "elusion"
       ]
     },
     {
@@ -156,7 +168,11 @@
       "subtitulo": "Términos del mundo clínico que rodean al diagnóstico",
       "emoji": "🏥",
       "color": "#40c4ff",
-      "terminosPrincipales": ["recidiva", "iatrogenia", "sangre-periferica"],
+      "terminosPrincipales": [
+        "recidiva",
+        "iatrogenia",
+        "sangre-periferica"
+      ],
       "terminosSecundarios": [
         "parasitemia-periferica",
         "apoptosis",
@@ -488,6 +504,90 @@
       "hasta": "metagenómica-clinica",
       "tipo": "sostiene",
       "descripcion": "La clasificación taxonómica del mNGS depende de la calidad y completitud de los repositorios de referencia genómica"
+    },
+    {
+      "desde": "agente-caotropico",
+      "hasta": "dnasas-plasmaticas",
+      "tipo": "inactiva",
+      "descripcion": "Los agentes caotrópicos desnaturalizan las DNasas plasmáticas, deteniendo la degradación del cfDNA durante la extracción"
+    },
+    {
+      "desde": "agente-caotropico",
+      "hasta": "columna-membrana-silice",
+      "tipo": "permite-union-a",
+      "descripcion": "La presencia de agente caotrópico crea las condiciones para que el cfDNA se una a la membrana de sílice"
+    },
+    {
+      "desde": "agente-caotropico",
+      "hasta": "resina-silice",
+      "tipo": "permite-union-a",
+      "descripcion": "El agente caotrópico permite la adsorción del cfDNA a la resina de sílice"
+    },
+    {
+      "desde": "kit-qiAamp",
+      "hasta": "agente-caotropico",
+      "tipo": "usa",
+      "descripcion": "El QIAamp usa cloruro de guanidinio como agente caotrópico principal"
+    },
+    {
+      "desde": "kit-qiAamp",
+      "hasta": "columna-membrana-silice",
+      "tipo": "usa",
+      "descripcion": "El QIAamp usa membrana de sílice como soporte de captura del cfDNA"
+    },
+    {
+      "desde": "kit-magmax",
+      "hasta": "particulas-magneticas",
+      "tipo": "usa",
+      "descripcion": "El MagMAX usa partículas magnéticas recubiertas de sílice como soporte de captura"
+    },
+    {
+      "desde": "kit-magmax",
+      "hasta": "automatizacion-extraccion",
+      "tipo": "permite",
+      "descripcion": "El formato de partículas magnéticas del MagMAX es automatizable en plataformas KingFisher"
+    },
+    {
+      "desde": "kit-maxwell",
+      "hasta": "resina-silice",
+      "tipo": "usa",
+      "descripcion": "El Maxwell usa resina de sílice en cartuchos cerrados preformateados"
+    },
+    {
+      "desde": "kit-maxwell",
+      "hasta": "automatizacion-extraccion",
+      "tipo": "maximiza",
+      "descripcion": "El Maxwell representa el mayor grado de automatización al ejecutar todo en un cartucho cerrado"
+    },
+    {
+      "desde": "kit-epiquik",
+      "hasta": "columna-membrana-silice",
+      "tipo": "usa",
+      "descripcion": "El EpiQuik usa columna de membrana optimizada para fragmentos cortos por debajo de 150 pb"
+    },
+    {
+      "desde": "kit-epiquik",
+      "hasta": "fragmento-nucleosomal",
+      "tipo": "optimizado-para",
+      "descripcion": "El EpiQuik está específicamente optimizado para recuperar fragmentos del tamaño nucleosomal y menores"
+    },
+    {
+      "desde": "particulas-magneticas",
+      "hasta": "resina-silice",
+      "tipo": "recubiertas-de",
+      "descripcion": "Las partículas magnéticas están recubiertas de sílice para capturar el cfDNA"
+    },
+    {
+      "desde": "elusion",
+      "hasta": "cfDNA",
+      "tipo": "libera",
+      "descripcion": "La elución es el paso que libera el cfDNA purificado del soporte sólido"
+    },
+    {
+      "desde": "automatizacion-extraccion",
+      "hasta": "lisis-leucocitaria",
+      "tipo": "reduce-riesgo-de",
+      "descripcion": "La automatización reduce la variabilidad manual que puede empeorar la lisis leucocitaria"
     }
   ],
   "terminos": [
@@ -535,7 +635,11 @@
         "membrana-lipidica",
         "nucleo-celular"
       ],
-      "apareceComo": ["cfDNA", "celula-neoplasica", "grupo-8"]
+      "apareceComo": [
+        "cfDNA",
+        "celula-neoplasica",
+        "grupo-8"
+      ]
     },
     {
       "id": "lisis-celular",
@@ -550,7 +654,11 @@
         "membrana-lipidica",
         "espacio-extracelular"
       ],
-      "apareceComo": ["cfDNA", "celula-neoplasica", "grupo-8"]
+      "apareceComo": [
+        "cfDNA",
+        "celula-neoplasica",
+        "grupo-8"
+      ]
     },
     {
       "id": "membrana-lipidica",
@@ -565,7 +673,11 @@
         "lisis-celular",
         "espacio-extracelular"
       ],
-      "apareceComo": ["vesicula-extracelular", "apoptosis", "lisis-celular"]
+      "apareceComo": [
+        "vesicula-extracelular",
+        "apoptosis",
+        "lisis-celular"
+      ]
     },
     {
       "id": "espacio-extracelular",
@@ -580,7 +692,11 @@
         "vesicula-extracelular",
         "lisis-celular"
       ],
-      "apareceComo": ["lisis-celular", "cfDNA", "celula-neoplasica"]
+      "apareceComo": [
+        "lisis-celular",
+        "cfDNA",
+        "celula-neoplasica"
+      ]
     },
     {
       "id": "nucleo-celular",
@@ -595,7 +711,11 @@
         "nucleosoma",
         "apoptosis"
       ],
-      "apareceComo": ["apoptosis", "lisis-celular", "cfDNA"]
+      "apareceComo": [
+        "apoptosis",
+        "lisis-celular",
+        "cfDNA"
+      ]
     },
     {
       "id": "cfDNA",
@@ -628,7 +748,9 @@
         "celula-tumoral-circulante",
         "NGS"
       ],
-      "apareceComo": ["celula-neoplasica"]
+      "apareceComo": [
+        "celula-neoplasica"
+      ]
     },
     {
       "id": "fragmento-nucleosomal",
@@ -644,7 +766,10 @@
         "dnasas-plasmaticas",
         "nucleo-celular"
       ],
-      "apareceComo": ["cfDNA", "columna-membrana-silice"]
+      "apareceComo": [
+        "cfDNA",
+        "columna-membrana-silice"
+      ]
     },
     {
       "id": "dnasas-plasmaticas",
@@ -659,7 +784,9 @@
         "lisis-leucocitaria",
         "degradacion-enzimatica-plasmatica"
       ],
-      "apareceComo": ["cfDNA"]
+      "apareceComo": [
+        "cfDNA"
+      ]
     },
     {
       "id": "plasma-suero",
@@ -674,7 +801,11 @@
         "lisis-leucocitaria",
         "dnasas-plasmaticas"
       ],
-      "apareceComo": ["cfDNA", "dnasas-plasmaticas", "columna-membrana-silice"]
+      "apareceComo": [
+        "cfDNA",
+        "dnasas-plasmaticas",
+        "columna-membrana-silice"
+      ]
     },
     {
       "id": "nucleosoma",
@@ -689,7 +820,10 @@
         "cfDNA",
         "apoptosis"
       ],
-      "apareceComo": ["fragmento-nucleosomal", "dnasas-plasmaticas"]
+      "apareceComo": [
+        "fragmento-nucleosomal",
+        "dnasas-plasmaticas"
+      ]
     },
     {
       "id": "sangre-periferica",
@@ -704,7 +838,10 @@
         "cfDNA",
         "lisis-leucocitaria"
       ],
-      "apareceComo": ["cfDNA", "plasma-suero"]
+      "apareceComo": [
+        "cfDNA",
+        "plasma-suero"
+      ]
     },
     {
       "id": "lisis-leucocitaria",
@@ -719,7 +856,10 @@
         "sangre-periferica",
         "dnasas-plasmaticas"
       ],
-      "apareceComo": ["plasma-suero", "columna-membrana-silice"]
+      "apareceComo": [
+        "plasma-suero",
+        "columna-membrana-silice"
+      ]
     },
     {
       "id": "vesicula-extracelular",
@@ -766,7 +906,9 @@
         "cfDNA",
         "metabolito"
       ],
-      "apareceComo": ["vesicula-extracelular"]
+      "apareceComo": [
+        "vesicula-extracelular"
+      ]
     },
     {
       "id": "metabolito",
@@ -781,7 +923,9 @@
         "vesicula-extracelular",
         "analito"
       ],
-      "apareceComo": ["vesicula-extracelular"]
+      "apareceComo": [
+        "vesicula-extracelular"
+      ]
     },
     {
       "id": "analito",
@@ -797,7 +941,10 @@
         "proteomica",
         "metabolomica"
       ],
-      "apareceComo": ["metabolito", "proteomica"]
+      "apareceComo": [
+        "metabolito",
+        "proteomica"
+      ]
     },
     {
       "id": "omica",
@@ -828,7 +975,9 @@
         "vesicula-extracelular",
         "plasma-suero"
       ],
-      "apareceComo": ["omica"]
+      "apareceComo": [
+        "omica"
+      ]
     },
     {
       "id": "metabolomica",
@@ -837,8 +986,16 @@
       "grupo": "grupo-4",
       "definicionCorta": "Rama de las ómicas que estudia el conjunto completo de metabolitos presentes en una muestra biológica.",
       "explicacion": "La metabolómica analiza de forma global el perfil de [[metabolito]] de bajo peso molecular presentes en una muestra biológica, ya sea plasma, suero, orina o tejido. Es la capa analítica más próxima a la función biológica real del organismo porque los metabolitos son el resultado final de todos los procesos celulares. La técnica dominante es la cromatografía líquida o de gases acoplada a espectrometría de masas (LC-MS o GC-MS). En parasitología, la revisión de Rodrigues et al. (2025) constató que el 75% de los estudios metabolómicos en esquistosomiasis utilizaron LC-MS como plataforma principal. Los metabolitos más consistentemente alterados en infecciones parasitarias incluyen intermediarios del ciclo de Krebs y aminoácidos. La metabolómica urinaria tiene el atractivo adicional de ser completamente no invasiva: Yuan et al. (2023) identificaron siete metabolitos urinarios desregulados en leishmaniasis visceral en modelo animal, con las vías de aminoácidos como las más afectadas.",
-      "relacionados": ["omica", "metaboloma", "metabolito", "analito"],
-      "apareceComo": ["omica", "metabolito"]
+      "relacionados": [
+        "omica",
+        "metaboloma",
+        "metabolito",
+        "analito"
+      ],
+      "apareceComo": [
+        "omica",
+        "metabolito"
+      ]
     },
     {
       "id": "vesiculomica",
@@ -853,7 +1010,10 @@
         "miARNomica",
         "proteomica"
       ],
-      "apareceComo": ["omica", "vesicula-extracelular"]
+      "apareceComo": [
+        "omica",
+        "vesicula-extracelular"
+      ]
     },
     {
       "id": "miARNomica",
@@ -868,7 +1028,10 @@
         "vesicula-extracelular",
         "vesiculomica"
       ],
-      "apareceComo": ["omica", "microARN"]
+      "apareceComo": [
+        "omica",
+        "microARN"
+      ]
     },
     {
       "id": "metaboloma",
@@ -877,8 +1040,14 @@
       "grupo": "grupo-4",
       "definicionCorta": "El conjunto completo de todos los metabolitos presentes en un organismo, tejido o muestra en un momento determinado.",
       "explicacion": "El metaboloma es el objeto de estudio de la [[metabolomica]]: la totalidad de los [[metabolito]] de bajo peso molecular presentes en un sistema biológico en un instante concreto. Es importante entender que el metaboloma es dinámico; cambia con cada comida, con cada infección, con cada respuesta inflamatoria. Por eso en parasitología tiene tanto valor: la infección por un parásito modifica el metaboloma del huésped de formas características. Zinga et al. (2025) analizaron el metaboloma sérico de niños con malaria asintomática en Tanzania e identificaron concentraciones reducidas de lactato, piruvato y aminoácidos de cadena ramificada en el grupo con infección activa, patrones que reflejan la competición metabólica entre el parásito y el huésped. La captura de esas diferencias en el metaboloma es lo que convierte a la metabolómica en una herramienta diagnóstica con potencial.",
-      "relacionados": ["metabolomica", "metabolito", "omica"],
-      "apareceComo": ["metabolomica"]
+      "relacionados": [
+        "metabolomica",
+        "metabolito",
+        "omica"
+      ],
+      "apareceComo": [
+        "metabolomica"
+      ]
     },
     {
       "id": "degradacion-enzimatica-plasmatica",
@@ -893,7 +1062,10 @@
         "vesicula-extracelular",
         "membrana-lipidica"
       ],
-      "apareceComo": ["dnasas-plasmaticas", "vesicula-extracelular"]
+      "apareceComo": [
+        "dnasas-plasmaticas",
+        "vesicula-extracelular"
+      ]
     },
     {
       "id": "columna-membrana-silice",
@@ -917,8 +1089,14 @@
       "grupo": "grupo-5",
       "definicionCorta": "Soluciones con sales caotrópicas que desnaturalizan proteínas y permiten la unión del ADN a las columnas de sílice.",
       "explicacion": "Un tampón caotrópico contiene sales como el cloruro de guanidinio o el tiocianato de guanidinio que tienen una propiedad muy particular: alteran la estructura del agua y desnaturalizan las proteínas. En el proceso de extracción de [[cfDNA]], estos tampones cumplen dos funciones. Primero, rompen las estructuras proteicas que puedan estar asociadas al ADN, liberándolo. Segundo, crean las condiciones químicas necesarias para que el ADN se adsorba a la [[columna-membrana-silice]]. La palabra caotrópico viene del griego kaos y tropos, y hace referencia a que estas sales introducen desorden en las estructuras moleculares ordenadas. Son fundamentales en los kits de extracción estándar, y su concentración y composición varía entre los diferentes kits comerciales disponibles, lo que explica parte de la variabilidad en los rendimientos de extracción observada en la literatura.",
-      "relacionados": ["columna-membrana-silice", "cfDNA", "proteomica"],
-      "apareceComo": ["columna-membrana-silice"]
+      "relacionados": [
+        "columna-membrana-silice",
+        "cfDNA",
+        "proteomica"
+      ],
+      "apareceComo": [
+        "columna-membrana-silice"
+      ]
     },
     {
       "id": "NGS",
@@ -942,8 +1120,15 @@
       "grupo": "grupo-6",
       "definicionCorta": "Aplicación diagnóstica del NGS que secuencia todos los ácidos nucleicos del plasma para identificar cualquier patógeno sin hipótesis previa.",
       "explicacion": "La metagenómica clínica no invasiva es, en términos diagnósticos, la técnica más revolucionaria disponible actualmente. Mientras que la qPCR te dice si está presente el parásito que tú sospechas, el mNGS te dice qué hay en la muestra con independencia de lo que esperes encontrar. Funciona secuenciando masivamente con [[NGS]] todos los fragmentos de ácido nucleico presentes en el [[plasma-suero]] del paciente. La inmensa mayoría son humanos, pero tras la [[deplecion-genoma]] bioinformática quedan las lecturas de origen no humano, que se comparan con bases de datos de referencia de bacterias, virus, hongos y parásitos para identificar al patógeno. Esse y colaboradores (2025) documentaron que en una cohorte de pacientes con infecciones graves de etiología incierta, el mNGS plasmático tuvo impacto terapéutico directo en el 13,6% de los casos, incluyendo la identificación de Leishmania infantum que había pasado desapercibida para todos los métodos convencionales. Su limitación principal no es técnica sino práctica: coste, tiempo de respuesta de dos días y necesidad de bioinformática especializada.",
-      "relacionados": ["NGS", "deplecion-genoma", "cfDNA", "sangre-periferica"],
-      "apareceComo": ["NGS"]
+      "relacionados": [
+        "NGS",
+        "deplecion-genoma",
+        "cfDNA",
+        "sangre-periferica"
+      ],
+      "apareceComo": [
+        "NGS"
+      ]
     },
     {
       "id": "deplecion-genoma",
@@ -952,8 +1137,15 @@
       "grupo": "grupo-6",
       "definicionCorta": "Paso bioinformático o experimental que elimina las lecturas de ADN humano para revelar las lecturas de origen patógeno.",
       "explicacion": "Cuando haces [[metagenómica-clinica]] de [[plasma-suero]], más del 99% de los fragmentos de [[cfDNA]] que secuencias son humanos. Solo una fracción mínima pertenece al parásito. Si no eliminas las lecturas humanas, el parásito queda completamente enterrado bajo ese volumen de información. La depleción del genoma huésped es el proceso por el cual se identifican y eliminan todas las lecturas que alinean con el genoma humano de referencia, dejando solo las lecturas que no corresponden al huésped. Esto se hace bioinformáticamente después de la secuenciación, comparando cada lectura contra el genoma humano. Las lecturas que no alinean son las candidatas a ser de origen microbiano o parasitario y se someten a clasificación taxonómica. La calidad y la cobertura de las bases de datos de referencia parasitarias es un factor limitante reconocido: si el genoma del parásito no está bien representado en la base de datos, sus lecturas no serán identificadas correctamente.",
-      "relacionados": ["NGS", "metagenómica-clinica", "cfDNA"],
-      "apareceComo": ["NGS", "metagenómica-clinica"]
+      "relacionados": [
+        "NGS",
+        "metagenómica-clinica",
+        "cfDNA"
+      ],
+      "apareceComo": [
+        "NGS",
+        "metagenómica-clinica"
+      ]
     },
     {
       "id": "sistema-crispr-cas",
@@ -962,7 +1154,12 @@
       "grupo": "grupo-6",
       "definicionCorta": "Sistema molecular de reconocimiento y corte de ADN/ARN que se usa en diagnóstico para detectar secuencias específicas con alta sensibilidad.",
       "explicacion": "CRISPR-Cas es originalmente un sistema inmune bacteriano que las bacterias usan para reconocer y destruir ADN viral. En diagnóstico molecular, se aprovecha una propiedad fascinante de algunas de sus proteínas: cuando una nucleasa Cas reconoce su secuencia diana exacta, se activa y empieza a cortar ácidos nucleicos aleatoriamente a su alrededor, lo que se llama actividad trans-cleavage o corte colateral. Si esos cortes colaterales liberan una molécula reportera fluorescente, obtienes una señal visible que indica que la diana estaba presente. Las plataformas diagnósticas basadas en este principio alcanzan límites de detección attomolares, operan a temperatura ambiente o con calor moderado y producen resultados en menos de dos horas a un coste de pocos euros por test. Las más relevantes en parasitología son SHERLOCK (usa [[nucleasas-cas]] tipo Cas13a), validada para tripanosomiasis africana, y CATSH, validada para Schistosoma haematobium.",
-      "relacionados": ["nucleasas-cas", "LAMP", "RPA", "cfDNA"],
+      "relacionados": [
+        "nucleasas-cas",
+        "LAMP",
+        "RPA",
+        "cfDNA"
+      ],
       "apareceComo": []
     },
     {
@@ -972,8 +1169,14 @@
       "grupo": "grupo-6",
       "definicionCorta": "Proteínas del sistema CRISPR que reconocen y cortan secuencias específicas de ADN o ARN guiadas por un ARN guía.",
       "explicacion": "Las nucleasas Cas son las proteínas ejecutoras del [[sistema-crispr-cas]]. Su nombre viene de CRISPR-associated. Necesitan dos componentes para funcionar: la proteína nucleasa en sí y un ARN guía que tiene una secuencia complementaria a la diana que se quiere detectar. Cuando el ARN guía lleva a la nucleasa hasta su diana exacta, la proteína se activa y corta. En diagnóstico parasitario se usan principalmente dos tipos: Cas12a, utilizada en la plataforma DETECTR, que actúa sobre ADN, y Cas13a, utilizada en SHERLOCK, que actúa sobre ARN. Ambas exhiben esa actividad de corte colateral que genera la señal detectable. La especificidad del sistema es muy alta porque requiere una coincidencia casi perfecta entre el ARN guía y la diana para que la nucleasa se active.",
-      "relacionados": ["sistema-crispr-cas", "ADN-polimerasa", "RPA"],
-      "apareceComo": ["sistema-crispr-cas"]
+      "relacionados": [
+        "sistema-crispr-cas",
+        "ADN-polimerasa",
+        "RPA"
+      ],
+      "apareceComo": [
+        "sistema-crispr-cas"
+      ]
     },
     {
       "id": "LAMP",
@@ -1012,8 +1215,14 @@
       "grupo": "grupo-6",
       "definicionCorta": "Combinación de RPA con una tira reactiva de flujo lateral que permite leer el resultado visualmente como un test de embarazo.",
       "explicacion": "La tira de flujo lateral, conocida como LFA del inglés Lateral Flow Assay, es el mismo principio que funciona en los tests de embarazo o en los tests rápidos de COVID-19: una tira de membrana con anticuerpos en posiciones específicas que genera una línea visible cuando el analito buscado está presente. Cuando el producto de amplificación de [[RPA]] se aplica a esta tira, si el parásito estaba en la muestra aparece una línea de resultado visible a simple vista. Sin instrumentación, sin [[fluorometros]], sin [[electroforesis]]. En 20 minutos y a temperatura ambiente. Esta combinación RPA-LFA representa el estado del arte del diagnóstico molecular de campo: Mesquita et al. (2025) validaron el sistema ShDraI-RPA-LFA para Schistosoma haematobium demostrando que era estable a temperatura ambiente, no requería cadena de frío y podía ser operado por personal con formación básica.",
-      "relacionados": ["RPA", "LAMP", "sistema-crispr-cas"],
-      "apareceComo": ["RPA"]
+      "relacionados": [
+        "RPA",
+        "LAMP",
+        "sistema-crispr-cas"
+      ],
+      "apareceComo": [
+        "RPA"
+      ]
     },
     {
       "id": "ADN-polimerasa",
@@ -1022,8 +1231,15 @@
       "grupo": "grupo-6",
       "definicionCorta": "Enzima que sintetiza nuevas cadenas de ADN copiando una cadena molde, base a base.",
       "explicacion": "La ADN polimerasa es la enzima que fabrica ADN nuevo. Funciona leyendo una cadena de ADN existente (la cadena molde) y construyendo una cadena complementaria añadiendo nucleótidos uno a uno en el orden indicado por la secuencia molde. En todas las técnicas de amplificación molecular, tanto PCR como [[LAMP]] como [[RPA]], una ADN polimerasa es el componente central que realiza la copia. Lo que varía entre técnicas es el tipo de polimerasa empleada: la PCR usa polimerasas termoestables como la Taq que soportan los ciclos de calentamiento; la LAMP usa polimerasas con actividad de desplazamiento de cadena que pueden copiar sin necesidad de separar previamente las dos hebras de ADN; y la RPA usa una combinación de recombinasa y polimerasa que trabajan juntas a temperatura baja.",
-      "relacionados": ["LAMP", "RPA", "electroforesis"],
-      "apareceComo": ["LAMP", "RPA"]
+      "relacionados": [
+        "LAMP",
+        "RPA",
+        "electroforesis"
+      ],
+      "apareceComo": [
+        "LAMP",
+        "RPA"
+      ]
     },
     {
       "id": "electroforesis",
@@ -1032,8 +1248,14 @@
       "grupo": "grupo-6",
       "definicionCorta": "Técnica que separa moléculas de ADN por tamaño aplicando un campo eléctrico sobre un gel de agarosa.",
       "explicacion": "La electroforesis en gel de agarosa es el método clásico para visualizar productos de amplificación de ADN. Funciona así: el ADN tiene carga negativa, así que si aplicas un campo eléctrico a un gel de agarosa (una matriz porosa similar a una gelatina), los fragmentos de ADN migran hacia el polo positivo. Los fragmentos pequeños avanzan más rápido que los grandes, por lo que al final quedan separados por tamaño. Añadiendo un colorante fluorescente que se intercala en el ADN, los fragmentos se ven como bandas al iluminar con luz ultravioleta. En biopsia líquida parasitaria, la electroforesis es el paso de visualización de la PCR convencional. Su principal inconveniente para el diagnóstico en campo es que requiere equipamiento específico (cubeta, fuente de alimentación, transiluminador UV) y manipulación posterior a la amplificación que aumenta el riesgo de contaminación. Las técnicas más modernas como [[LAMP]] con visualización por colorante o [[RPA-flujo-lateral]] eliminan esta dependencia.",
-      "relacionados": ["ADN-polimerasa", "LAMP", "fluorometros"],
-      "apareceComo": ["ADN-polimerasa"]
+      "relacionados": [
+        "ADN-polimerasa",
+        "LAMP",
+        "fluorometros"
+      ],
+      "apareceComo": [
+        "ADN-polimerasa"
+      ]
     },
     {
       "id": "fluorometros",
@@ -1042,8 +1264,14 @@
       "grupo": "grupo-6",
       "definicionCorta": "Instrumentos que miden la intensidad de fluorescencia emitida por moléculas marcadas con fluoróforos.",
       "explicacion": "Un fluorómetro es el instrumento que cuantifica la luz emitida por moléculas fluorescentes. En biología molecular, los fluoróforos son colorantes que absorben luz de una longitud de onda específica y emiten luz de otra longitud de onda diferente. Este principio de fluorescencia es la base de la qPCR (que mide la fluorescencia en tiempo real durante la amplificación) y de la lectura de productos de [[LAMP]] con intercalantes fluorescentes. En entornos de campo, la existencia de fluorómetros portátiles de bajo coste ha ampliado considerablemente las posibilidades del diagnóstico molecular fuera del laboratorio. Los nuevos dispositivos de lectura del sistema [[sistema-crispr-cas]] también usan señales fluorescentes. La alternativa a los fluorómetros en campo son los métodos de lectura visual directa, como el precipitado de pirofosfato de magnesio que genera [[LAMP]] o las tiras de [[RPA-flujo-lateral]].",
-      "relacionados": ["LAMP", "electroforesis", "sistema-crispr-cas"],
-      "apareceComo": ["LAMP"]
+      "relacionados": [
+        "LAMP",
+        "electroforesis",
+        "sistema-crispr-cas"
+      ],
+      "apareceComo": [
+        "LAMP"
+      ]
     },
     {
       "id": "diversidad-taxonomica",
@@ -1075,7 +1303,9 @@
         "ADN-kinetoplasto",
         "diversidad-taxonomica"
       ],
-      "apareceComo": ["diversidad-taxonomica"]
+      "apareceComo": [
+        "diversidad-taxonomica"
+      ]
     },
     {
       "id": "ciclo-intraeritrocitario",
@@ -1090,7 +1320,9 @@
         "cfDNA",
         "parasitemia-periferica"
       ],
-      "apareceComo": ["protozoo-hematico"]
+      "apareceComo": [
+        "protozoo-hematico"
+      ]
     },
     {
       "id": "nematodo-intestinal",
@@ -1105,7 +1337,9 @@
         "diversidad-taxonomica",
         "parasitemia-periferica"
       ],
-      "apareceComo": ["diversidad-taxonomica"]
+      "apareceComo": [
+        "diversidad-taxonomica"
+      ]
     },
     {
       "id": "helminto-tisular",
@@ -1121,7 +1355,9 @@
         "iatrogenia",
         "diversidad-taxonomica"
       ],
-      "apareceComo": ["diversidad-taxonomica"]
+      "apareceComo": [
+        "diversidad-taxonomica"
+      ]
     },
     {
       "id": "parasitemia-periferica",
@@ -1136,7 +1372,10 @@
         "protozoo-hematico",
         "ciclo-intraeritrocitario"
       ],
-      "apareceComo": ["protozoo-hematico", "sangre-periferica"]
+      "apareceComo": [
+        "protozoo-hematico",
+        "sangre-periferica"
+      ]
     },
     {
       "id": "ADN-kinetoplasto",
@@ -1160,7 +1399,11 @@
       "grupo": "grupo-8",
       "definicionCorta": "Reaparición de una enfermedad después de un período de mejoría o aparente curación.",
       "explicacion": "Una recidiva es cuando una enfermedad que parecía curada o controlada vuelve a manifestarse. En parasitología es un concepto particularmente importante porque muchas infecciones parasitarias tienen tendencia a reaparecer: la leishmaniasis visceral puede recidivar después del tratamiento, especialmente en pacientes inmunocomprometidos; la equinococosis puede reactivarse si quedan restos de quiste viable; la malaria puede reaparecer con Plasmodium vivax porque este parásito puede permanecer latente en el hígado como hipnozoíto durante meses o años. La biopsia líquida tiene un papel especialmente relevante en la detección de recidivas porque permite detectar enfermedad mínima residual, es decir, la presencia de un nivel mínimo del parásito en el organismo cuando los síntomas clínicos han desaparecido. Una técnica como la ddPCR, capaz de cuantificar [[cfDNA]] con precisión absoluta, puede detectar esa señal mínima antes de que la recidiva se manifieste clínicamente.",
-      "relacionados": ["cfDNA", "parasitemia-periferica", "iatrogenia"],
+      "relacionados": [
+        "cfDNA",
+        "parasitemia-periferica",
+        "iatrogenia"
+      ],
       "apareceComo": []
     },
     {
@@ -1170,7 +1413,11 @@
       "grupo": "grupo-8",
       "definicionCorta": "Daño causado al paciente como consecuencia de una intervención médica o diagnóstica.",
       "explicacion": "Iatrogenia viene del griego iatros (médico) y genesis (origen): literalmente, daño de origen médico. No implica necesariamente negligencia; puede ser el daño inherente a un procedimiento necesario. En parasitología existe un riesgo iatrogénico específico que no tiene equivalente en otros contextos: la diseminación parasitaria durante la biopsia. Puncionar un quiste hidatídico de [[helminto-tisular]] como Echinococcus puede provocar el derrame de su contenido, desencadenando una reacción anafiláctica grave o la siembra peritoneal de protoescólices viables. La neurocisticercosis cerebral presenta riesgos similares. Este riesgo iatrogénico es uno de los argumentos más poderosos a favor de la biopsia líquida en parasitología: la sustitución de una biopsia tisular de alto riesgo por una extracción venosa ambulatoria elimina de raíz ese tipo de complicación.",
-      "relacionados": ["helminto-tisular", "recidiva", "sangre-periferica"],
+      "relacionados": [
+        "helminto-tisular",
+        "recidiva",
+        "sangre-periferica"
+      ],
       "apareceComo": []
     },
     {
@@ -1335,7 +1582,185 @@
         "metagenómica-clinica",
         "deplecion-genoma"
       ],
-      "apareceComo": ["NHGRI"]
+      "apareceComo": [
+        "NHGRI"
+      ]
+    },
+    {
+      "id": "agente-caotropico",
+      "nombre": "Agente caotrópico",
+      "tipo": "principal",
+      "grupo": "grupo-5",
+      "definicionCorta": "Sustancia que desestabiliza las interacciones moleculares del agua, desnaturaliza proteínas y permite la unión del ADN a soportes sólidos como la sílice.",
+      "explicacion": "La palabra caotrópico viene del griego kaos (desorden) y tropos (giro o dirección): literalmente, algo que introduce desorden. Un agente caotrópico es una sal o molécula que, al disolverse en agua, altera la estructura ordenada que las moléculas de agua forman entre sí mediante puentes de hidrógeno. Cuando ese orden se rompe, las proteínas pierden su estructura tridimensional y se desnaturalizan, porque esa estructura dependía precisamente de las interacciones con el agua. Las sales caotrópicas más usadas en extracción de [[cfDNA]] son el cloruro de guanidinio y el tiocianato de guanidinio. En el contexto de los [[tampones-lisis-caotropica]], estas sales cumplen tres funciones simultáneas. Primera: desnaturalizan las [[dnasas-plasmaticas]] y otras enzimas del plasma que degradarían el [[cfDNA]] durante la extracción. Segunda: rompen las asociaciones entre el ADN y las proteínas que lo acompañan, liberándolo. Tercera: crean las condiciones fisicoquímicas necesarias para que el ADN se adsorba con alta afinidad a la [[columna-membrana-silice]] o a la [[resina-silice]], mientras que los lípidos, proteínas desnaturalizadas y otros contaminantes no se unen y se eliminan con los lavados posteriores. Sin agentes caotrópicos, la extracción de cfDNA de alta pureza desde plasma sería prácticamente imposible con los métodos actuales.",
+      "relacionados": [
+        "tampones-lisis-caotropica",
+        "columna-membrana-silice",
+        "resina-silice",
+        "dnasas-plasmaticas",
+        "cfDNA",
+        "kit-qiAamp"
+      ],
+      "apareceComo": [
+        "tampones-lisis-caotropica"
+      ]
+    },
+    {
+      "id": "kit-qiAamp",
+      "nombre": "QIAamp Circulating Nucleic Acid — Qiagen",
+      "tipo": "principal",
+      "grupo": "grupo-5",
+      "definicionCorta": "Kit de extracción de cfDNA por lisis caotrópica y membrana de sílice. Estándar de referencia más validado en oncología y parasitología.",
+      "explicacion": "El QIAamp Circulating Nucleic Acid de Qiagen es el kit de extracción de [[cfDNA]] más ampliamente validado en la literatura, tanto en oncología como en parasitología, y se considera el estándar de referencia contra el que se comparan otros métodos. Su principio de funcionamiento tiene tres fases bien diferenciadas. En la fase de lisis, el plasma se mezcla con un tampón que contiene [[agente-caotropico]] (cloruro de guanidinio) junto con una proteasa. El agente caotrópico desnaturaliza las proteínas asociadas al ADN y destruye las [[dnasas-plasmaticas]], deteniendo la degradación. La proteasa digiere las histonas y otras proteínas unidas al ADN, liberando los [[fragmento-nucleosomal]] completamente. En la fase de unión, la mezcla se pasa a través de una [[columna-membrana-silice]]: en presencia de alta concentración de sales caotrópicas, el ADN se une fuertemente a la membrana de sílice mientras que los contaminantes fluyen a través. En la fase de elución, tras varios lavados que eliminan sales residuales, se añade tampón de baja salinidad o agua, que revierte las condiciones y libera el [[cfDNA]] purificado. Su principal limitación es práctica: requiere entre 1 y 4 mL de plasma de partida, el protocolo tarda aproximadamente 3 horas y su coste por muestra es elevado. Como ventaja, su reproducibilidad y su amplia base de validación lo hacen el punto de referencia inevitable en cualquier comparativa de métodos.",
+      "relacionados": [
+        "agente-caotropico",
+        "columna-membrana-silice",
+        "tampones-lisis-caotropica",
+        "cfDNA",
+        "fragmento-nucleosomal",
+        "elusion",
+        "kit-magmax",
+        "kit-maxwell",
+        "kit-epiquik"
+      ],
+      "apareceComo": []
+    },
+    {
+      "id": "kit-magmax",
+      "nombre": "MagMAX Cell-Free DNA — Thermo Fisher",
+      "tipo": "principal",
+      "grupo": "grupo-5",
+      "definicionCorta": "Kit de extracción de cfDNA basado en partículas magnéticas recubiertas de sílice, automatizable en plataformas robóticas.",
+      "explicacion": "El MagMAX Cell-Free DNA de Thermo Fisher aplica el mismo principio químico de afinidad por sílice que el [[kit-qiAamp]], pero con una diferencia tecnológica fundamental en el soporte físico: en lugar de una [[columna-membrana-silice]] estática por la que fluye la muestra por gravedad o centrifugación, usa [[particulas-magneticas]] recubiertas de sílice que se suspenden en la muestra y se mueven activamente. El protocolo funciona así: las partículas magnéticas se añaden directamente al plasma lisado con [[agente-caotropico]], y el [[cfDNA]] se une a su superficie de sílice. Luego se aplica un imán externo que atrae y retiene las partículas en la pared del tubo, mientras que el líquido con los contaminantes se aspira y descarta. Tras lavados sucesivos con el imán, el [[cfDNA]] se eluye añadiendo tampón de baja salinidad que separa el ADN de las partículas. La gran ventaja de este formato es la [[automatizacion-extraccion]]: las plataformas robóticas como KingFisher de Thermo Fisher pueden mover imanes y dispensar líquidos automáticamente, procesando decenas de muestras simultáneamente con variabilidad mínima entre operadores. Su limitación es que requiere ese equipamiento de extracción magnética y su coste por muestra es moderado-alto.",
+      "relacionados": [
+        "agente-caotropico",
+        "particulas-magneticas",
+        "resina-silice",
+        "automatizacion-extraccion",
+        "cfDNA",
+        "elusion",
+        "kit-qiAamp",
+        "kit-maxwell"
+      ],
+      "apareceComo": []
+    },
+    {
+      "id": "kit-maxwell",
+      "nombre": "Maxwell RSC ccfDNA Plasma — Promega",
+      "tipo": "principal",
+      "grupo": "grupo-5",
+      "definicionCorta": "Kit de extracción de cfDNA en cartucho cerrado completamente automatizado que minimiza la manipulación de muestra y el riesgo de contaminación.",
+      "explicacion": "El Maxwell RSC ccfDNA Plasma de Promega lleva el concepto de [[automatizacion-extraccion]] un paso más allá que el [[kit-magmax]]: toda la extracción ocurre dentro de un cartucho desechable cerrado que se inserta en el instrumento Maxwell RSC. El cartucho contiene todos los reactivos preformateados en compartimentos separados, incluyendo los tampones con [[agente-caotropico]], las partículas de [[resina-silice]] para captura del [[cfDNA]], los tampones de lavado y el tampón de [[elusion]]. El instrumento mueve un pistón magnético que desplaza los reactivos de compartimento en compartimento dentro del cartucho sellado, sin que el operador necesite pipetear, abrir tubos ni transferir líquidos. El protocolo completo dura menos de una hora. Esta arquitectura cerrada tiene dos ventajas claras: primero, elimina casi por completo el riesgo de contaminación cruzada entre muestras, que es una fuente de error particularmente grave cuando se trabaja con [[cfDNA]] de baja concentración; segundo, reduce drásticamente la variabilidad inter-operador porque no hay pasos manuales que ejecutar. Su limitación reconocida es que al ser una plataforma cerrada y propietaria, hay menos flexibilidad para optimizar parámetros, y su rendimiento en muestras con cfDNA muy fragmentado puede ser inferior al del [[kit-qiAamp]].",
+      "relacionados": [
+        "agente-caotropico",
+        "resina-silice",
+        "automatizacion-extraccion",
+        "particulas-magneticas",
+        "cfDNA",
+        "elusion",
+        "kit-qiAamp",
+        "kit-magmax"
+      ],
+      "apareceComo": []
+    },
+    {
+      "id": "kit-epiquik",
+      "nombre": "EpiQuik Circulating Cell-Free DNA Isolation — Epigentek",
+      "tipo": "principal",
+      "grupo": "grupo-5",
+      "definicionCorta": "Kit de extracción de cfDNA con columna de membrana optimizada específicamente para recuperar fragmentos cortos de menos de 150 pares de bases.",
+      "explicacion": "El EpiQuik Circulating Cell-Free DNA Isolation de Epigentek parte del mismo principio de [[columna-membrana-silice]] que el [[kit-qiAamp]], pero su formulación está específicamente optimizada para una limitación crítica en biopsia líquida parasitaria: la recuperación eficiente de fragmentos muy cortos. El [[cfDNA]] parasitario, como el [[fragmento-nucleosomal]] estándar, tiene entre 135 y 200 pares de bases, pero en muestras con alta degradación o en ciertos contextos parasitológicos pueden existir fragmentos aún más cortos, por debajo de 150 pares de bases. Los kits de extracción convencionales están optimizados para ADN genómico de alto peso molecular y pueden perder estos fragmentos ultracortos durante los pasos de unión a la membrana o los lavados. El EpiQuik usa tampones de unión y elución reformulados que favorecen la retención y recuperación de fragmentos de menos de 150 pares de bases, lo que lo hace especialmente adecuado cuando se trabaja con muestras muy degradadas o cuando la diana diagnóstica son fragmentos de tamaño por debajo del mononucleosómico estándar. Su limitación es que tiene menor validación en muestras parasitológicas específicas comparado con el [[kit-qiAamp]], y su rendimiento puede ser variable entre lotes de reactivos.",
+      "relacionados": [
+        "columna-membrana-silice",
+        "agente-caotropico",
+        "cfDNA",
+        "fragmento-nucleosomal",
+        "elusion",
+        "kit-qiAamp"
+      ],
+      "apareceComo": []
+    },
+    {
+      "id": "particulas-magneticas",
+      "nombre": "Partículas magnéticas",
+      "tipo": "secundario",
+      "grupo": "grupo-5",
+      "definicionCorta": "Micropartículas con núcleo magnético y superficie funcionalizada (recubierta de sílice u otro ligando) que capturan moléculas de interés y se separan aplicando un campo magnético externo.",
+      "explicacion": "Las partículas magnéticas son microesferas de entre 1 y 5 micrómetros de diámetro con un núcleo de óxido de hierro que las hace responsivas a campos magnéticos, recubiertas en su superficie con un material funcional. En extracción de [[cfDNA]], esa superficie es [[resina-silice]], que une el ADN en presencia de [[agente-caotropico]]. Su ventaja operativa es que pueden suspenderse en solución y mezclarse íntimamente con la muestra para maximizar el contacto entre el ADN y la superficie de captura, y luego separarse del líquido en segundos aplicando un imán externo. Esto permite automatizar todo el proceso con plataformas robóticas como hace el [[kit-magmax]], procesando múltiples muestras en paralelo sin centrifugación. A diferencia de la [[columna-membrana-silice]] estática, que requiere que la muestra fluya físicamente a través de la membrana, las partículas magnéticas van a buscar el [[cfDNA]] en la solución, lo que puede mejorar el rendimiento en muestras de gran volumen.",
+      "relacionados": [
+        "kit-magmax",
+        "kit-maxwell",
+        "resina-silice",
+        "agente-caotropico",
+        "automatizacion-extraccion"
+      ],
+      "apareceComo": [
+        "kit-magmax",
+        "kit-maxwell"
+      ]
+    },
+    {
+      "id": "resina-silice",
+      "nombre": "Resina de sílice",
+      "tipo": "secundario",
+      "grupo": "grupo-5",
+      "definicionCorta": "Material sólido con alta afinidad por el ADN en presencia de sales caotrópicas, usado como soporte de captura en kits de extracción.",
+      "explicacion": "La sílice (dióxido de silicio, SiO₂) tiene una propiedad química muy útil para la extracción de ácidos nucleicos: en presencia de [[agente-caotropico]] y alta concentración de sales, el ADN se une a su superficie con alta afinidad, mientras que proteínas, lípidos y otros contaminantes no lo hacen. Este principio, descubierto por Boom et al. en 1990, es la base de prácticamente todos los kits modernos de extracción de ADN. La resina de sílice es la versión particulada de ese material: en lugar de una membrana plana como en la [[columna-membrana-silice]], son gránulos o partículas que aumentan la superficie de contacto disponible. En los cartuchos del [[kit-maxwell]] la resina de sílice está preformateada dentro del cartucho; en el [[kit-magmax]] la sílice recubre las [[particulas-magneticas]]. El proceso siempre sigue la misma lógica: unión en condiciones caotrópicas, lavados para eliminar contaminantes, y [[elusion]] en condiciones de baja salinidad que revierten la afinidad y liberan el [[cfDNA]] purificado.",
+      "relacionados": [
+        "columna-membrana-silice",
+        "agente-caotropico",
+        "particulas-magneticas",
+        "kit-maxwell",
+        "kit-magmax",
+        "elusion"
+      ],
+      "apareceComo": [
+        "kit-magmax",
+        "kit-maxwell",
+        "kit-epiquik"
+      ]
+    },
+    {
+      "id": "automatizacion-extraccion",
+      "nombre": "Automatización de la extracción",
+      "tipo": "secundario",
+      "grupo": "grupo-5",
+      "definicionCorta": "Uso de plataformas robóticas para ejecutar protocolos de extracción de cfDNA de forma estandarizada, reduciendo variabilidad operador-dependiente y aumentando el rendimiento.",
+      "explicacion": "En el contexto de la biopsia líquida, la automatización de la extracción no es un lujo sino una necesidad cuando se trabajan grandes volúmenes de muestras o cuando la estandarización es crítica. La variabilidad manual en pasos como la pipetación del plasma, el tiempo de contacto entre la muestra y los reactivos o la eficiencia del lavado puede introducir diferencias en el rendimiento de extracción del [[cfDNA]] que son mayores que las diferencias entre los propios kits. Las plataformas robóticas de extracción como KingFisher (Thermo Fisher) para el [[kit-magmax]] o el instrumento Maxwell RSC para el [[kit-maxwell]] eliminan esa variabilidad ejecutando siempre el mismo protocolo con la misma precisión. Esto es especialmente importante en parasitología clínica porque las concentraciones de [[cfDNA]] parasitario son tan bajas que una extracción subóptima puede hacer que una muestra positiva quede por debajo del [[umbral-deteccion-LOD]] de la técnica posterior, generando un falso negativo. La estandarización preanalítica que permite la automatización es uno de los tres condicionantes transversales que el TFM identifica como limitaciones no resueltas por ninguna técnica de forma independiente.",
+      "relacionados": [
+        "kit-magmax",
+        "kit-maxwell",
+        "cfDNA",
+        "umbral-deteccion-LOD",
+        "lisis-leucocitaria"
+      ],
+      "apareceComo": [
+        "kit-magmax",
+        "kit-maxwell"
+      ]
+    },
+    {
+      "id": "elusion",
+      "nombre": "Elución",
+      "tipo": "secundario",
+      "grupo": "grupo-5",
+      "definicionCorta": "Paso final de la extracción en el que el ADN retenido en la membrana o resina se libera añadiendo un tampón de baja salinidad o agua.",
+      "explicacion": "La elución es el paso que cierra el proceso de extracción de [[cfDNA]]. Después de que el ADN se ha unido a la [[columna-membrana-silice]] o a la [[resina-silice]] en presencia de [[agente-caotropico]], y después de que los lavados han eliminado proteínas, lípidos y sales residuales, queda el ADN atrapado en el soporte sólido. Para recuperarlo, se añade un pequeño volumen (típicamente entre 20 y 100 microlitros) de tampón de baja salinidad, generalmente tampón Tris-EDTA a pH 8-9, o simplemente agua ultrapura. En condiciones de baja concentración de sales, la afinidad del ADN por la sílice se revierte: el ADN se desprende de la superficie y queda disuelto en ese pequeño volumen de líquido. Ese eluido es el [[cfDNA]] purificado listo para la técnica de detección posterior (qPCR, ddPCR, [[NGS]]). El volumen de elución es un parámetro crítico: eluir en un volumen muy pequeño concentra el ADN pero puede reducir la eficiencia de recuperación; eluir en un volumen grande mejora la recuperación pero diluye el [[cfDNA]] y puede comprometer la sensibilidad de la técnica posterior.",
+      "relacionados": [
+        "columna-membrana-silice",
+        "resina-silice",
+        "agente-caotropico",
+        "cfDNA",
+        "kit-qiAamp",
+        "kit-magmax"
+      ],
+      "apareceComo": [
+        "kit-qiAamp",
+        "kit-magmax",
+        "kit-maxwell",
+        "kit-epiquik",
+        "resina-silice"
+      ]
     }
   ]
 }
