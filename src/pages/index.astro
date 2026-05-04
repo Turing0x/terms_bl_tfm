@@ -6,6 +6,8 @@ import MapaView from '../components/views/MapaView.astro'
 import GrupoView from '../components/views/GrupoView.astro'
 import FichaView from '../components/views/FichaView.astro'
 import QuizView from '../components/views/QuizView.astro'
+import LaboratorioView from '../components/views/LaboratorioView.astro'
+import TecnicasView from '../components/views/TecnicasView.astro'
 import ConceptGraph from '../components/graph/ConceptGraph.astro'
 
 import {
@@ -67,6 +69,16 @@ const searchData = terminos.map(t => ({
               relaciones={getRelacionesByTermino(t.id)}
             />
           ))}
+        </div>
+
+        <!-- ── Vista: Laboratorio ─────────────────────────── -->
+        <div id="view-laboratorio" class="view overflow-hidden">
+          <LaboratorioView />
+        </div>
+
+        <!-- ── Vista: Técnicas ────────────────────────────── -->
+        <div id="view-tecnicas" class="view overflow-hidden">
+          <TecnicasView />
         </div>
 
         <!-- ── Vista: Quiz ────────────────────────────────── -->
@@ -164,6 +176,16 @@ const searchData = terminos.map(t => ({
       updateNavActive(null)
       window.history.pushState({}, '', `#termino/${id}`)
       showFichaPanel(id)
+
+    } else if (view === 'laboratorio') {
+      showView('laboratorio')
+      updateNavActive('laboratorio')
+      window.history.pushState({}, '', '#laboratorio')
+
+    } else if (view === 'tecnicas') {
+      showView('tecnicas')
+      updateNavActive('tecnicas')
+      window.history.pushState({}, '', '#tecnicas')
 
     } else if (view === 'quiz') {
       showView('quiz')
@@ -442,6 +464,10 @@ const searchData = terminos.map(t => ({
     } else if (hash.startsWith('termino/')) {
       const fichaId = hash.slice(8)
       navigate('ficha', fichaId)
+    } else if (hash === 'laboratorio') {
+      navigate('laboratorio')
+    } else if (hash === 'tecnicas') {
+      navigate('tecnicas')
     } else if (hash === 'quiz') {
       navigate('quiz')
     } else if (hash.startsWith('quiz/')) {

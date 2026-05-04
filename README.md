@@ -7,7 +7,7 @@
 
 ## 🎯 Objetivo del proyecto
 
-Construir una Single Page Application visualmente dinámica e interactiva que sirva como herramienta de estudio personal para comprender los ~58 conceptos del glosario del TFM. La app permite navegar por grupos temáticos, explorar relaciones entre conceptos y acceder a fichas individuales autocontenidas, donde cada término secundario que aparece en una explicación es clickeable y lleva a su propia ficha.
+Construir una Single Page Application visualmente dinámica e interactiva que sirva como herramienta de estudio personal para comprender los 68 conceptos del glosario del TFM. La app tiene cinco vistas con entidad propia: el mapa de relaciones, los grupos temáticos, el laboratorio interactivo de kits de extracción, el ecosistema de técnicas moleculares y las fichas individuales de cada término. Todo está conectado: las visualizaciones interactivas de las vistas Laboratorio y Técnicas son el puente entre entender visualmente y entender en profundidad, y cada elemento clickeable lleva a la ficha del término correspondiente en el glosario.
 
 ---
 
@@ -51,33 +51,52 @@ bioglosario/
 ├── src/
 │   ├── components/
 │   │   ├── layout/
-│   │   │   ├── Header.astro          # Logo + navegación principal
-│   │   │   └── Sidebar.astro         # Panel lateral con lista de grupos
+│   │   │   ├── Header.astro              # Logo + navegación de las 5 vistas principales
+│   │   │   └── Sidebar.astro             # Panel lateral con lista de grupos
 │   │   ├── views/
-│   │   │   ├── MapaView.astro         # Vista de mapa/grafo de relaciones
-│   │   │   ├── GrupoView.astro        # Vista de grupo temático
-│   │   │   └── FichaView.astro        # Vista de ficha individual
+│   │   │   ├── MapaView.astro            # Vista 1 — Grafo D3 de relaciones entre términos
+│   │   │   ├── GruposView.astro          # Vista 2 — Grid de los 9 grupos temáticos
+│   │   │   ├── LaboratorioView.astro     # Vista 3 — Comparador interactivo de kits de extracción
+│   │   │   ├── TecnicasView.astro        # Vista 4 — Ecosistema de técnicas moleculares por niveles
+│   │   │   └── FichaView.astro           # Vista 5 — Ficha individual de término
+│   │   ├── laboratorio/
+│   │   │   ├── KitStepper.astro          # Stepper animado de pasos de extracción por kit
+│   │   │   ├── KitComparador.astro       # Vista paralela de los 4 kits paso a paso
+│   │   │   └── PasoExtraccion.astro      # Componente de un paso individual con términos clickeables
+│   │   ├── tecnicas/
+│   │   │   ├── EcosistemaTecnicas.astro  # Grid de técnicas organizadas por nivel
+│   │   │   ├── NivelCard.astro           # Card de nivel (campo / regional / referencia)
+│   │   │   ├── TecnicaPanel.astro        # Panel con animación + descripción de la técnica
+│   │   │   └── animaciones/
+│   │   │       ├── AnimQPCR.astro        # Animación curva de amplificación qPCR
+│   │   │       ├── AnimDdPCR.astro       # Animación particionamiento en gotitas ddPCR
+│   │   │       ├── AnimLAMP.astro        # Animación bucle isotérmico LAMP
+│   │   │       ├── AnimRPA.astro         # Animación recombinasa + polimerasa RPA
+│   │   │       ├── AnimCRISPR.astro      # Animación activación nucleasa Cas + trans-cleavage
+│   │   │       └── AnimNGS.astro         # Animación flujo de lecturas y clasificación taxonómica
 │   │   ├── ui/
-│   │   │   ├── TermTag.astro          # Pill clickeable de término
-│   │   │   ├── ConceptCard.astro      # Tarjeta de concepto en grupo
-│   │   │   ├── RelationBadge.astro    # Badge de relación entre conceptos
-│   │   │   ├── SearchBar.astro        # Barra de búsqueda global
-│   │   │   └── BreadCrumb.astro       # Navegación contextual
+│   │   │   ├── TermTag.astro             # Pill clickeable de término (abre FichaView)
+│   │   │   ├── ConceptCard.astro         # Tarjeta de concepto en grupos
+│   │   │   ├── RelationBadge.astro       # Badge de tipo de relación en el grafo
+│   │   │   ├── SearchBar.astro           # Búsqueda global con Cmd+K
+│   │   │   ├── BreadCrumb.astro          # Navegación contextual
+│   │   │   └── NavTab.astro              # Tab de navegación entre las 5 vistas
 │   │   └── graph/
-│   │       └── ConceptGraph.astro     # Componente de grafo interactivo (D3.js)
+│   │       └── ConceptGraph.astro        # Grafo D3 force-directed con filtro por grupo
 │   ├── mock/
-│   │   └── glosario_biopsialiquida.json  # ✅ Fuente de datos única — NO editar directamente
+│   │   └── glosario_biopsialiquida.json  # Fuente de datos única — NO importar directamente
 │   ├── lib/
-│   │   ├── glosario.ts               # Carga y expone el JSON como módulo tipado
-│   │   └── parseLinks.ts             # Parser de [[links]] internos → TermTag
+│   │   ├── glosario.ts                   # Acceso tipado al JSON — único punto de entrada a datos
+│   │   ├── parseLinks.ts                 # Parser [[id]] → TermTag clickeable
+│   │   └── tecnicas.ts                   # Datos estáticos de animaciones y pasos por técnica/kit
 │   ├── layouts/
-│   │   └── BaseLayout.astro           # Layout raíz con fuentes y meta
+│   │   └── BaseLayout.astro              # Layout raíz con fuentes, meta y variables CSS
 │   ├── pages/
-│   │   └── index.astro                # Página principal (SPA)
+│   │   └── index.astro                   # Página principal (todas las vistas se montan aquí)
 │   ├── styles/
-│   │   └── global.css                 # Variables CSS + utilidades globales
+│   │   └── global.css                    # Variables CSS + utilidades globales
 │   └── types/
-│       └── index.ts                   # Tipos TypeScript del proyecto
+│       └── index.ts                      # Tipos: Termino, Grupo, Relacion, Glosario, Tecnica, PasoKit
 ├── astro.config.mjs
 ├── tailwind.config.mjs
 ├── tsconfig.json
@@ -98,7 +117,9 @@ src/mock/glosario_biopsialiquida.json
 
 Este archivo **no se genera en tiempo de ejecución** ni se consume directamente desde los componentes. En su lugar, existe una capa de acceso en `src/lib/glosario.ts` que lo importa, lo tipifica y expone funciones de consulta que el resto de la app usa.
 
-> ⚠️ **Regla de oro:** ningún componente `.astro` ni ningún archivo `.ts` debe hacer `import` directo del JSON. Todo acceso a datos pasa por `src/lib/glosario.ts`.
+Los datos de las animaciones de técnicas y los pasos de los kits de extracción viven en `src/lib/tecnicas.ts`, separados del JSON porque son datos de presentación (textos de pasos, SVG paths, timings de animación) no de contenido de glosario.
+
+> ⚠️ **Regla de oro:** ningún componente `.astro` ni ningún archivo `.ts` debe hacer `import` directo del JSON. Todo acceso a datos de glosario pasa por `src/lib/glosario.ts`.
 
 ---
 
@@ -108,17 +129,17 @@ El archivo tiene cuatro secciones de primer nivel:
 
 ```json
 {
-  "meta":      { ... },   // Metadatos del proyecto
-  "grupos":    [ ... ],   // 8 grupos temáticos
-  "relaciones":[ ... ],   // 34 relaciones tipadas entre términos
-  "terminos":  [ ... ]    // 49 términos con explicaciones completas
+  "meta":       { ... },   // Metadatos del proyecto (v1.3)
+  "grupos":     [ ... ],   // 9 grupos temáticos
+  "relaciones": [ ... ],   // 65 relaciones tipadas entre términos
+  "terminos":   [ ... ]    // 68 términos con explicaciones completas
 }
 ```
 
 #### `meta`
 Información del proyecto: título, versión, autora, tutora, universidad y totales.
 
-#### `grupos` — Array de 8 objetos
+#### `grupos` — Array de 9 objetos
 ```json
 {
   "id": "grupo-1",
@@ -131,7 +152,7 @@ Información del proyecto: título, versión, autora, tutora, universidad y tota
 }
 ```
 
-#### `relaciones` — Array de 34 objetos
+#### `relaciones` — Array de 65 objetos
 ```json
 {
   "desde": "cfDNA",
@@ -140,9 +161,10 @@ Información del proyecto: título, versión, autora, tutora, universidad y tota
   "descripcion": "La apoptosis libera fragmentos de ADN al plasma que se convierten en cfDNA"
 }
 ```
-Tipos de relación disponibles: `originado-por`, `vive-en`, `degradado-por`, `determina-tamano`, `protegido-por`, `es-subtipo-de`, `procede-de`, `compuesta-de`, `contiene`, `estudiada-por`, `estudiado-por`, `objeto-de-estudio-de`, `engloba`, `requiere`, `analiza`, `habilita`, `utiliza`, `usa`, `combinable-con`, `trabaja-con`, `realizada-por`, `origina`, `contamina`, `altera`, `libera-contenido-a`, `detectada-en`.
 
-#### `terminos` — Array de 49 objetos
+Tipos de relación disponibles: `originado-por`, `vive-en`, `degradado-por`, `determina-tamano`, `protegido-por`, `es-subtipo-de`, `procede-de`, `compuesta-de`, `contiene`, `estudiada-por`, `estudiado-por`, `objeto-de-estudio-de`, `engloba`, `requiere`, `analiza`, `habilita`, `utiliza`, `usa`, `combinable-con`, `trabaja-con`, `realizada-por`, `origina`, `contamina`, `altera`, `libera-contenido-a`, `detectada-en`, `inactiva`, `permite-union-a`, `optimizado-para`, `recubiertas-de`, `libera`, `reduce-riesgo-de`, `se-basa-en`, `comparada-con`, `condiciona`, `determina`, `limita`, `referencia`, `puede-causar`, `requiere-bajo`, `invisible-para`, `tiene-baja`, `supera-a`, `no-detecta`, `sostiene`, `es-un`.
+
+#### `terminos` — Array de 68 objetos
 ```json
 {
   "id": "cfDNA",
@@ -150,22 +172,20 @@ Tipos de relación disponibles: `originado-por`, `vive-en`, `degradado-por`, `de
   "tipo": "principal",
   "grupo": "grupo-2",
   "definicionCorta": "Fragmentos de ADN que flotan libres en el plasma...",
-  "explicacion": "El cfDNA, del inglés cell-free DNA, es uno de los biomarcadores... [[apoptosis]] o por [[lisis-celular]], libera fragmentos...",
-  "relacionados": ["ctDNA", "apoptosis", "lisis-celular", "dnasas-plasmaticas", ...],
+  "explicacion": "El cfDNA... [[apoptosis]] o por [[lisis-celular]]...",
+  "relacionados": ["ctDNA", "apoptosis", "lisis-celular", ...],
   "apareceComo": []
 }
 ```
 
-- `tipo`: `"principal"` (41 términos) o `"secundario"` (8 términos)
+- `tipo`: `"principal"` (54 términos) o `"secundario"` (14 términos)
 - `explicacion`: texto completo con `[[id-termino]]` para links internos
 - `relacionados`: IDs de términos para el grafo D3
-- `apareceComo`: IDs de términos en cuyas explicaciones aparece este término mencionado
+- `apareceComo`: IDs de términos en cuyas explicaciones aparece este término
 
 ---
 
 ### Capa de acceso — `src/lib/glosario.ts`
-
-Este módulo es el único punto de entrada a los datos. Debe implementar:
 
 ```typescript
 import data from '../mock/glosario_biopsialiquida.json'
@@ -173,27 +193,22 @@ import type { Glosario, Termino, Grupo, Relacion } from '../types'
 
 const glosario = data as Glosario
 
-// Acceso a colecciones completas
 export const getTerminos   = (): Termino[]  => glosario.terminos
 export const getGrupos     = (): Grupo[]    => glosario.grupos
 export const getRelaciones = (): Relacion[] => glosario.relaciones
 
-// Búsqueda por ID
 export const getTerminoById = (id: string): Termino | undefined =>
   glosario.terminos.find(t => t.id === id)
 
 export const getGrupoById = (id: string): Grupo | undefined =>
   glosario.grupos.find(g => g.id === id)
 
-// Términos de un grupo (principales + secundarios)
 export const getTerminosByGrupo = (grupoId: string): Termino[] =>
   glosario.terminos.filter(t => t.grupo === grupoId)
 
-// Relaciones de un término (entrantes y salientes)
 export const getRelacionesByTermino = (id: string): Relacion[] =>
   glosario.relaciones.filter(r => r.desde === id || r.hasta === id)
 
-// Búsqueda full-text sobre nombre + definicionCorta
 export const buscarTerminos = (query: string): Termino[] => {
   const q = query.toLowerCase()
   return glosario.terminos.filter(t =>
@@ -202,7 +217,6 @@ export const buscarTerminos = (query: string): Termino[] => {
   )
 }
 
-// Términos relacionados de un término (resueltos a objetos)
 export const getRelacionados = (id: string): Termino[] => {
   const termino = getTerminoById(id)
   if (!termino) return []
@@ -214,9 +228,121 @@ export const getRelacionados = (id: string): Termino[] => {
 
 ---
 
-### Parser de links internos — `src/lib/parseLinks.ts`
+### Capa de datos de presentación — `src/lib/tecnicas.ts`
 
-Las explicaciones contienen referencias del tipo `[[id-termino]]`. Este parser las convierte en HTML con atributos de datos para que los componentes puedan renderizarlas como `<TermTag>` clickeables:
+Este módulo contiene los datos que alimentan las vistas **Laboratorio** y **Técnicas**: pasos de extracción por kit y metadatos de las animaciones. No viene del JSON porque son datos de presentación, no de contenido de glosario.
+
+```typescript
+export interface PasoKit {
+  numero: number
+  titulo: string          // ej: "Lisis caotrópica"
+  descripcion: string     // explicación del paso
+  terminosLinked: string[] // IDs de términos del glosario mencionados en este paso
+  colorAcento: string     // color visual del paso
+}
+
+export interface KitExtraccion {
+  id: string              // ej: "kit-qiAamp"
+  nombre: string
+  fabricante: string
+  principio: string       // "columna-silice" | "particulas-magneticas" | "cartucho-cerrado"
+  pasos: PasoKit[]
+  ventajaClave: string
+  limitacionClave: string
+  terminoGlosario: string // ID del término en el JSON para linkear la ficha
+}
+
+export interface Tecnica {
+  id: string              // ej: "qPCR"
+  nombre: string
+  nivel: 'campo' | 'regional' | 'referencia'
+  animacion: string       // nombre del componente de animación a montar
+  lod: string            // límite de detección (texto descriptivo)
+  tiempo: string         // tiempo de respuesta
+  coste: string          // coste relativo
+  escenario: string      // escenario clínico óptimo
+  terminoGlosario: string // ID del término en el JSON
+}
+
+// Kits definidos con sus pasos completos
+export const kitsExtraccion: KitExtraccion[] = [
+  {
+    id: 'kit-qiAamp',
+    nombre: 'QIAamp Circulating Nucleic Acid',
+    fabricante: 'Qiagen',
+    principio: 'columna-silice',
+    pasos: [
+      { numero: 1, titulo: 'Lisis caotrópica', descripcion: 'Se añade tampón con cloruro de guanidinio al plasma. El agente caotrópico desnaturaliza proteínas y DNAsas, liberando el cfDNA.', terminosLinked: ['agente-caotropico', 'dnasas-plasmaticas', 'cfDNA'], colorAcento: '#00e5ff' },
+      { numero: 2, titulo: 'Unión a la membrana', descripcion: 'La mezcla pasa por la columna de membrana de sílice. En presencia de alta salinidad, el cfDNA se une a la membrana. Los contaminantes fluyen a través.', terminosLinked: ['columna-membrana-silice', 'resina-silice'], colorAcento: '#39ff14' },
+      { numero: 3, titulo: 'Lavados', descripcion: 'Dos lavados sucesivos eliminan sales residuales, lípidos y proteínas sin despegar el cfDNA de la membrana.', terminosLinked: [], colorAcento: '#ffb300' },
+      { numero: 4, titulo: 'Elución', descripcion: 'Se añade tampón de baja salinidad o agua. La afinidad del cfDNA por la sílice se revierte y el ADN se libera purificado en un volumen de 20-100 µL.', terminosLinked: ['elusion', 'fragmento-nucleosomal'], colorAcento: '#b388ff' }
+    ],
+    ventajaClave: 'Estándar de referencia más validado. Alta reproducibilidad.',
+    limitacionClave: 'Requiere 1-4 mL de plasma. Protocolo de ~3 h. Coste elevado.',
+    terminoGlosario: 'kit-qiAamp'
+  },
+  {
+    id: 'kit-magmax',
+    nombre: 'MagMAX Cell-Free DNA',
+    fabricante: 'Thermo Fisher',
+    principio: 'particulas-magneticas',
+    pasos: [
+      { numero: 1, titulo: 'Lisis caotrópica', descripcion: 'El plasma se mezcla con tampón caotrópico que desnaturaliza proteínas y detiene la actividad de las DNAsas.', terminosLinked: ['agente-caotropico', 'dnasas-plasmaticas'], colorAcento: '#00e5ff' },
+      { numero: 2, titulo: 'Captura magnética', descripcion: 'Se añaden partículas magnéticas recubiertas de sílice. El cfDNA se une a su superficie. Se aplica un imán externo que retiene las partículas; el sobrenadante con contaminantes se aspira.', terminosLinked: ['particulas-magneticas', 'resina-silice', 'cfDNA'], colorAcento: '#39ff14' },
+      { numero: 3, titulo: 'Lavados con imán', descripcion: 'Con el imán activo, se añaden tampones de lavado que eliminan impurezas sin liberar el cfDNA de las partículas.', terminosLinked: [], colorAcento: '#ffb300' },
+      { numero: 4, titulo: 'Elución', descripcion: 'Se retira el imán, se añade tampón de baja salinidad y el cfDNA se separa de las partículas quedando disuelto en la solución.', terminosLinked: ['elusion'], colorAcento: '#b388ff' }
+    ],
+    ventajaClave: 'Automatizable en plataformas KingFisher. Mínima variabilidad entre operadores.',
+    limitacionClave: 'Requiere equipamiento de extracción magnética.',
+    terminoGlosario: 'kit-magmax'
+  },
+  {
+    id: 'kit-maxwell',
+    nombre: 'Maxwell RSC ccfDNA Plasma',
+    fabricante: 'Promega',
+    principio: 'cartucho-cerrado',
+    pasos: [
+      { numero: 1, titulo: 'Carga del cartucho', descripcion: 'El plasma se carga en el pocillo de entrada del cartucho desechable cerrado. Todos los reactivos ya están preformateados dentro.', terminosLinked: ['automatizacion-extraccion'], colorAcento: '#00e5ff' },
+      { numero: 2, titulo: 'Lisis + captura automatizada', descripcion: 'El instrumento Maxwell RSC mueve un pistón magnético que desplaza los reactivos de compartimento en compartimento. La lisis caotrópica y la captura del cfDNA en resina de sílice ocurren sin intervención manual.', terminosLinked: ['agente-caotropico', 'resina-silice', 'cfDNA', 'particulas-magneticas'], colorAcento: '#39ff14' },
+      { numero: 3, titulo: 'Lavados automatizados', descripcion: 'El pistón magnético ejecuta los lavados dentro del cartucho sellado, eliminando contaminantes sin riesgo de contaminación cruzada entre muestras.', terminosLinked: [], colorAcento: '#ffb300' },
+      { numero: 4, titulo: 'Elución automatizada', descripcion: 'El instrumento realiza la elución en el compartimento final del cartucho. El cfDNA purificado queda recogido sin que el operador abra nada.', terminosLinked: ['elusion'], colorAcento: '#b388ff' }
+    ],
+    ventajaClave: 'Máxima automatización. Cartucho cerrado elimina contaminación. Protocolo <1 h.',
+    limitacionClave: 'Plataforma cerrada y propietaria. Menor rendimiento en cfDNA muy fragmentado.',
+    terminoGlosario: 'kit-maxwell'
+  },
+  {
+    id: 'kit-epiquik',
+    nombre: 'EpiQuik Circulating Cell-Free DNA Isolation',
+    fabricante: 'Epigentek',
+    principio: 'columna-silice-optimizada',
+    pasos: [
+      { numero: 1, titulo: 'Lisis optimizada para fragmentos cortos', descripcion: 'Tampón de lisis con formulación específica para maximizar la recuperación de fragmentos menores de 150 pb, especialmente relevante en cfDNA parasitario muy degradado.', terminosLinked: ['agente-caotropico', 'cfDNA', 'fragmento-nucleosomal'], colorAcento: '#00e5ff' },
+      { numero: 2, titulo: 'Unión a membrana optimizada', descripcion: 'La columna de membrana de sílice usa tampones de unión reformulados que retienen fragmentos ultracortos que los kits convencionales perderían.', terminosLinked: ['columna-membrana-silice'], colorAcento: '#39ff14' },
+      { numero: 3, titulo: 'Lavados suaves', descripcion: 'Tampones de lavado formulados para no despegar los fragmentos cortos ya unidos, que son más sensibles a las condiciones de lavado que el ADN de alto peso molecular.', terminosLinked: [], colorAcento: '#ffb300' },
+      { numero: 4, titulo: 'Elución en volumen reducido', descripcion: 'Elución optimizada para maximizar la concentración del cfDNA recuperado, especialmente útil cuando la muestra de partida tiene muy baja concentración de ADN parasitario.', terminosLinked: ['elusion'], colorAcento: '#b388ff' }
+    ],
+    ventajaClave: 'Especialmente eficaz para fragmentos menores de 150 pb. Bajo coste relativo.',
+    limitacionClave: 'Menor validación en muestras parasitológicas. Rendimiento variable entre lotes.',
+    terminoGlosario: 'kit-epiquik'
+  }
+]
+
+// Técnicas moleculares con sus metadatos para la vista Técnicas
+export const tecnicasMoleculares: Tecnica[] = [
+  { id: 'qPCR',    nombre: 'qPCR',    nivel: 'regional',   animacion: 'AnimQPCR',   lod: '1-5 parásitos/µL',      tiempo: '4 h',    coste: 'Medio',   escenario: 'Diagnóstico inicial en laboratorio equipado', terminoGlosario: 'NGS' },
+  { id: 'ddPCR',   nombre: 'ddPCR',   nivel: 'regional',   animacion: 'AnimDdPCR',  lod: '<1 parásito/µL',        tiempo: '4-6 h',  coste: 'Alto',    escenario: 'Monitorización postratamiento y EMR', terminoGlosario: 'NGS' },
+  { id: 'LAMP',    nombre: 'LAMP',    nivel: 'campo',      animacion: 'AnimLAMP',   lod: '10 fg de ADN',          tiempo: '30-60 min', coste: 'Bajo', escenario: 'Diagnóstico de campo sin termociclador', terminoGlosario: 'LAMP' },
+  { id: 'RPA',     nombre: 'RPA',     nivel: 'campo',      animacion: 'AnimRPA',    lod: '10 fg de ADN',          tiempo: '20 min', coste: 'Bajo',    escenario: 'Diagnóstico POC a temperatura corporal', terminoGlosario: 'RPA' },
+  { id: 'CRISPR',  nombre: 'CRISPR-Cas', nivel: 'campo',  animacion: 'AnimCRISPR', lod: 'Attomolar',             tiempo: '<2 h',   coste: '2-4 €',   escenario: 'Diagnóstico POC sin instrumentación', terminoGlosario: 'sistema-crispr-cas' },
+  { id: 'mNGS',    nombre: 'mNGS',    nivel: 'referencia', animacion: 'AnimNGS',    lod: 'Agnóstico (cualquier patógeno)', tiempo: '2 días', coste: 'Muy alto', escenario: 'Etiología incierta / coinfección', terminoGlosario: 'metagenómica-clinica' },
+  { id: 'ONT',     nombre: 'Oxford Nanopore', nivel: 'regional', animacion: 'AnimNGS', lod: 'Similar a NGS Illumina', tiempo: 'Tiempo real', coste: 'Medio', escenario: 'Vigilancia genómica de resistencias en campo', terminoGlosario: 'NGS' }
+]
+```
+
+---
+
+### Parser de links internos — `src/lib/parseLinks.ts`
 
 ```typescript
 import { getTerminoById } from './glosario'
@@ -224,7 +350,7 @@ import { getTerminoById } from './glosario'
 export function parseLinks(texto: string): string {
   return texto.replace(/\[\[([^\]]+)\]\]/g, (_, id) => {
     const termino = getTerminoById(id)
-    if (!termino) return id  // fallback: mostrar el id tal cual
+    if (!termino) return id
     return `<span
       class="term-link"
       data-id="${termino.id}"
@@ -234,8 +360,6 @@ export function parseLinks(texto: string): string {
   })
 }
 ```
-
-En el cliente, los elementos `.term-link` se enhancen con un event listener que abre la ficha del término al hacer click, sin navegación de página completa.
 
 ---
 
@@ -287,192 +411,205 @@ export interface Glosario {
   relaciones: Relacion[]
   terminos: Termino[]
 }
+
+// Tipos para vistas Laboratorio y Técnicas (vienen de tecnicas.ts, no del JSON)
+export interface PasoKit {
+  numero: number
+  titulo: string
+  descripcion: string
+  terminosLinked: string[]
+  colorAcento: string
+}
+
+export interface KitExtraccion {
+  id: string
+  nombre: string
+  fabricante: string
+  principio: string
+  pasos: PasoKit[]
+  ventajaClave: string
+  limitacionClave: string
+  terminoGlosario: string
+}
+
+export interface Tecnica {
+  id: string
+  nombre: string
+  nivel: 'campo' | 'regional' | 'referencia'
+  animacion: string
+  lod: string
+  tiempo: string
+  coste: string
+  escenario: string
+  terminoGlosario: string
+}
 ```
-
----
-
-### Uso desde un componente Astro
-
-```astro
----
-// src/components/views/FichaView.astro
-import { getTerminoById, getRelacionados, getGrupoById } from '../../lib/glosario'
-import { parseLinks } from '../../lib/parseLinks'
-
-const { id } = Astro.props
-const termino  = getTerminoById(id)
-const grupo    = termino ? getGrupoById(termino.grupo) : undefined
-const relacionados = termino ? getRelacionados(id) : []
-const htmlExplicacion = termino ? parseLinks(termino.explicacion) : ''
----
-
-{termino && (
-  <article>
-    <h1>{termino.nombre}</h1>
-    <span class="badge" style={`background: ${grupo?.color}`}>
-      {grupo?.nombre}
-    </span>
-    <blockquote>{termino.definicionCorta}</blockquote>
-    <div set:html={htmlExplicacion} />
-    <section>
-      <h2>Términos relacionados</h2>
-      {relacionados.map(r => <TermTag id={r.id} nombre={r.nombre} tipo={r.tipo} />)}
-    </section>
-  </article>
-)}
-```
-
----
-
-### Uso desde el grafo D3
-
-```typescript
-// src/components/graph/ConceptGraph.astro — script cliente
-import { getTerminos, getRelaciones } from '../../lib/glosario'
-
-const nodes = getTerminos().map(t => ({
-  id:    t.id,
-  label: t.nombre,
-  tipo:  t.tipo,
-  grupo: t.grupo
-}))
-
-const links = getRelaciones().map(r => ({
-  source: r.desde,
-  target: r.hasta,
-  tipo:   r.tipo
-}))
-
-// Pasar nodes y links a la simulación D3 force-directed
-```
-
----
-
-### Sistema de links internos en `explicacion`
-
-Dentro del texto de cada explicación, los términos secundarios se marcan con doble corchete usando el `id` del término, no el nombre:
-
-```
-"...los fragmentos liberados al [[plasma-suero]] por [[apoptosis]] o [[lisis-celular]]..."
-```
-
-El parser `parseLinks` convierte `[[id-termino]]` en un `<span class="term-link">` con atributos de datos, y los componentes cliente añaden el comportamiento de click para abrir la ficha correspondiente sin recarga de página.
-
-> ⚠️ **Al añadir nuevos términos al JSON:** si se añade un término nuevo, asegurarse de que su `id` en el JSON coincide exactamente con las referencias `[[id]]` usadas en las explicaciones de otros términos. El parser hace la resolución en tiempo de build y devuelve el `id` en texto plano si no encuentra coincidencia.
-
-
 
 ---
 
 ## 🖥️ Vistas de la aplicación
 
-### Vista 1 — Mapa de Relaciones (`/`)
-- Grafo interactivo construido con **D3.js** (force-directed graph)
-- Nodos coloreados por grupo temático
-- Aristas con estilo según tipo de relación
-- Click en nodo → abre ficha del término
-- Hover → resalta nodo + conexiones directas, opaca el resto
-- Controles: zoom, pan, filtro por grupo
-- Leyenda de colores en esquina
+La navegación principal tiene **cinco tabs** siempre visibles en el Header. La SPA monta y desmonta vistas sin recarga de página usando la History API.
 
-### Vista 2 — Grupos Temáticos (`/grupos`)
-- Grid de 8 cards, una por grupo
-- Cada card muestra: emoji, nombre, subtítulo temático, número de términos y lista de pills de los términos que contiene
-- Click en card → expande el grupo en pantalla completa
-- Dentro del grupo: lista de ConceptCards ordenadas (primero principales, luego secundarios)
-- Navegación entre grupos con flechas laterales
-
-### Vista 3 — Ficha Individual (`/termino/:id`)
-- Panel principal con:
-  - Nombre grande + tipo (principal / secundario) como badge
-  - Grupo al que pertenece (con color del grupo)
-  - Definición corta destacada en caja con acento
-  - Explicación completa con términos secundarios como TermTags clickeables
-  - Sección "Aparece en" → lista de fichas donde este término es mencionado
-  - Sección "Términos relacionados" → grid de pills clickeables
-- Breadcrumb de navegación en la parte superior
-- Botón de retorno al mapa o al grupo
-
-### Vista 4 — Búsqueda Global
-- Accesible desde cualquier vista con `Cmd+K` o la barra superior
-- Búsqueda en tiempo real sobre nombres y definiciones cortas
-- Resultados agrupados por tipo (principal / secundario)
-- Navegación con teclado
+```
+[ 🗺️ Mapa ]  [ 🗂️ Grupos ]  [ ⚗️ Laboratorio ]  [ 🛠️ Técnicas ]  [ 🔍 Buscar ]
+```
 
 ---
 
-## 📚 Contenido — Grupos y términos
+### Vista 1 — Mapa de Relaciones
+**Ruta:** `/` (vista por defecto)
+
+Grafo interactivo construido con D3.js (force-directed graph) que muestra los 68 términos como nodos y las 65 relaciones como aristas.
+
+- Nodos coloreados por grupo temático (color del grupo en el JSON)
+- Nodos con tamaño proporcional al número de relaciones
+- Aristas con estilo según tipo de relación (grosor y opacidad variable)
+- **Hover** sobre nodo: resalta el nodo y sus conexiones directas, opaca el resto
+- **Click** sobre nodo: abre FichaView del término
+- Controles: zoom con rueda, pan con drag, filtro por grupo con pills
+- Leyenda de colores y tipos de relación en esquina inferior
+
+---
+
+### Vista 2 — Grupos Temáticos
+**Ruta:** `/grupos`
+
+Grid de 9 cards, una por grupo temático.
+
+- Cada card: emoji, nombre, subtítulo, número de términos, lista de pills de términos principales
+- **Click en card**: expande el grupo mostrando sus ConceptCards ordenadas (principales primero, luego secundarios)
+- Dentro de cada ConceptCard: nombre, definición corta, tags de relacionados clickeables
+- **Click en cualquier término**: abre FichaView
+- Navegación entre grupos expandidos con flechas laterales
+
+---
+
+### Vista 3 — Laboratorio de Extracción
+**Ruta:** `/laboratorio`
+
+Visualización interactiva de los cuatro kits de extracción de cfDNA.
+
+**Modo individual (por defecto):**
+- Selector de kit en la parte superior (4 tabs: QIAamp / MagMAX / Maxwell / EpiQuik)
+- Stepper vertical de 4 pasos con animación al avanzar
+- Cada paso muestra: número, título, descripción, diagrama SVG del paso, y tags clickeables de los términos del glosario mencionados
+- Indicador visual del principio del kit (columna de sílice / partículas magnéticas / cartucho cerrado)
+
+**Modo comparación:**
+- Toggle "Comparar los 4 kits" activa una tabla de 4 columnas paralelas
+- Cada columna muestra los 4 pasos del kit con el color de acento del paso correspondiente
+- Los pasos equivalentes quedan alineados horizontalmente para comparar diferencias
+- Fila inferior: ventaja clave y limitación clave de cada kit resaltadas
+- Cada nombre de kit es clickeable y abre su FichaView en el glosario
+
+**Integración con glosario:**
+- Todos los términos técnicos mencionados en los pasos (agente caotrópico, DNAsas plasmáticas, partículas magnéticas, elución...) aparecen como TermTags clickeables
+- Click en TermTag → abre FichaView del término sin perder el contexto del Laboratorio (panel lateral o modal)
+
+---
+
+### Vista 4 — Ecosistema de Técnicas Moleculares
+**Ruta:** `/tecnicas`
+
+Visualización del ecosistema de técnicas moleculares organizada por los **tres niveles de implementación** del TFM.
+
+**Estructura de tres niveles (columnas o zonas visuales):**
+
+```
+┌─────────────────┬──────────────────────┬──────────────────────────┐
+│  NIVEL CAMPO    │  NIVEL REGIONAL      │  NIVEL REFERENCIA        │
+│  Sin laboratorio│  Laboratorio básico  │  Lab. nacional / I+D     │
+├─────────────────┼──────────────────────┼──────────────────────────┤
+│  LAMP           │  qPCR                │  mNGS (Illumina)         │
+│  RPA            │  ddPCR               │  Proteómica / Metabolómica│
+│  CRISPR-Cas     │  Oxford Nanopore     │  small RNA-seq           │
+└─────────────────┴──────────────────────┴──────────────────────────┘
+```
+
+- Cada técnica es una card con: nombre, nivel (badge), LOD, tiempo de respuesta, coste relativo y escenario clínico óptimo
+- **Click en card**: abre el TecnicaPanel lateral con la animación SVG del principio de funcionamiento y descripción detallada
+- En el TecnicaPanel: botón "Ver ficha completa" que abre FichaView del término
+
+**Animaciones SVG por técnica:**
+
+| Técnica | Animación |
+|---|---|
+| qPCR | Curva sigmoidea de amplificación que crece ciclo a ciclo con marcador de Ct |
+| ddPCR | Muestra dividiéndose en ~20.000 gotitas; gotitas positivas iluminándose en verde |
+| LAMP | ADN abriéndose isotérmicamente y generando bucles que se replican en cascada |
+| RPA | Recombinasa abriendo la doble cadena; polimerasa copiando a temperatura baja |
+| CRISPR-Cas | ARN guía buscando su diana; Cas activándose y cortando moléculas reporteras lateralmente |
+| mNGS | Río de lecturas cortas; filtrado bioinformático; lecturas parasitarias emergiendo del ruido humano |
+| Oxford Nanopore | Molécula de ADN individual pasando por el nanoporo; corriente eléctrica leyendo cada base |
+
+**Tabla comparativa integrada:**
+- Debajo de los tres niveles, una tabla resumen comparativa de todas las técnicas con las métricas clave (LOD, tiempo, coste, escenario) para repaso rápido
+
+---
+
+### Vista 5 — Ficha Individual
+**Ruta:** `/termino/:id`
+
+Panel principal de cualquier término del glosario. Se abre desde cualquier otra vista.
+
+- Nombre grande + badge de tipo (principal / secundario) + badge de grupo con su color
+- Definición corta en caja destacada con borde de acento
+- Explicación completa con todos los `[[links]]` renderizados como TermTags clickeables
+- Sección **"Aparece en"**: lista de fichas donde este término es mencionado como secundario
+- Sección **"Términos relacionados"**: grid de pills con los términos relacionados del grafo
+- Sección **"Relaciones"**: lista de las relaciones tipadas entrantes y salientes del término
+- Breadcrumb de navegación con retorno a la vista anterior
+- Para kits y técnicas: botón "Ver en Laboratorio" o "Ver en Técnicas" que lleva a la vista correspondiente con ese elemento seleccionado
+
+---
+
+### Vista transversal — Búsqueda Global
+**Acceso:** `Cmd+K` desde cualquier vista, o barra superior en Header
+
+- Búsqueda en tiempo real sobre `nombre` y `definicionCorta` de todos los términos
+- Resultados agrupados: Principales / Secundarios / Kits / Técnicas
+- Navegación con teclado (↑↓ para moverse, Enter para abrir ficha)
+- Muestra el grupo de pertenencia de cada resultado como badge de color
+
+---
+
+## 📚 Contenido — Grupos y términos (v1.3)
 
 ### Grupo 1 — El origen del material circulante 🔬
-*¿De dónde viene todo lo que detectamos en sangre?*
 - **Principales:** Célula tumoral circulante, Célula neoplásica, Apoptosis, Lisis celular
 - **Secundarios:** Membrana lipídica, Espacio extracelular, Núcleo celular
 
 ### Grupo 2 — El ADN que viaja en sangre 🧬
-*cfDNA, su tamaño, su vida corta y por qué sobrevive*
 - **Principales:** cfDNA, ctDNA, Fragmento nucleosómico, DNAsas plasmáticas
 - **Secundarios:** Plasma/suero, Nucleosoma, Sangre periférica, Lisis leucocitaria
 
 ### Grupo 3 — Otros mensajeros circulantes 📡
-*Lo que el parásito o la célula enferma secreta activamente*
 - **Principales:** Vesícula extracelular, Exovesículas séricas, microARN, Metabolito, Analito
 - **Secundarios:** Membrana lipídica, Espacio extracelular
 
 ### Grupo 4 — Las ómicas 🔭
-*Leer el organismo completo de una sola vez*
 - **Principales:** Ómica, Proteómica, Metabolómica, Vesiculómica, miARNómica, Metaboloma
 - **Secundarios:** Analito, Plasma/suero, Degradación enzimática plasmática
 
 ### Grupo 5 — Extracción y preparación de muestra ⚗️
-*Del tubo de sangre al ácido nucleico puro*
-- **Principales:** Sangre periférica, Plasma/suero, Lisis leucocitaria, Columna de membrana de sílice, Tampones de lisis caotrópica
-- **Secundarios:** Fragmento nucleosómico, cfDNA, DNAsas plasmáticas
+- **Principales:** Sangre periférica, Plasma/suero, Lisis leucocitaria, Columna de membrana de sílice, Tampones de lisis caotrópica, Agente caotrópico, QIAamp (Qiagen), MagMAX (Thermo Fisher), Maxwell RSC (Promega), EpiQuik (Epigentek)
+- **Secundarios:** Fragmento nucleosómico, cfDNA, DNAsas plasmáticas, Partículas magnéticas, Resina de sílice, Automatización de extracción, Elución
 
 ### Grupo 6 — Técnicas de detección y amplificación 🛠️
-*Las herramientas que convierten una señal débil en un resultado*
 - **Principales:** NGS, Metagenómica clínica no invasiva, Depleción del genoma, Sistema CRISPR-Cas, Nucleasas Cas, LAMP, RPA, RPA con flujo lateral, ADN polimerasa, Electroforesis, Fluorómetros
-- **Secundarios:** cfDNA, Fragmento nucleosómico, Analito
+- **Secundarios:** cfDNA, Fragmento nucleosómico, Analito, NHGRI, Repositorios institucionales
 
 ### Grupo 7 — Biología parasitaria circulante 🦠
-*Entender al parásito para entender qué deja en sangre*
 - **Principales:** Diversidad taxonómica, Protozoo hemático, Ciclo intraeritrocitario, Nematodo intestinal, Helminto tisular, Parasitemia periférica, ADN del kinetoplasto
 - **Secundarios:** Lisis celular, cfDNA, Vesícula extracelular, Espacio extracelular
 
 ### Grupo 8 — Contexto clínico 🏥
-*Términos del mundo clínico que rodean al diagnóstico*
 - **Principales:** Recidiva, Iatrogenia, Sangre periférica
 - **Secundarios:** Parasitemia periférica, Apoptosis, Lisis celular
 
----
-
-## 🗺️ Mapa de relaciones clave
-
-```
-cfDNA ──────────────── originado por ──── Apoptosis
-cfDNA ──────────────── originado por ──── Lisis celular
-cfDNA ──────────────── vive en ──────────  Plasma/suero
-cfDNA ──────────────── degradado por ─── DNAsas plasmáticas
-cfDNA ──────────────── tamaño define ─── Fragmento nucleosómico
-Fragmento nucleosómico ── protegido por ─ Nucleosoma
-ctDNA ──────────────── es un tipo de ─── cfDNA
-ctDNA ──────────────── procede de ──────  Célula neoplásica
-Vesícula extracelular ── compuesta de ── Membrana lipídica
-Vesícula extracelular ── contiene ───── microARN
-Vesícula extracelular ── contiene ───── Metabolito
-Vesícula extracelular ── estudiada por ─ Vesiculómica
-microARN ───────────── estudiado por ── miARNómica
-Metabolito ─────────── estudiado por ── Metabolómica
-Proteómica ─────────── estudia ────────  Analito (proteínas)
-Ómica ──────────────── engloba ─────────  Proteómica, Metabolómica, Vesiculómica, miARNómica
-NGS ────────────────── requiere ────────  Depleción del genoma
-NGS ────────────────── analiza ─────────  cfDNA
-CRISPR-Cas ─────────── usa ─────────────  Nucleasas Cas
-LAMP ───────────────── alternativa a ─── NGS (campo/recursos limitados)
-RPA ────────────────── combinable con ─── RPA con flujo lateral
-ADN del kinetoplasto ── es tipo de ─── cfDNA (parasitario)
-Parasitemia periférica ─ detectada en ─ Sangre periférica
-Lisis leucocitaria ──── contamina ───── cfDNA (ruido analítico)
-```
+### Grupo 9 — Los conceptos que articulan todo 🧩
+- **Principales:** Biopsia líquida, Principio de inferencia indirecta, Ratio señal/ruido parasitario, Brecha metodológica transversal, Enfermedad mínima residual, Parasitosis submicroscópica, Umbral de detección LOD, Gold standard diagnóstico
 
 ---
 
@@ -495,29 +632,41 @@ npm install @fontsource/space-mono @fontsource/dm-sans
 - El JSON ya existe en `src/mock/glosario_biopsialiquida.json` — **no regenerar**
 - Crear `src/lib/glosario.ts` con todas las funciones de acceso tipadas
 - Crear `src/lib/parseLinks.ts` con el parser de `[[links]]` internos
-- Crear `src/types/index.ts` con los tipos `Termino`, `Grupo`, `Relacion`, `Glosario`
-- Verificar que `tsconfig.json` tiene `"resolveJsonModule": true` para el import del JSON
+- Crear `src/lib/tecnicas.ts` con los datos de kits y técnicas para las vistas interactivas
+- Verificar que `tsconfig.json` tiene `"resolveJsonModule": true`
 
 ### Fase 3 — Componentes base
+- `NavTab.astro` — tab de navegación entre las 5 vistas
 - `TermTag.astro` — pill clickeable con color según tipo
-- `ConceptCard.astro` — tarjeta de concepto con definición corta
-- `SearchBar.astro` — búsqueda con `Cmd+K`
+- `ConceptCard.astro` — tarjeta de concepto en grupos
+- `SearchBar.astro` — búsqueda global con `Cmd+K`
 - `BreadCrumb.astro` — navegación contextual
 - `RelationBadge.astro` — badge de tipo de relación
 
-### Fase 4 — Vistas principales
-- `FichaView.astro` — ficha individual completa
-- `GrupoView.astro` — vista de grupo expandido
-- `MapaView.astro` — grafo D3 interactivo
+### Fase 4 — Vista Mapa
+- `ConceptGraph.astro` — grafo D3 force-directed completo
+- Filtro por grupo, hover, click, zoom y pan
 
-### Fase 5 — Layout y navegación
-- `Header.astro` con búsqueda global
-- `Sidebar.astro` con lista de grupos
-- Routing entre vistas (con state management sin framework — vanilla JS + History API)
+### Fase 5 — Vista Grupos y Ficha
+- `GruposView.astro` — grid de 9 grupos con expansión
+- `FichaView.astro` — ficha individual con links internos resueltos
 
-### Fase 6 — Pulido visual
+### Fase 6 — Vista Laboratorio
+- `KitStepper.astro` — stepper de 4 pasos con animación SVG por paso
+- `KitComparador.astro` — vista paralela de los 4 kits
+- `PasoExtraccion.astro` — paso individual con TermTags
+- Toggle entre modo individual y modo comparación
+
+### Fase 7 — Vista Técnicas
+- `EcosistemaTecnicas.astro` — grid de tres niveles
+- `NivelCard.astro` — card de nivel con técnicas
+- `TecnicaPanel.astro` — panel lateral con animación
+- Animaciones SVG: `AnimQPCR`, `AnimDdPCR`, `AnimLAMP`, `AnimRPA`, `AnimCRISPR`, `AnimNGS`
+
+### Fase 8 — Layout, navegación y pulido
+- `Header.astro` con los 5 NavTabs y búsqueda global
+- Routing SPA con History API
 - Animaciones de entrada (stagger)
-- Hover states y transiciones
 - Responsive para móvil
 - Accesibilidad básica (ARIA labels, navegación por teclado)
 
@@ -550,21 +699,23 @@ npm install @fontsource/space-mono @fontsource/dm-sans
 | Framework | Astro | Ideal para contenido estático/semi-estático; sin overhead de JS innecesario |
 | Estilos | Tailwind CSS | Velocidad de prototipado; fácil consistencia visual |
 | Grafo | D3.js | Estándar para visualizaciones de datos; control total sobre el render |
+| Animaciones | SVG animado inline | Sin dependencias externas; control total sobre timing y estética |
 | Tipado | TypeScript | Seguridad en el modelo de datos del glosario |
-| Estado/Routing | Vanilla JS + History API | Sin necesidad de React/Vue para esta escala; Astro lo gestiona bien |
-| Fuentes | Google Fonts / Fontsource | Carga local, sin dependencia de red externa |
-| Datos | JSON estático en `src/mock/` | Fuente única de verdad; sin base de datos; fácil de mantener y versionar |
-| Import JSON | `resolveJsonModule: true` en tsconfig | Permite importar el JSON como módulo tipado directamente en TypeScript |
+| Estado/Routing | Vanilla JS + History API | Sin necesidad de React/Vue para esta escala |
+| Fuentes | Fontsource (local) | Sin dependencia de red externa |
+| Datos glosario | JSON estático en `src/mock/` | Fuente única de verdad; fácil de mantener y versionar |
+| Datos presentación | `src/lib/tecnicas.ts` | Separados del glosario; datos de UI no de contenido |
+| Import JSON | `resolveJsonModule: true` en tsconfig | Import del JSON como módulo tipado en TypeScript |
 
 ---
 
 ## 🔮 Posibles extensiones futuras
 
-- **Modo quiz**: el sistema te muestra la definición y tienes que adivinar el término
-- **Progreso de estudio**: marca qué términos ya dominas (localStorage)
-- **Vista de mapa mental** alternativa al grafo D3
+- **Modo quiz**: el sistema muestra la definición y hay que adivinar el término
+- **Progreso de estudio**: marcar qué términos ya se dominan (localStorage)
 - **Exportar ficha** individual como imagen para repasar offline
 - **Modo presentación**: navegar fichas como slides para repasar antes de la defensa
+- **Línea de tiempo**: visualizar la evolución histórica de los conceptos (cfDNA tumoral → cfDNA parasitario)
 
 ---
 

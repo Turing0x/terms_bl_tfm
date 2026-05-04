@@ -1,0 +1,52 @@
+---
+import { getTerminoById } from '../../lib/glosario'
+import type { PasoKit } from '../../lib/tecnicas'
+
+export interface Props {
+  paso: PasoKit
+}
+
+const { paso } = Astro.props
+
+const terminos = paso.terminosLinked
+  .map(id => getTerminoById(id))
+  .filter((t): t is NonNullable<typeof t> => t !== undefined)
+---
+
+<div
+  class="paso-extraccion p-5 rounded-xl"
+  style={`border: 1px solid ${paso.colorAcento}40; background: rgba(26,34,53,0.7);`}
+>
+  <div class="flex items-start gap-4">
+    <div
+      class="w-9 h-9 rounded-full flex items-center justify-center text-sm font-mono font-bold shrink-0 mt-0.5"
+      style={`background: ${paso.colorAcento}18; border: 2px solid ${paso.colorAcento}60; color: ${paso.colorAcento};`}
+    >
+      {paso.numero}
+    </div>
+    <div class="flex-1">
+      <h3 class="font-mono font-bold text-sm mb-2" style={`color: ${paso.colorAcento};`}>
+        {paso.titulo}
+      </h3>
+      <p class="text-sm leading-relaxed mb-3" style="color: var(--text-primary);">
+        {paso.descripcion}
+      </p>
+      {terminos.length > 0 && (
+        <div class="flex flex-wrap gap-2 mt-2">
+          <span class="text-xs font-mono" style="color: var(--text-muted);">términos:</span>
+          {terminos.map(t => (
+            <span
+              class="pill cursor-pointer"
+              data-action="navigate-ficha"
+              data-id={t.id}
+              title={`Ver ficha: ${t.nombre}`}
+              style="background: rgba(179,136,255,0.1); color: var(--accent-purple); border: 1px solid rgba(179,136,255,0.3);"
+            >
+              {t.nombre}
+            </span>
+          ))}
+        </div>
+      )}
+    </div>
+  </div>
+</div>

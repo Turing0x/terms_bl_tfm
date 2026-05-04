@@ -1,0 +1,122 @@
+---
+import type { KitExtraccion } from '../../lib/tecnicas'
+import type { Termino } from '../../types'
+import { getTerminoById } from '../../lib/glosario'
+
+export interface Props {
+  kits: KitExtraccion[]
+}
+
+const { kits } = Astro.props
+
+const principioIcon: Record<string, string> = {
+  'columna-silice':            '🧪',
+  'particulas-magneticas':     '🧲',
+  'cartucho-cerrado':          '🤖',
+  'columna-silice-optimizada': '⚗️',
+}
+
+const pasoColors = ['#00e5ff', '#39ff14', '#ffb300', '#b388ff']
+
+// Pre-compute all step data to avoid TypeScript predicates in template
+interface StepCell {
+  numero: number
+  titulo: string
+  descripcion: string
+  color: string
+  terminos: Termino[]
+}
+
+const stepGrid: StepCell[][] = [0, 1, 2, 3].map(stepIdx =>
+  kits.map(kit => {
+    const paso = kit.pasos[stepIdx]
+    const terminos: Termino[] = paso.terminosLinked
+      .map(id => getTerminoById(id))
+      .filter((t): t is Termino => t !== undefined)
+    return {
+      numero: paso.numero,
+      titulo: paso.titulo,
+      descripcion: paso.descripcion,
+      color: pasoColors[stepIdx],
+      terminos,
+    }
+  })
+)
+---
+
+<div class="kit-comparador overflow-x-auto">
+  <div class="min-w-[700px]">
+
+    <!-- Kit headers -->
+    <div class="grid grid-cols-4 gap-3 mb-4">
+      {kits.map(kit => (
+        <div
+          class="p-3 rounded-xl text-center"
+          style="background: var(--bg-card); border: 1px solid var(--border);"
+        >
+          <div class="text-lg mb-1">{principioIcon[kit.principio] ?? '🔬'}</div>
+          <div class="font-mono text-xs font-bold mb-0.5" style="color: var(--accent-cyan);">
+            {kit.nombre.split(' ').slice(0, 2).join(' ')}
+          </div>
+          <div class="text-xs" style="color: var(--text-muted);">{kit.fabricante}</div>
+        </div>
+      ))}
+    </div>
+
+    <!-- Steps aligned by row -->
+    {stepGrid.map(row => (
+      <div class="grid grid-cols-4 gap-3 mb-3">
+        {row.map(cell => (
+          <div
+            class="p-3 rounded-xl"
+            style={`border: 1px solid ${cell.color}30; background: ${cell.color}08;`}
+          >
+            <div class="flex items-center gap-2 mb-2">
+              <span
+                class="w-5 h-5 rounded-full flex items-center justify-center text-xs font-mono font-bold shrink-0"
+                style={`background: ${cell.color}20; border: 1px solid ${cell.color}50; color: ${cell.color};`}
+              >
+                {cell.numero}
+              </span>
+              <span class="text-xs font-mono font-semibold" style={`color: ${cell.color};`}>{cell.titulo}</span>
+            </div>
+            <p class="text-xs leading-relaxed" style="color: var(--text-primary); opacity: 0.85;">
+              {cell.descripcion.slice(0, 100)}{cell.descripcion.length > 100 ? '…' : ''}
+            </p>
+            {cell.terminos.length > 0 && (
+              <div class="flex flex-wrap gap-1 mt-2">
+                {cell.terminos.map(t => (
+                  <span
+                    class="text-xs px-1.5 py-0.5 rounded cursor-pointer font-mono"
+                    data-action="navigate-ficha"
+                    data-id={t.id}
+                    style="background: rgba(179,136,255,0.1); color: var(--accent-purple); border: 1px solid rgba(179,136,255,0.25);"
+                  >
+                    {t.nombre}
+                  </span>
+                ))}
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+    ))}
+
+    <!-- Footer: ventaja + limitación -->
+    <div class="grid grid-cols-4 gap-3 mt-4 pt-4" style="border-top: 1px solid var(--border);">
+      {kits.map(kit => (
+        <div class="flex flex-col gap-2">
+          <div class="p-2.5 rounded-lg" style="background: rgba(57,255,20,0.05); border: 1px solid rgba(57,255,20,0.2);">
+            <div class="text-xs font-mono mb-1" style="color: var(--accent-green);">✓ Ventaja</div>
+            <p class="text-xs leading-relaxed" style="color: var(--text-primary);">{kit.ventajaClave}</p>
+          </div>
+          <div class="p-2.5 rounded-lg" style="background: rgba(255,179,0,0.05); border: 1px solid rgba(255,179,0,0.2);">
+            <div class="text-xs font-mono mb-1" style="color: var(--accent-amber);">⚠ Limitación</div>
+            <p class="text-xs leading-relaxed" style="color: var(--text-primary);">{kit.limitacionClave}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+
+  </div>
+</div>

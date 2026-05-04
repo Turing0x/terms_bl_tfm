@@ -1,0 +1,107 @@
+---
+import NivelCard from './NivelCard.astro'
+import TecnicaPanel from './TecnicaPanel.astro'
+import type { Tecnica } from '../../lib/tecnicas'
+
+export interface Props {
+  tecnicas: Tecnica[]
+}
+
+const { tecnicas } = Astro.props
+
+const porNivel = {
+  campo:      tecnicas.filter(t => t.nivel === 'campo'),
+  regional:   tecnicas.filter(t => t.nivel === 'regional'),
+  referencia: tecnicas.filter(t => t.nivel === 'referencia'),
+}
+
+const nivelColor = {
+  campo:      '#39ff14',
+  regional:   '#00e5ff',
+  referencia: '#b388ff',
+}
+
+const allNiveles: Array<'campo' | 'regional' | 'referencia'> = ['campo', 'regional', 'referencia']
+---
+
+<!-- Three-level grid -->
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6 items-start">
+  {allNiveles.map(nivel => (
+    <NivelCard nivel={nivel} tecnicas={porNivel[nivel]} />
+  ))}
+</div>
+
+<!-- Inline technique panel — shown between grid and table on selection -->
+<div id="tecnica-inline-panel" class="inline-panel hidden mb-6">
+  {tecnicas.map(t => (
+    <TecnicaPanel tecnica={t} />
+  ))}
+</div>
+
+<!-- Comparison table -->
+<div>
+  <h3
+    class="font-mono text-sm font-bold mb-3 pb-2"
+    style="color: var(--text-muted); border-bottom: 1px solid var(--border);"
+  >
+    Tabla comparativa · todas las técnicas
+  </h3>
+  <div class="overflow-x-auto">
+    <table class="w-full text-xs" style="border-collapse: separate; border-spacing: 0 4px;">
+      <thead>
+        <tr>
+          {['Técnica', 'Nivel', 'LOD', 'Tiempo', 'Coste', 'Escenario óptimo'].map(col => (
+            <th class="text-left px-3 py-2 font-mono" style="color: var(--text-muted); font-weight: 600;">
+              {col}
+            </th>
+          ))}
+        </tr>
+      </thead>
+      <tbody>
+        {tecnicas.map(t => {
+          const color = nivelColor[t.nivel]
+          return (
+            <tr
+              class="tecnica-table-row cursor-pointer transition-all"
+              data-action="tecnica-select"
+              data-tecnica-id={t.id}
+            >
+              <td class="px-3 py-2 rounded-l-lg font-mono font-semibold" style={`color: ${color}; background: var(--bg-card);`}>
+                {t.nombre}
+              </td>
+              <td class="px-3 py-2" style="background: var(--bg-card);">
+                <span
+                  class="px-2 py-0.5 rounded-full text-xs font-mono"
+                  style={`background: ${color}12; border: 1px solid ${color}30; color: ${color};`}
+                >
+                  {t.nivel}
+                </span>
+              </td>
+              <td class="px-3 py-2" style="color: var(--text-primary); background: var(--bg-card);">{t.lod}</td>
+              <td class="px-3 py-2" style="color: var(--text-primary); background: var(--bg-card);">{t.tiempo}</td>
+              <td class="px-3 py-2" style="color: var(--text-primary); background: var(--bg-card);">{t.coste}</td>
+              <td class="px-3 py-2 rounded-r-lg" style="color: var(--text-muted); background: var(--bg-card);">{t.escenario}</td>
+            </tr>
+          )
+        })}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<style>
+  .tecnica-table-row:hover td {
+    background: rgba(0, 229, 255, 0.04) !important;
+  }
+  .inline-panel {
+    border: 1px solid rgba(0, 229, 255, 0.2);
+    border-radius: 0.75rem;
+    background: var(--bg-secondary);
+    padding: 1.25rem;
+    animation: panel-slide-in 0.25s ease-out;
+  }
+  @keyframes panel-slide-in {
+    from { opacity: 0; transform: translateY(-8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+</style>

@@ -1,0 +1,106 @@
+---
+import PasoExtraccion from './PasoExtraccion.astro'
+import type { KitExtraccion } from '../../lib/tecnicas'
+
+export interface Props {
+  kit: KitExtraccion
+}
+
+const { kit } = Astro.props
+
+const principioMeta: Record<string, { label: string; icon: string; color: string }> = {
+  'columna-silice':          { label: 'Columna de sílice',           icon: '🧪', color: '#00e5ff' },
+  'particulas-magneticas':   { label: 'Partículas magnéticas',       icon: '🧲', color: '#b388ff' },
+  'cartucho-cerrado':        { label: 'Cartucho cerrado automatizado', icon: '🤖', color: '#39ff14' },
+  'columna-silice-optimizada': { label: 'Columna de sílice optimizada', icon: '⚗️', color: '#ffb300' },
+}
+const p = principioMeta[kit.principio] ?? { label: kit.principio, icon: '🔬', color: '#00e5ff' }
+---
+
+<div class="kit-stepper flex flex-col gap-4" data-stepper-id={kit.id}>
+
+  <!-- Principio -->
+  <div class="flex items-center gap-2">
+    <span class="text-xl">{p.icon}</span>
+    <span
+      class="text-xs font-mono px-3 py-1 rounded-full"
+      style={`background: ${p.color}12; border: 1px solid ${p.color}40; color: ${p.color};`}
+    >
+      {p.label}
+    </span>
+    <span class="text-xs font-mono ml-auto" style="color: var(--text-muted);">{kit.fabricante}</span>
+  </div>
+
+  <!-- Step tabs -->
+  <div class="flex gap-2 overflow-x-auto pb-1 stepper-tabs">
+    {kit.pasos.map((paso, i) => (
+      <button
+        class="kit-step-tab shrink-0 px-3 py-2 rounded-lg text-xs font-mono transition-all whitespace-nowrap"
+        data-stepper={kit.id}
+        data-step={i}
+        data-color={paso.colorAcento}
+        style={i === 0
+          ? `background: ${paso.colorAcento}18; border: 1px solid ${paso.colorAcento}60; color: ${paso.colorAcento};`
+          : 'background: transparent; border: 1px solid var(--border); color: var(--text-muted);'}
+      >
+        {paso.numero}. {paso.titulo}
+      </button>
+    ))}
+  </div>
+
+  <!-- Step panels (all rendered, JS shows/hides) -->
+  <div class="step-panels">
+    {kit.pasos.map((paso, i) => (
+      <div
+        class={`step-panel ${i !== 0 ? 'hidden' : ''}`}
+        data-stepper={kit.id}
+        data-panel={i}
+      >
+        <PasoExtraccion paso={paso} />
+      </div>
+    ))}
+  </div>
+
+  <!-- Footer: ventaja + limitación -->
+  <div class="grid grid-cols-2 gap-3 mt-1">
+    <div class="p-3 rounded-xl" style="background: rgba(57,255,20,0.05); border: 1px solid rgba(57,255,20,0.2);">
+      <div class="text-xs font-mono mb-1" style="color: var(--accent-green);">✓ Ventaja clave</div>
+      <p class="text-xs leading-relaxed" style="color: var(--text-primary);">{kit.ventajaClave}</p>
+    </div>
+    <div class="p-3 rounded-xl" style="background: rgba(255,179,0,0.05); border: 1px solid rgba(255,179,0,0.2);">
+      <div class="text-xs font-mono mb-1" style="color: var(--accent-amber);">⚠ Limitación clave</div>
+      <p class="text-xs leading-relaxed" style="color: var(--text-primary);">{kit.limitacionClave}</p>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('click', event => {
+    const btn = (event.target as Element).closest('.kit-step-tab') as HTMLElement | null
+    if (!btn) return
+
+    const stepperId = btn.dataset.stepper
+    const stepIdx   = parseInt(btn.dataset.step ?? '0')
+    const container = btn.closest('[data-stepper-id]')
+    if (!container || container.getAttribute('data-stepper-id') !== stepperId) return
+
+    // Update tab styles
+    container.querySelectorAll<HTMLElement>('.kit-step-tab').forEach((tab, i) => {
+      const color = tab.dataset.color ?? '#00e5ff'
+      if (i === stepIdx) {
+        tab.style.background   = `${color}18`
+        tab.style.borderColor  = `${color}60`
+        tab.style.color        = color
+      } else {
+        tab.style.background   = 'transparent'
+        tab.style.borderColor  = 'var(--border)'
+        tab.style.color        = 'var(--text-muted)'
+      }
+    })
+
+    // Show/hide panels
+    container.querySelectorAll<HTMLElement>('.step-panel').forEach((panel, i) => {
+      panel.classList.toggle('hidden', i !== stepIdx)
+    })
+  })
+</script>

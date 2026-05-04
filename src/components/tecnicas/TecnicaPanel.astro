@@ -1,0 +1,116 @@
+---
+import type { Tecnica } from '../../lib/tecnicas'
+import AnimQPCR   from './animaciones/AnimQPCR.astro'
+import AnimDdPCR  from './animaciones/AnimDdPCR.astro'
+import AnimLAMP   from './animaciones/AnimLAMP.astro'
+import AnimRPA    from './animaciones/AnimRPA.astro'
+import AnimCRISPR from './animaciones/AnimCRISPR.astro'
+import AnimNGS    from './animaciones/AnimNGS.astro'
+import { getTerminoById } from '../../lib/glosario'
+
+export interface Props {
+  tecnica: Tecnica
+}
+
+const { tecnica } = Astro.props
+
+const termino = getTerminoById(tecnica.terminoGlosario)
+
+const nivelColor = {
+  campo:      '#39ff14',
+  regional:   '#00e5ff',
+  referencia: '#b388ff',
+}[tecnica.nivel]
+---
+
+<div
+  id={`tecnica-panel-${tecnica.id}`}
+  class="tecnica-panel hidden flex-col gap-4"
+>
+  <!-- Panel header -->
+  <div class="flex items-center justify-between gap-3 pb-3" style="border-bottom: 1px solid var(--border);">
+    <div class="flex items-center gap-3">
+      <h3 class="font-mono text-base font-bold" style="color: var(--text-primary);">{tecnica.nombre}</h3>
+      <span
+        class="inline-block text-xs font-mono px-2.5 py-0.5 rounded-full"
+        style={`background: ${nivelColor}12; border: 1px solid ${nivelColor}35; color: ${nivelColor};`}
+      >
+        nivel {tecnica.nivel}
+      </span>
+    </div>
+    <button
+      class="shrink-0 p-1.5 rounded-lg transition-all"
+      data-action="tecnica-close"
+      style="color: var(--text-muted); border: 1px solid var(--border);"
+      title="Cerrar panel"
+      aria-label="Cerrar panel de técnica"
+    >
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <path d="M18 6L6 18M6 6l12 12"/>
+      </svg>
+    </button>
+  </div>
+
+  <!-- Two-column body: animation left, metrics right -->
+  <div class="panel-body">
+
+    <!-- Left: animation -->
+    <div
+      class="rounded-xl p-3"
+      style="background: var(--bg-secondary); border: 1px solid var(--border);"
+    >
+      {tecnica.animacion === 'AnimQPCR'   && <AnimQPCR />}
+      {tecnica.animacion === 'AnimDdPCR'  && <AnimDdPCR />}
+      {tecnica.animacion === 'AnimLAMP'   && <AnimLAMP />}
+      {tecnica.animacion === 'AnimRPA'    && <AnimRPA />}
+      {tecnica.animacion === 'AnimCRISPR' && <AnimCRISPR />}
+      {tecnica.animacion === 'AnimNGS'    && <AnimNGS />}
+    </div>
+
+    <!-- Right: metrics + link -->
+    <div class="flex flex-col gap-2">
+      <div class="grid grid-cols-2 gap-2">
+        {[
+          { label: 'LOD',      value: tecnica.lod,       color: nivelColor },
+          { label: 'Tiempo',   value: tecnica.tiempo,    color: '#ffb300'  },
+          { label: 'Coste',    value: tecnica.coste,     color: '#64748b'  },
+          { label: 'Escenario', value: tecnica.escenario, color: 'var(--text-muted)' },
+        ].map(m => (
+          <div
+            class={`p-2.5 rounded-xl ${m.label === 'Escenario' ? 'col-span-2' : ''}`}
+            style="background: var(--bg-secondary); border: 1px solid var(--border);"
+          >
+            <div class="text-xs font-mono mb-0.5" style={`color: ${m.color};`}>{m.label}</div>
+            <div class="text-xs" style="color: var(--text-primary);">{m.value}</div>
+          </div>
+        ))}
+      </div>
+
+      {termino && (
+        <button
+          class="w-full py-2.5 rounded-xl text-sm font-mono font-semibold transition-all mt-auto"
+          data-action="navigate-ficha"
+          data-id={termino.id}
+          style="background: rgba(0,229,255,0.08); border: 1px solid rgba(0,229,255,0.3); color: var(--accent-cyan);"
+        >
+          Ver ficha completa →
+        </button>
+      )}
+    </div>
+
+  </div>
+</div>
+
+<style>
+  .panel-body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    align-items: start;
+  }
+  @media (max-width: 600px) {
+    .panel-body {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
