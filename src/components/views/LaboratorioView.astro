@@ -1,0 +1,141 @@
+---
+import KitStepper from '../laboratorio/KitStepper.astro'
+import KitComparador from '../laboratorio/KitComparador.astro'
+import { kitsExtraccion } from '../../lib/tecnicas'
+
+const kits = kitsExtraccion
+---
+
+<div class="laboratorio-view flex flex-col h-full overflow-hidden">
+
+  <!-- Header -->
+  <div
+    class="shrink-0 px-6 py-4 flex items-center justify-between gap-4 flex-wrap"
+    style="border-bottom: 1px solid var(--border);"
+  >
+    <div>
+      <h2 class="font-mono text-lg font-bold" style="color: var(--accent-cyan);">⚗️ Laboratorio de Extracción</h2>
+      <p class="text-xs mt-0.5" style="color: var(--text-muted);">
+        Kits de extracción de cfDNA — pasos, principios y comparativa
+      </p>
+    </div>
+
+    <!-- Mode toggle -->
+    <div
+      class="flex items-center gap-1 p-1 rounded-xl"
+      style="background: var(--bg-secondary); border: 1px solid var(--border);"
+    >
+      <button
+        id="lab-mode-individual"
+        class="lab-mode-btn px-4 py-1.5 rounded-lg text-xs font-mono transition-all active-mode"
+      >
+        Individual
+      </button>
+      <button
+        id="lab-mode-comparar"
+        class="lab-mode-btn px-4 py-1.5 rounded-lg text-xs font-mono transition-all"
+      >
+        Comparar 4 kits
+      </button>
+    </div>
+  </div>
+
+  <!-- Modo Individual -->
+  <div id="lab-individual" class="flex flex-col flex-1 min-h-0 overflow-hidden">
+    <!-- Kit selector tabs -->
+    <div
+      class="shrink-0 flex gap-2 px-6 py-3 overflow-x-auto"
+      style="border-bottom: 1px solid var(--border);"
+    >
+      {kits.map((kit, i) => (
+        <button
+          class="kit-selector-tab shrink-0 px-4 py-2 rounded-xl text-xs font-mono transition-all whitespace-nowrap"
+          data-kit-idx={i}
+          style={i === 0
+            ? 'background: rgba(0,229,255,0.12); border: 1px solid rgba(0,229,255,0.4); color: var(--accent-cyan);'
+            : 'background: transparent; border: 1px solid var(--border); color: var(--text-muted);'}
+        >
+          {kit.nombre.split(' ').slice(0, 2).join(' ')}
+          <span class="ml-1.5 opacity-60">{kit.fabricante}</span>
+        </button>
+      ))}
+    </div>
+
+    <!-- Kit stepper panels -->
+    <div class="flex-1 overflow-y-auto px-6 py-5">
+      {kits.map((kit, i) => (
+        <div
+          class={`kit-panel ${i !== 0 ? 'hidden' : ''}`}
+          data-kit-panel={i}
+        >
+          <KitStepper kit={kit} />
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <!-- Modo Comparación (hidden initially) -->
+  <div id="lab-comparar" class="hidden flex-1 min-h-0 overflow-y-auto px-6 py-5">
+    <KitComparador kits={kits} />
+  </div>
+
+</div>
+
+<script>
+  // Mode toggle
+  const btnIndividual = document.getElementById('lab-mode-individual')
+  const btnComparar   = document.getElementById('lab-mode-comparar')
+  const panelIndividual = document.getElementById('lab-individual')
+  const panelComparar   = document.getElementById('lab-comparar')
+
+  function setMode(mode: 'individual' | 'comparar') {
+    const isInd = mode === 'individual'
+
+    panelIndividual?.classList.toggle('hidden', !isInd)
+    panelIndividual?.classList.toggle('flex', isInd)
+    panelComparar?.classList.toggle('hidden', isInd)
+    panelComparar?.classList.toggle('flex', !isInd)
+
+    document.querySelectorAll<HTMLElement>('.lab-mode-btn').forEach(btn => {
+      const active = (isInd && btn.id === 'lab-mode-individual') ||
+                     (!isInd && btn.id === 'lab-mode-comparar')
+      btn.style.background = active ? 'rgba(0,229,255,0.12)' : 'transparent'
+      btn.style.color      = active ? 'var(--accent-cyan)' : 'var(--text-muted)'
+      btn.style.border     = active ? '1px solid rgba(0,229,255,0.4)' : '1px solid transparent'
+    })
+  }
+
+  btnIndividual?.addEventListener('click', () => setMode('individual'))
+  btnComparar?.addEventListener('click',   () => setMode('comparar'))
+
+  // Kit selector tabs
+  document.querySelectorAll<HTMLElement>('.kit-selector-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      const idx = parseInt(tab.dataset.kitIdx ?? '0')
+
+      document.querySelectorAll<HTMLElement>('.kit-selector-tab').forEach((t, i) => {
+        const active = i === idx
+        t.style.background  = active ? 'rgba(0,229,255,0.12)' : 'transparent'
+        t.style.borderColor = active ? 'rgba(0,229,255,0.4)'  : 'var(--border)'
+        t.style.color       = active ? 'var(--accent-cyan)'   : 'var(--text-muted)'
+      })
+
+      document.querySelectorAll<HTMLElement>('.kit-panel').forEach((panel, i) => {
+        panel.classList.toggle('hidden', i !== idx)
+      })
+    })
+  })
+</script>
+
+<style>
+  .lab-mode-btn {
+    border: 1px solid transparent;
+    color: var(--text-muted);
+    background: transparent;
+  }
+  .lab-mode-btn.active-mode {
+    background: rgba(0, 229, 255, 0.12);
+    border-color: rgba(0, 229, 255, 0.4);
+    color: var(--accent-cyan);
+  }
+</style>

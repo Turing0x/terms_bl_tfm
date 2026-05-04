@@ -1,0 +1,78 @@
+---
+import EcosistemaTecnicas from '../tecnicas/EcosistemaTecnicas.astro'
+import { tecnicasMoleculares } from '../../lib/tecnicas'
+
+const tecnicas = tecnicasMoleculares
+---
+
+<div class="tecnicas-view flex flex-col h-full overflow-hidden">
+
+  <!-- Header -->
+  <div
+    class="shrink-0 px-6 py-4"
+    style="border-bottom: 1px solid var(--border);"
+  >
+    <h2 class="font-mono text-lg font-bold" style="color: var(--accent-cyan);">🛠️ Ecosistema de Técnicas Moleculares</h2>
+    <p class="text-xs mt-0.5" style="color: var(--text-muted);">
+      Técnicas organizadas por nivel de implementación · click en una técnica para ver su animación
+    </p>
+  </div>
+
+  <!-- Scrollable content — single column, panel appears inline above table -->
+  <div class="flex-1 overflow-y-auto px-6 py-5">
+    <EcosistemaTecnicas tecnicas={tecnicas} />
+  </div>
+
+</div>
+
+<script>
+  function selectTecnica(tecnicaId: string) {
+    const inlinePanel = document.getElementById('tecnica-inline-panel')
+    if (!inlinePanel) return
+
+    // Show inline panel
+    inlinePanel.classList.remove('hidden')
+
+    // Show correct panel, hide others
+    document.querySelectorAll<HTMLElement>('.tecnica-panel').forEach(panel => {
+      const isActive = panel.id === `tecnica-panel-${tecnicaId}`
+      panel.classList.toggle('hidden', !isActive)
+      panel.classList.toggle('flex', isActive)
+    })
+
+    // Highlight selected cards and table rows
+    document.querySelectorAll<HTMLElement>('[data-action="tecnica-select"]').forEach(btn => {
+      const active = btn.dataset.tecnicaId === tecnicaId
+      btn.style.borderColor = active ? 'rgba(0,229,255,0.4)' : ''
+      btn.style.background  = active ? 'rgba(0,229,255,0.06)' : ''
+    })
+
+    // Scroll inline panel into view
+    inlinePanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+  }
+
+  function closeTecnica() {
+    const inlinePanel = document.getElementById('tecnica-inline-panel')
+    if (!inlinePanel) return
+    inlinePanel.classList.add('hidden')
+
+    document.querySelectorAll<HTMLElement>('[data-action="tecnica-select"]').forEach(btn => {
+      btn.style.borderColor = ''
+      btn.style.background  = ''
+    })
+  }
+
+  document.addEventListener('click', event => {
+    const target = (event.target as Element).closest('[data-action]') as HTMLElement | null
+    if (!target) return
+
+    if (target.dataset.action === 'tecnica-select') {
+      const id = target.dataset.tecnicaId
+      if (id) selectTecnica(id)
+    }
+
+    if (target.dataset.action === 'tecnica-close') {
+      closeTecnica()
+    }
+  })
+</script>

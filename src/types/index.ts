@@ -43,3 +43,34 @@ export interface Glosario {
   relaciones: Relacion[]
   terminos: Termino[]
 }
+
+export interface PasoKit {
+  numero: number
+  titulo: string
+  descripcion: string
+  terminosLinked: string[]
+  colorAcento: string
+}
+
+export interface KitExtraccion {
+  id: string
+  nombre: string
+  fabricante: string
+  principio: string
+  pasos: PasoKit[]
+  ventajaClave: string
+  limitacionClave: string
+  terminoGlosario: string
+}
+
+export interface Tecnica {
+  id: string
+  nombre: string
+  nivel: 'campo' | 'regional' | 'referencia'
+  animacion: string
+  lod: string
+  tiempo: string
+  coste: string
+  escenario: string
+  terminoGlosario: string
+}
