@@ -1,70 +1,68 @@
-<!-- mNGS / Oxford Nanopore — reads humanos, clasificador, lecturas parasitarias -->
-<div class="wrapper">
+<!-- mNGS / Oxford Nanopore — 3 pasos controlados por botones -->
+<div class="anim-wrapper step-1" data-total-steps="3" data-current-step="1">
   <svg viewBox="0 0 280 160" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Animación mNGS / Metagenómica">
 
-    <!-- Technique badge -->
+    <!-- Technique badge siempre visible -->
     <rect x="6" y="4" width="58" height="16" rx="5" fill="rgba(0,229,255,0.1)" stroke="rgba(0,229,255,0.4)" stroke-width="0.8" />
     <text x="35" y="15" fill="#00e5ff" font-size="7.5" font-family="monospace" text-anchor="middle" font-weight="bold">mNGS</text>
 
-    <!-- Phase 1 label -->
-    <text x="62" y="25" fill="#64748b" font-size="6.5" font-family="monospace" text-anchor="middle" class="phase1-label">lecturas humanas (99%)</text>
+    <!-- Fase 1: reads humanos fluyendo + label -->
+    <g data-phase="1">
+      <text x="62" y="25" fill="#64748b" font-size="6.5" font-family="monospace" text-anchor="middle" class="phase1-label">lecturas humanas (99%)</text>
+      {[
+        { y: 35, w: 38, delay: '0s' },
+        { y: 48, w: 32, delay: '0.3s' },
+        { y: 61, w: 36, delay: '0.15s' },
+        { y: 74, w: 40, delay: '0.45s' },
+        { y: 87, w: 28, delay: '0.6s' },
+      ].map((r) => (
+        <rect
+          x="10" y={r.y} width={r.w} height="9" rx="3"
+          fill="rgba(100,116,139,0.3)" stroke="#1e3a5f" stroke-width="0.5"
+          class="human-read" style={`animation-delay: ${r.delay}`}
+        />
+      ))}
+    </g>
 
-    <!-- Human reads flowing left → classifier (phase 1+2) -->
-    {[
-      { y: 35, w: 38, delay: '0s' },
-      { y: 48, w: 32, delay: '0.3s' },
-      { y: 61, w: 36, delay: '0.15s' },
-      { y: 74, w: 40, delay: '0.45s' },
-      { y: 87, w: 28, delay: '0.6s' },
-    ].map((r) => (
-      <rect
-        x="-10" y={r.y} width={r.w} height="9" rx="3"
-        fill="rgba(100,116,139,0.3)" stroke="#1e3a5f" stroke-width="0.5"
-        class="human-read" style={`animation-delay: ${r.delay}`}
-      />
-    ))}
+    <!-- Fase 2: clasificador + reads saliendo -->
+    <g data-phase="2" style="display: none">
+      <rect x="126" y="25" width="3" height="80" rx="1.5" fill="#1e3a5f" class="filter-line" />
+      <rect x="127" y="25" width="2" height="80" rx="1"
+        fill="url(#ngs-filter-gradient)" class="filter-pulse" />
+      <text x="131" y="22" fill="#64748b" font-size="6.5" font-family="monospace" class="filter-label">clasificador</text>
+      <text x="131" y="30" fill="#64748b" font-size="6" font-family="monospace" class="filter-label">bioinformático</text>
+      {[
+        { y: 38, w: 30, delay: '0.3s' },
+        { y: 56, w: 26, delay: '0.7s' },
+        { y: 74, w: 22, delay: '0.5s' },
+      ].map(r => (
+        <rect
+          x="132" y={r.y} width={r.w} height="8" rx="3"
+          fill="rgba(100,116,139,0.15)" stroke="#1e3a5f" stroke-width="0.5"
+          class="human-read-out" style={`animation-delay: ${r.delay}`}
+        />
+      ))}
+    </g>
 
-    <!-- Filter / bioinformatic classifier (phase 2+3) -->
-    <rect x="126" y="25" width="3" height="80" rx="1.5" fill="#1e3a5f" class="filter-line" />
-    <rect x="127" y="25" width="2" height="80" rx="1"
-      fill="url(#ngs-filter-gradient)" class="filter-pulse" />
-    <text x="131" y="22" fill="#64748b" font-size="6.5" font-family="monospace" class="filter-label">clasificador</text>
-    <text x="131" y="30" fill="#64748b" font-size="6" font-family="monospace" class="filter-label">bioinformático</text>
-
-    <!-- Human reads exiting right (small, dimmed) — phase 2 -->
-    {[
-      { y: 38, w: 30, delay: '0.3s' },
-      { y: 56, w: 26, delay: '0.7s' },
-      { y: 74, w: 22, delay: '0.5s' },
-    ].map(r => (
-      <rect
-        x="260" y={r.y} width={r.w} height="8" rx="3"
-        fill="rgba(100,116,139,0.15)" stroke="#1e3a5f" stroke-width="0.5"
-        class="human-read-out" style={`animation-delay: ${r.delay}`}
-      />
-    ))}
-
-    <!-- Parasite reads emerging (phase 3) -->
-    {[
-      { y: 40, label: 'T. cruzi' },
-      { y: 62, label: 'Plasmodium' },
-      { y: 82, label: 'Leishmania' },
-    ].map((r, i) => (
-      <g class="parasite-read" style={`animation-delay: ${i * 0.4}s`}>
-        <rect x="135" y={r.y} width="52" height="10" rx="4"
-          fill="rgba(57,255,20,0.2)" stroke="#39ff14" stroke-width="1.2" />
-        <text x="161" y={r.y + 8} fill="#39ff14" font-size="6"
-          font-family="monospace" text-anchor="middle" font-weight="bold">
-          {r.label}
-        </text>
-      </g>
-    ))}
-
-    <!-- Phase 3 label -->
-    <text x="195" y="115" fill="#39ff14" font-size="6.5" font-family="monospace" text-anchor="middle" class="phase3-label">lecturas parasitarias (&lt;1%)</text>
-
-    <!-- Bottom note -->
-    <text x="140" y="148" fill="#64748b" font-size="7" font-family="monospace" text-anchor="middle" class="bottom-note">agnóstico · cualquier patógeno · ~2 días · ref.</text>
+    <!-- Fase 3: reads parasitarios + label + nota -->
+    <g data-phase="3" style="display: none">
+      {[
+        { y: 40, label: 'T. cruzi' },
+        { y: 62, label: 'Plasmodium' },
+        { y: 82, label: 'Leishmania' },
+      ].map((r, i) => (
+        <g class="parasite-read" style={`animation-delay: ${i * 0.25}s`}>
+          <rect x="135" y={r.y} width="52" height="10" rx="4"
+            fill="rgba(57,255,20,0.2)" stroke="#39ff14" stroke-width="1.2" />
+          <text x="161" y={r.y + 8} fill="#39ff14" font-size="6"
+            font-family="monospace" text-anchor="middle" font-weight="bold">
+            {r.label}
+          </text>
+        </g>
+      ))}
+      <text x="195" y="110" fill="#39ff14" font-size="6.5" font-family="monospace" text-anchor="middle" class="phase3-label">lecturas parasitarias (&lt;1%)</text>
+      <text x="140" y="148" fill="#64748b" font-size="7" font-family="monospace" text-anchor="middle" class="bottom-note">agnóstico · cualquier patógeno · ~2 días · ref.</text>
+    </g>
 
     <defs>
       <linearGradient id="ngs-filter-gradient" x1="0" y1="0" x2="0" y2="1">
@@ -81,25 +79,28 @@
     <span class="leg"><span class="lgrad"></span>línea gradiente = clasificador bioinformático (pipeline)</span>
   </div>
 
-  <!-- Pasos sincronizados (loop 9s) -->
-  <div class="steps">
-    <div class="step s1">
-      <span class="snum">1/3</span>
-      <p>Millones de fragmentos de ADN del paciente se secuencian simultáneamente. El <strong>99%</strong> son reads del genoma humano del propio paciente.</p>
-    </div>
-    <div class="step s2">
-      <span class="snum">2/3</span>
-      <p>El <strong>clasificador bioinformático</strong> filtra y elimina reads humanos en tiempo real, alineando contra el genoma de referencia hg38.</p>
-    </div>
-    <div class="step s3">
-      <span class="snum">3/3</span>
-      <p>Los reads no-humanos se alinean contra bases de datos de patógenos. Parásitos identificados: <strong>T. cruzi, Plasmodium, Leishmania</strong> y más.</p>
-    </div>
+  <div class="step-text step-text-1">
+    <span class="snum">1/3</span>
+    <p>Millones de fragmentos de ADN del paciente se secuencian simultáneamente. El <strong>99%</strong> son reads del genoma humano del propio paciente.</p>
+  </div>
+  <div class="step-text step-text-2">
+    <span class="snum">2/3</span>
+    <p>El <strong>clasificador bioinformático</strong> filtra y elimina reads humanos en tiempo real, alineando contra el genoma de referencia hg38.</p>
+  </div>
+  <div class="step-text step-text-3">
+    <span class="snum">3/3</span>
+    <p>Los reads no-humanos se alinean contra bases de datos de patógenos. Parásitos identificados: <strong>T. cruzi, Plasmodium, Leishmania</strong> y más.</p>
+  </div>
+
+  <div class="step-controls">
+    <button data-action="anim-prev" class="step-btn" disabled>← Anterior</button>
+    <span class="step-indicator">1 / 3</span>
+    <button data-action="anim-next" class="step-btn">Siguiente →</button>
   </div>
 </div>
 
 <style>
-  .wrapper { display: flex; flex-direction: column; gap: 5px; }
+  .anim-wrapper { display: flex; flex-direction: column; gap: 5px; }
   svg { width: 100%; }
 
   .legend {
@@ -118,104 +119,50 @@
     background: linear-gradient(to bottom, #b388ff, #00e5ff);
   }
 
-  .steps { position: relative; height: 5rem; }
-  .step {
-    position: absolute; inset: 0;
-    display: flex; align-items: flex-start; gap: 6px;
-    padding: 5px 7px;
-    background: rgba(0,229,255,0.04);
-    border: 1px solid rgba(0,229,255,0.12);
-    border-radius: 5px;
-    opacity: 0;
-  }
-  .snum {
-    font-family: monospace; font-size: 0.58rem;
-    color: var(--accent-cyan); flex-shrink: 0;
-    font-weight: bold; padding-top: 1px;
-  }
-  .step p { font-size: 0.62rem; line-height: 1.42; color: var(--text-primary); margin: 0; }
-  .step strong { color: var(--accent-cyan); font-weight: 600; }
+  .step-text { display: none; align-items: flex-start; gap: 6px; padding: 5px 7px; background: rgba(0,229,255,0.04); border: 1px solid rgba(0,229,255,0.12); border-radius: 5px; min-height: 3.5rem; }
+  .step-1 .step-text-1,
+  .step-2 .step-text-2,
+  .step-3 .step-text-3 { display: flex; }
+  .snum { font-family: monospace; font-size: 0.58rem; color: var(--accent-cyan); flex-shrink: 0; font-weight: bold; padding-top: 1px; }
+  .step-text p { font-size: 0.62rem; line-height: 1.42; color: var(--text-primary); margin: 0; }
+  .step-text strong { color: var(--accent-cyan); font-weight: 600; }
 
-  /* SVG — 9s loop */
-  .phase1-label { animation: ngs-phase1only 9s ease infinite; }
-  .human-read   { animation: ngs-read-flow 2s linear infinite; }
-  .filter-line  { animation: ngs-filter-show 9s ease infinite; }
-  .filter-pulse { animation: ngs-filter-show 9s ease infinite, filter-glow 2s ease-in-out infinite; }
-  .filter-label { animation: ngs-filter-show 9s ease infinite; }
+  .step-controls { display: flex; align-items: center; justify-content: space-between; padding-top: 5px; border-top: 1px solid var(--border); }
+  .step-btn { font-family: monospace; font-size: 0.65rem; padding: 4px 10px; border-radius: 5px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text-muted); cursor: pointer; transition: all 0.15s; }
+  .step-btn:hover:not(:disabled) { color: var(--accent-cyan); border-color: rgba(0,229,255,0.3); background: rgba(0,229,255,0.06); }
+  .step-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+  .step-indicator { font-family: monospace; font-size: 0.65rem; color: var(--accent-cyan); font-weight: bold; }
+
+  .phase1-label { animation: fade-in 0.5s ease-out forwards; }
+  .human-read { animation: ngs-read-flow 2s linear infinite; }
+
+  .filter-line, .filter-label { animation: fade-in 0.5s ease-out forwards; }
+  .filter-pulse { animation: fade-in 0.5s ease-out forwards, filter-glow 2s ease-in-out 0.5s infinite; }
   .human-read-out { animation: ngs-read-out 2s linear infinite; }
-  .parasite-read  { animation: ngs-parasite 9s ease infinite, parasite-glow 1.4s ease-in-out infinite; }
-  .phase3-label   { animation: ngs-phase3only 9s ease infinite; }
-  .bottom-note    { animation: ngs-phase3only 9s ease infinite; }
 
-  @keyframes ngs-phase1only {
-    0%      { opacity: 0; }
-    3%      { opacity: 1; }
-    30%     { opacity: 1; }
-    33.33%  { opacity: 0; }
-    100%    { opacity: 0; }
-  }
+  .parasite-read { animation: parasite-appear 0.5s ease-out forwards, parasite-glow 1.4s ease-in-out 0.5s infinite; }
+  .phase3-label { animation: fade-in 0.5s ease-out 0.8s forwards; opacity: 0; }
+  .bottom-note { animation: fade-in 0.5s ease-out 1s forwards; opacity: 0; }
+
+  @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
   @keyframes ngs-read-flow {
     from { transform: translateX(0);     opacity: 0.8; }
-    to   { transform: translateX(145px); opacity: 0.3; }
+    to   { transform: translateX(115px); opacity: 0.3; }
   }
-  @keyframes ngs-filter-show {
-    0%      { opacity: 0; }
-    33.33%  { opacity: 0; }
-    38%     { opacity: 1; }
-    96%     { opacity: 1; }
-    100%    { opacity: 0; }
+  @keyframes ngs-read-out {
+    from { transform: translateX(0);      opacity: 0.3; }
+    to   { transform: translateX(80px);   opacity: 0.1; }
   }
   @keyframes filter-glow {
     0%, 100% { opacity: 0.6; }
     50%       { opacity: 1; filter: drop-shadow(0 0 3px #b388ff); }
   }
-  @keyframes ngs-read-out {
-    from { transform: translateX(-120px); opacity: 0.3; }
-    to   { transform: translateX(0);      opacity: 0.1; }
-  }
-  @keyframes ngs-parasite {
-    0%      { opacity: 0; }
-    66.66%  { opacity: 0; transform: translateY(4px); }
-    71%     { opacity: 1; transform: translateY(0); }
-    96%     { opacity: 1; }
-    100%    { opacity: 0; }
+  @keyframes parasite-appear {
+    from { opacity: 0; transform: translateY(4px); }
+    to   { opacity: 1; transform: translateY(0); }
   }
   @keyframes parasite-glow {
     0%, 100% { filter: drop-shadow(0 0 2px #39ff14); }
     50%       { filter: drop-shadow(0 0 6px #39ff14) drop-shadow(0 0 10px rgba(57,255,20,0.4)); }
   }
-  @keyframes ngs-phase3only {
-    0%      { opacity: 0; }
-    66.66%  { opacity: 0; }
-    71%     { opacity: 1; }
-    96%     { opacity: 1; }
-    100%    { opacity: 0; }
-  }
-
-  /* Pasos de texto — 9s loop */
-  @keyframes s1 {
-    0%      { opacity: 0; transform: translateY(3px); }
-    3%      { opacity: 1; transform: translateY(0); }
-    29%     { opacity: 1; }
-    33.33%  { opacity: 0; transform: translateY(-3px); }
-    100%    { opacity: 0; }
-  }
-  @keyframes s2 {
-    0%      { opacity: 0; }
-    33.33%  { opacity: 0; transform: translateY(3px); }
-    37%     { opacity: 1; transform: translateY(0); }
-    62%     { opacity: 1; }
-    66.66%  { opacity: 0; transform: translateY(-3px); }
-    100%    { opacity: 0; }
-  }
-  @keyframes s3 {
-    0%      { opacity: 0; }
-    66.66%  { opacity: 0; transform: translateY(3px); }
-    70%     { opacity: 1; transform: translateY(0); }
-    96%     { opacity: 1; }
-    100%    { opacity: 0; transform: translateY(-3px); }
-  }
-  .s1 { animation: s1 9s ease infinite; }
-  .s2 { animation: s2 9s ease infinite; }
-  .s3 { animation: s3 9s ease infinite; }
 </style>

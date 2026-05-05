@@ -26,28 +26,104 @@ const tecnicas = tecnicasMoleculares
 </div>
 
 <script>
+  // ── Anim wrapper step controller ─────────────────────────────────────────
+  function toInt(value: string | undefined | null, fallback: number): number {
+    const n = Number.parseInt(String(value ?? ''), 10)
+    return Number.isFinite(n) ? n : fallback
+  }
+
+  function restartAnimations(el: HTMLElement) {
+    el.style.animation = 'none'
+    void el.offsetWidth
+    el.style.animation = ''
+    el.querySelectorAll<HTMLElement>('*').forEach(child => {
+      child.style.animation = 'none'
+      void child.offsetWidth
+      child.style.animation = ''
+    })
+  }
+
+  function setAnimStep(wrapper: HTMLElement, step: number) {
+    const total = toInt(wrapper.dataset.totalSteps, 1)
+    const nextStep = Math.min(Math.max(step, 1), total)
+    wrapper.dataset.currentStep = String(nextStep)
+
+    wrapper.className = wrapper.className
+      .split(/\s+/)
+      .filter(c => c && !/^step-\d+$/.test(c))
+      .concat(`step-${nextStep}`)
+      .join(' ')
+
+    const prevBtn = wrapper.querySelector<HTMLButtonElement>('[data-action="anim-prev"]')
+    const nextBtn = wrapper.querySelector<HTMLButtonElement>('[data-action="anim-next"]')
+    const indicator = wrapper.querySelector('.step-indicator')
+    if (indicator) indicator.textContent = `${nextStep} / ${total}`
+    if (prevBtn) prevBtn.disabled = nextStep <= 1
+    if (nextBtn) nextBtn.disabled = nextStep >= total
+
+    wrapper.querySelectorAll<HTMLElement>('[data-phase]').forEach(el => {
+      const phase = toInt(el.getAttribute('data-phase'), 1)
+      const shouldShow = phase <= nextStep
+      const wasHidden = el.style.display === 'none'
+      el.style.display = shouldShow ? '' : 'none'
+      if (shouldShow && wasHidden) restartAnimations(el)
+    })
+  }
+
+  function initAnimWrapper(wrapper: HTMLElement) {
+    if (wrapper.dataset.animBound) return
+    wrapper.dataset.animBound = '1'
+    wrapper.addEventListener('click', e => {
+      const target = (e.target as Element).closest('[data-action]') as HTMLElement | null
+      if (!target) return
+      const action = target.getAttribute('data-action')
+      if (action !== 'anim-prev' && action !== 'anim-next') return
+      e.preventDefault()
+      e.stopPropagation()
+      setAnimStep(wrapper, toInt(wrapper.dataset.currentStep, 1) + (action === 'anim-next' ? 1 : -1))
+    })
+  }
+
+  function resetAnimWrapper(wrapper: HTMLElement) {
+    // Reset all phase elements to hidden except phase 1
+    wrapper.querySelectorAll<HTMLElement>('[data-phase]').forEach(el => {
+      const phase = toInt(el.getAttribute('data-phase'), 1)
+      el.style.display = phase === 1 ? '' : 'none'
+    })
+    // Force restart animations on phase 1 elements
+    wrapper.querySelectorAll<HTMLElement>('[data-phase="1"]').forEach(el => {
+      restartAnimations(el)
+    })
+    setAnimStep(wrapper, 1)
+  }
+
+  // ── Tecnica panel logic ──────────────────────────────────────────────────
   function selectTecnica(tecnicaId: string) {
     const inlinePanel = document.getElementById('tecnica-inline-panel')
     if (!inlinePanel) return
 
-    // Show inline panel
     inlinePanel.classList.remove('hidden')
 
-    // Show correct panel, hide others
     document.querySelectorAll<HTMLElement>('.tecnica-panel').forEach(panel => {
       const isActive = panel.id === `tecnica-panel-${tecnicaId}`
       panel.classList.toggle('hidden', !isActive)
       panel.classList.toggle('flex', isActive)
+
+      if (isActive) {
+        // Init + reset the anim wrapper inside this panel
+        panel.querySelectorAll<HTMLElement>('.anim-wrapper[data-total-steps]').forEach(w => {
+          initAnimWrapper(w)
+          resetAnimWrapper(w)
+        })
+      }
     })
 
-    // Highlight selected cards and table rows
     document.querySelectorAll<HTMLElement>('[data-action="tecnica-select"]').forEach(btn => {
       const active = btn.dataset.tecnicaId === tecnicaId
       btn.style.borderColor = active ? 'rgba(0,229,255,0.4)' : ''
       btn.style.background  = active ? 'rgba(0,229,255,0.06)' : ''
     })
 
-    // Scroll inline panel into view
     inlinePanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
   }
 
