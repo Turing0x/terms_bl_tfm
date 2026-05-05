@@ -1,210 +1,174 @@
-<!-- CRISPR-Cas12a — gRNA guía, reconocimiento diana, trans-cleavage reporteras -->
-<div class="wrapper">
+<!-- CRISPR-Cas12a — 3 pasos controlados por botones -->
+<div class="anim-wrapper step-1" data-total-steps="3" data-current-step="1">
   <svg viewBox="0 0 280 160" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Animación CRISPR-Cas12a">
 
-    <!-- Technique badge -->
+    <!-- Badge técnica siempre visible -->
     <rect x="190" y="4" width="82" height="16" rx="5" fill="rgba(179,136,255,0.12)" stroke="rgba(179,136,255,0.5)" stroke-width="0.8" />
     <text x="231" y="15" fill="#b388ff" font-size="8" font-family="monospace" text-anchor="middle" font-weight="bold">CRISPR-Cas12a</text>
 
-    <!-- Target DNA (always visible) -->
+    <!-- ADN diana siempre visible -->
     <line x1="30" y1="55" x2="250" y2="55" stroke="#00e5ff" stroke-width="2.5" stroke-linecap="round" />
     <line x1="30" y1="65" x2="250" y2="65" stroke="#b388ff" stroke-width="2.5" stroke-linecap="round" />
     <text x="18" y="58" fill="#64748b" font-size="6" font-family="monospace">ADN</text>
     <text x="18" y="68" fill="#64748b" font-size="6" font-family="monospace">diana</text>
 
-    <!-- Cas12a complex — slides in during phase 1 -->
-    <g class="cas-complex">
+    <!-- Reporteras intactas (fases 1+2) -->
+    <g data-phase="1">
+      {[50, 80, 100, 175, 200, 220].map(x => (
+        <g>
+          <line x1={x} y1="95" x2={x} y2="110" stroke="#39ff14" stroke-width="2" stroke-linecap="round" />
+          <circle cx={x} cy="92" r="3.5" fill="rgba(57,255,20,0.2)" stroke="#39ff14" stroke-width="1" />
+        </g>
+      ))}
+    </g>
+
+    <!-- Fase 1: Cas12a deslizando hacia la diana -->
+    <g data-phase="1" class="cas-complex">
       <ellipse cx="140" cy="40" rx="22" ry="14" fill="rgba(179,136,255,0.2)" stroke="#b388ff" stroke-width="1.5" />
       <text x="140" y="44" fill="#b388ff" font-size="7.5" font-family="monospace" text-anchor="middle" font-weight="bold">Cas</text>
       <path d="M 118,40 Q 100,38 88,35" stroke="#ffb300" stroke-width="1.8" stroke-linecap="round" />
       <text x="80" y="32" fill="#ffb300" font-size="6.5" font-family="monospace" text-anchor="middle">gRNA</text>
     </g>
 
-    <!-- Recognition ring — phase 2 -->
-    <circle cx="140" cy="60" r="14"
-      fill="rgba(179,136,255,0.15)" stroke="#b388ff" stroke-width="1"
-      stroke-dasharray="3 2" class="recognition-ring" />
+    <!-- Fase 2: anillo de reconocimiento -->
+    <g data-phase="2" style="display: none">
+      <circle cx="140" cy="60" r="14" fill="rgba(179,136,255,0.15)" stroke="#b388ff" stroke-width="1" stroke-dasharray="3 2" class="recognition-ring" />
+      <path d="M 140,75 L 140,88" stroke="#b388ff" stroke-width="1.5" stroke-dasharray="3 2" class="trans-arrow" />
+    </g>
 
-    <!-- Trans-cleavage arrow — phase 3 -->
-    <path d="M 140,75 L 140,88"
-      stroke="#b388ff" stroke-width="1.5" stroke-dasharray="3 2"
-      class="trans-arrow" />
-
-    <!-- Reporter molecules — intact (phase 1+2), cut (phase 3) -->
-    {[50, 80, 100, 175, 200, 220].map((x) => (
-      <g class="reporter-intact">
-        <line x1={x} y1="95" x2={x} y2="110" stroke="#39ff14" stroke-width="2" stroke-linecap="round" />
-        <circle cx={x} cy="92" r="3.5" fill="rgba(57,255,20,0.2)" stroke="#39ff14" stroke-width="1" />
-      </g>
-    ))}
-    {[50, 80, 100, 175, 200, 220].map((x) => (
-      <g class="reporter-cut">
-        <line x1={x - 4} y1="100" x2={x + 4} y2="105" stroke="#39ff14" stroke-width="1.5" stroke-linecap="round" />
-        <circle cx={x} cy="92" r="5" fill="none" stroke="#39ff14" stroke-width="0.8" opacity="0.7" />
-      </g>
-    ))}
-
-    <!-- Phase 3 label -->
-    <text x="140" y="130" fill="#39ff14" font-size="7" font-family="monospace" text-anchor="middle" class="trans-label">trans-cleavage → señal fluorescente</text>
-    <text x="140" y="142" fill="#64748b" font-size="6.5" font-family="monospace" text-anchor="middle" class="lod-label">LOD: attomolar · sin termociclador</text>
-
-    <defs>
-      <marker id="arrow-purple-crispr" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
-        <path d="M0,0 L6,3 L0,6 Z" fill="#b388ff" />
-      </marker>
-    </defs>
+    <!-- Fase 3: reporteras cortadas + labels -->
+    <g data-phase="3" style="display: none">
+      {[50, 80, 100, 175, 200, 220].map(x => (
+        <g class="reporter-cut">
+          <line x1={x - 4} y1="100" x2={x + 4} y2="105" stroke="#39ff14" stroke-width="1.5" stroke-linecap="round" />
+          <circle cx={x} cy="92" r="5" fill="none" stroke="#39ff14" stroke-width="0.8" opacity="0.7" />
+        </g>
+      ))}
+      <text x="140" y="130" fill="#39ff14" font-size="7" font-family="monospace" text-anchor="middle" class="trans-label">trans-cleavage → señal fluorescente</text>
+      <text x="140" y="142" fill="#64748b" font-size="6.5" font-family="monospace" text-anchor="middle" class="trans-label">LOD: attomolar · sin termociclador</text>
+    </g>
   </svg>
 
-  <!-- Leyenda estática -->
+  <!-- Leyenda -->
   <div class="legend">
     <span class="leg"><span class="lellipse"></span>Cas12a = proteína nucleasa programable</span>
     <span class="leg"><span class="lbar" style="background:#ffb300"></span>gRNA = ARN guía (define la secuencia diana)</span>
     <span class="leg"><span class="lbar" style="background:#39ff14"></span>segmentos = moléculas reporteras fluorescentes</span>
-    <span class="leg"><span class="lring"></span>anillo = zona de reconocimiento y unión</span>
+    <span class="leg"><span class="lring"></span>anillo = zona de reconocimiento y activación</span>
   </div>
 
-  <!-- Pasos sincronizados (loop 9s) -->
-  <div class="steps">
-    <div class="step s1">
-      <span class="snum">1/3</span>
-      <p>El <strong>gRNA</strong> dirige Cas12a hacia la secuencia diana del patógeno. Programar otro patógeno solo requiere cambiar el gRNA.</p>
-    </div>
-    <div class="step s2">
-      <span class="snum">2/3</span>
-      <p>Cas12a <strong>reconoce y se une</strong> a la secuencia complementaria. La unión activa la actividad nucleasa de la proteína (modo "on").</p>
-    </div>
-    <div class="step s3">
-      <span class="snum">3/3</span>
-      <p>Cas12a activada corta indiscriminadamente las <strong>moléculas reporteras</strong> → señal fluorescente o colorimétrica. Sensibilidad: attomolar.</p>
-    </div>
+  <div class="step-text step-text-1">
+    <span class="snum">1/3</span>
+    <p>El <strong>gRNA</strong> (ARN guía) dirige Cas12a hacia la secuencia diana del patógeno. Cada patógeno diferente solo requiere cambiar el gRNA — la proteína Cas es siempre la misma.</p>
+  </div>
+  <div class="step-text step-text-2">
+    <span class="snum">2/3</span>
+    <p>Cas12a <strong>reconoce y se une</strong> a la secuencia complementaria del ADN diana. La unión activa la actividad nucleasa: la proteína cambia de conformación al modo "activo".</p>
+  </div>
+  <div class="step-text step-text-3">
+    <span class="snum">3/3</span>
+    <p>Cas12a activada corta indiscriminadamente las <strong>moléculas reporteras</strong> (trans-cleavage) → señal fluorescente o colorimétrica visible. Sensibilidad: <strong>attomolar</strong>. Sin termociclador.</p>
+  </div>
+
+  <div class="step-controls">
+    <button data-action="anim-prev" class="step-btn" disabled>← Anterior</button>
+    <span class="step-indicator">1 / 3</span>
+    <button data-action="anim-next" class="step-btn">Siguiente →</button>
   </div>
 </div>
 
 <style>
-  .wrapper { display: flex; flex-direction: column; gap: 5px; }
+  .anim-wrapper { display: flex; flex-direction: column; gap: 5px; }
   svg { width: 100%; }
 
   .legend {
     display: flex; flex-wrap: wrap; gap: 4px 10px;
-    padding: 4px 7px;
-    background: rgba(255,255,255,0.03);
-    border: 1px solid rgba(255,255,255,0.07);
-    border-radius: 5px;
-    font-family: monospace; font-size: 0.6rem;
-    color: var(--text-muted);
+    padding: 4px 7px; background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.07); border-radius: 5px;
+    font-family: monospace; font-size: 0.6rem; color: var(--text-muted);
   }
   .leg { display: flex; align-items: center; gap: 4px; }
   .lbar { display: inline-block; width: 14px; height: 2px; border-radius: 1px; flex-shrink: 0; }
-  .lellipse {
-    display: inline-block; width: 14px; height: 8px;
-    border-radius: 50%; flex-shrink: 0;
-    background: rgba(179,136,255,0.2); border: 1px solid #b388ff;
-  }
-  .lring {
-    display: inline-block; width: 10px; height: 10px;
-    border-radius: 50%; flex-shrink: 0;
-    border: 1px dashed #b388ff;
-  }
+  .lellipse { display: inline-block; width: 14px; height: 8px; border-radius: 50%; flex-shrink: 0; background: rgba(179,136,255,0.2); border: 1px solid #b388ff; }
+  .lring { display: inline-block; width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; border: 1px dashed #b388ff; }
 
-  .steps { position: relative; height: 5rem; }
-  .step {
-    position: absolute; inset: 0;
-    display: flex; align-items: flex-start; gap: 6px;
-    padding: 5px 7px;
-    background: rgba(179,136,255,0.04);
-    border: 1px solid rgba(179,136,255,0.15);
-    border-radius: 5px;
-    opacity: 0;
-  }
-  .snum {
-    font-family: monospace; font-size: 0.58rem;
-    color: #b388ff; flex-shrink: 0;
-    font-weight: bold; padding-top: 1px;
-  }
-  .step p { font-size: 0.62rem; line-height: 1.42; color: var(--text-primary); margin: 0; }
-  .step strong { color: #b388ff; font-weight: 600; }
+  .step-text { display: none; align-items: flex-start; gap: 6px; padding: 5px 7px; background: rgba(179,136,255,0.04); border: 1px solid rgba(179,136,255,0.15); border-radius: 5px; min-height: 3.5rem; }
+  .step-1 .step-text-1, .step-2 .step-text-2, .step-3 .step-text-3 { display: flex; }
+  .snum { font-family: monospace; font-size: 0.58rem; color: #b388ff; flex-shrink: 0; font-weight: bold; padding-top: 1px; }
+  .step-text p { font-size: 0.62rem; line-height: 1.42; color: var(--text-primary); margin: 0; }
+  .step-text strong { color: #b388ff; font-weight: 600; }
 
-  /* SVG — 9s loop */
-  .cas-complex {
-    animation: cas-slide 9s ease infinite;
-  }
-  .recognition-ring {
-    animation: ring-pulse 9s ease infinite;
-  }
-  .trans-arrow {
-    animation: crispr-phase3 9s ease infinite;
-  }
-  .reporter-intact {
-    animation: reporter-intact-anim 9s ease infinite;
-  }
-  .reporter-cut {
-    animation: reporter-cut-anim 9s ease infinite;
-  }
-  .trans-label, .lod-label {
-    animation: crispr-phase3 9s ease infinite;
-  }
+  .step-controls { display: flex; align-items: center; justify-content: space-between; padding-top: 5px; border-top: 1px solid var(--border); }
+  .step-btn { font-family: monospace; font-size: 0.65rem; padding: 4px 10px; border-radius: 5px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text-muted); cursor: pointer; transition: all 0.15s; }
+  .step-btn:hover:not(:disabled) { color: #b388ff; border-color: rgba(179,136,255,0.3); background: rgba(179,136,255,0.06); }
+  .step-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+  .step-indicator { font-family: monospace; font-size: 0.65rem; color: #b388ff; font-weight: bold; }
 
+  .cas-complex { animation: cas-slide 1.4s ease-out forwards; }
   @keyframes cas-slide {
-    0%     { transform: translateX(-60px); opacity: 0; }
-    3%     { opacity: 0.3; }
-    28%    { transform: translateX(0); opacity: 1; }
-    96%    { transform: translateX(0); opacity: 1; }
-    100%   { transform: translateX(-60px); opacity: 0; }
+    from { transform: translateX(-55px); opacity: 0.3; }
+    to   { transform: translateX(0); opacity: 1; }
   }
+  .recognition-ring { opacity: 0; animation: ring-pulse 0.8s ease-out forwards; }
   @keyframes ring-pulse {
-    0%      { opacity: 0; }
-    33.33%  { opacity: 0; transform: scale(0.5); }
-    38%     { opacity: 1; transform: scale(1.2); }
-    45%     { opacity: 1; transform: scale(1); }
-    62%     { opacity: 0.3; }
-    66.66%  { opacity: 0; }
-    100%    { opacity: 0; }
+    0%   { opacity: 0; transform: scale(0.5); }
+    60%  { opacity: 1; transform: scale(1.2); }
+    100% { opacity: 1; transform: scale(1); }
   }
-  @keyframes reporter-intact-anim {
-    0%     { opacity: 1; }
-    66.66% { opacity: 1; }
-    72%    { opacity: 0; }
-    100%   { opacity: 0; }
+  .trans-arrow { opacity: 0; animation: fade-in 0.4s ease-out 0.5s forwards; }
+  .reporter-cut { opacity: 0; animation: reporter-flash 0.5s ease-out forwards; }
+  .trans-label { opacity: 0; animation: fade-in 0.5s ease-out 0.6s forwards; }
+  @keyframes reporter-flash {
+    0%   { opacity: 0; }
+    50%  { opacity: 1; filter: drop-shadow(0 0 5px #39ff14); }
+    100% { opacity: 0.85; }
   }
-  @keyframes reporter-cut-anim {
-    0%      { opacity: 0; }
-    66.66%  { opacity: 0; }
-    70%     { opacity: 1; filter: drop-shadow(0 0 4px #39ff14); }
-    96%     { opacity: 0.8; }
-    100%    { opacity: 0; }
-  }
-  @keyframes crispr-phase3 {
-    0%      { opacity: 0; }
-    66.66%  { opacity: 0; }
-    71%     { opacity: 1; }
-    96%     { opacity: 1; }
-    100%    { opacity: 0; }
-  }
-
-  /* Pasos de texto — 9s loop */
-  @keyframes s1 {
-    0%      { opacity: 0; transform: translateY(3px); }
-    3%      { opacity: 1; transform: translateY(0); }
-    29%     { opacity: 1; }
-    33.33%  { opacity: 0; transform: translateY(-3px); }
-    100%    { opacity: 0; }
-  }
-  @keyframes s2 {
-    0%      { opacity: 0; }
-    33.33%  { opacity: 0; transform: translateY(3px); }
-    37%     { opacity: 1; transform: translateY(0); }
-    62%     { opacity: 1; }
-    66.66%  { opacity: 0; transform: translateY(-3px); }
-    100%    { opacity: 0; }
-  }
-  @keyframes s3 {
-    0%      { opacity: 0; }
-    66.66%  { opacity: 0; transform: translateY(3px); }
-    70%     { opacity: 1; transform: translateY(0); }
-    96%     { opacity: 1; }
-    100%    { opacity: 0; transform: translateY(-3px); }
-  }
-  .s1 { animation: s1 9s ease infinite; }
-  .s2 { animation: s2 9s ease infinite; }
-  .s3 { animation: s3 9s ease infinite; }
+  @keyframes fade-in { to { opacity: 1; } }
 </style>
+
+<script is:inline>
+  (function () {
+    function toInt(value, fallback) {
+      const n = Number.parseInt(String(value ?? ''), 10);
+      return Number.isFinite(n) ? n : fallback;
+    }
+
+    function setStep(wrapper, step) {
+      const total = toInt(wrapper.dataset.totalSteps, 1);
+      const nextStep = Math.min(Math.max(step, 1), total);
+      wrapper.dataset.currentStep = String(nextStep);
+
+      wrapper.className = wrapper.className
+        .split(/\s+/)
+        .filter((c) => c && !/^step-\d+$/.test(c))
+        .concat(`step-${nextStep}`)
+        .join(' ');
+
+      const prevBtn = wrapper.querySelector('[data-action="anim-prev"]');
+      const nextBtn = wrapper.querySelector('[data-action="anim-next"]');
+      const indicator = wrapper.querySelector('.step-indicator');
+      if (indicator) indicator.textContent = `${nextStep} / ${total}`;
+      if (prevBtn) prevBtn.toggleAttribute('disabled', nextStep <= 1);
+      if (nextBtn) nextBtn.toggleAttribute('disabled', nextStep >= total);
+
+      wrapper.querySelectorAll('[data-phase]').forEach((el) => {
+        const phase = toInt(el.getAttribute('data-phase'), 1);
+        el.style.display = phase <= nextStep ? '' : 'none';
+      });
+    }
+
+    function init(wrapper) {
+      setStep(wrapper, toInt(wrapper.dataset.currentStep, 1));
+      wrapper.addEventListener('click', (e) => {
+        const target = e.target instanceof Element ? e.target.closest('[data-action]') : null;
+        if (!target) return;
+        const action = target.getAttribute('data-action');
+        if (action !== 'anim-prev' && action !== 'anim-next') return;
+        e.preventDefault();
+        setStep(wrapper, toInt(wrapper.dataset.currentStep, 1) + (action === 'anim-next' ? 1 : -1));
+      });
+    }
+
+    document.querySelectorAll('.anim-wrapper[data-total-steps]').forEach((w) => init(w));
+  })();
+</script>

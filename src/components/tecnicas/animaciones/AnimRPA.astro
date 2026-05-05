@@ -1,225 +1,167 @@
-<!-- RPA — recombinasa, cadena desplazada, síntesis nueva a 37°C -->
-<div class="wrapper">
+<!-- RPA — 4 pasos controlados por botones -->
+<div class="anim-wrapper step-1" data-total-steps="4" data-current-step="1">
   <svg viewBox="0 0 280 160" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Animación RPA">
 
-    <!-- Temperature badge -->
+    <!-- Badges siempre visibles -->
     <rect x="8" y="4" width="52" height="16" rx="5" fill="rgba(57,255,20,0.1)" stroke="rgba(57,255,20,0.4)" stroke-width="0.8" />
     <text x="34" y="15" fill="#39ff14" font-size="8" font-family="monospace" text-anchor="middle" font-weight="bold">37°C cte.</text>
-
-    <!-- Technique badge -->
     <rect x="220" y="4" width="52" height="16" rx="5" fill="rgba(0,229,255,0.1)" stroke="rgba(0,229,255,0.4)" stroke-width="0.8" />
     <text x="246" y="15" fill="#00e5ff" font-size="8" font-family="monospace" text-anchor="middle" font-weight="bold">RPA</text>
 
-    <!-- dsDNA — phase 1 -->
-    <line x1="30" y1="65" x2="110" y2="65" stroke="#00e5ff" stroke-width="2.5" stroke-linecap="round" class="ds-top" />
-    <line x1="30" y1="80" x2="110" y2="80" stroke="#b388ff" stroke-width="2.5" stroke-linecap="round" class="ds-bot" />
-    <!-- Ladder rungs (hydrogen bonds) -->
-    {[45, 60, 75, 90].map((x) => (
-      <line x1={x} y1="65" x2={x} y2="80" stroke="#1e3a5f" stroke-width="1.5" class="rung" />
-    ))}
-    <!-- Label dsDNA -->
-    <text x="60" y="60" fill="#64748b" font-size="6.5" font-family="monospace" text-anchor="middle" class="label-ds">dsDNA original</text>
+    <!-- Fase 1: dsDNA con puentes de hidrógeno -->
+    <g data-phase="1">
+      <line x1="30" y1="65" x2="110" y2="65" stroke="#00e5ff" stroke-width="2.5" stroke-linecap="round" class="ds-top" />
+      <line x1="30" y1="80" x2="110" y2="80" stroke="#b388ff" stroke-width="2.5" stroke-linecap="round" class="ds-bot" />
+      {[45, 60, 75, 90].map(x => (
+        <line x1={x} y1="65" x2={x} y2="80" stroke="#1e3a5f" stroke-width="1.5" class="rung" />
+      ))}
+      <text x="60" y="60" fill="#64748b" font-size="6.5" font-family="monospace" text-anchor="middle" class="label-ds">dsDNA original</text>
+    </g>
 
-    <!-- Recombinase proteins — phase 2 -->
-    <circle cx="110" cy="62" r="8" fill="rgba(255,179,0,0.2)" stroke="#ffb300" stroke-width="1.5" class="rec-1" />
-    <circle cx="110" cy="83" r="8" fill="rgba(255,179,0,0.2)" stroke="#ffb300" stroke-width="1.5" class="rec-2" />
-    <text x="110" y="66" fill="#ffb300" font-size="6" font-family="monospace" text-anchor="middle" class="rec-1">R</text>
-    <text x="110" y="87" fill="#ffb300" font-size="6" font-family="monospace" text-anchor="middle" class="rec-2">R</text>
+    <!-- Fase 2: proteínas recombinasa -->
+    <g data-phase="2" style="display: none">
+      <circle cx="110" cy="62" r="8" fill="rgba(255,179,0,0.2)" stroke="#ffb300" stroke-width="1.5" class="rec-appear" />
+      <circle cx="110" cy="83" r="8" fill="rgba(255,179,0,0.2)" stroke="#ffb300" stroke-width="1.5" class="rec-appear" />
+      <text x="110" y="66" fill="#ffb300" font-size="6" font-family="monospace" text-anchor="middle" class="rec-appear">R</text>
+      <text x="110" y="87" fill="#ffb300" font-size="6" font-family="monospace" text-anchor="middle" class="rec-appear">R</text>
+    </g>
 
-    <!-- Displaced strand — phase 3 -->
-    <path d="M 110,65 Q 140,50 160,55 Q 180,60 200,58"
-      stroke="#00e5ff" stroke-width="2" stroke-dasharray="4 3" fill="none" class="displaced" />
-    <text x="155" y="47" fill="#00e5ff" font-size="6.5" font-family="monospace" text-anchor="middle" class="label-disp">cadena desplazada</text>
+    <!-- Fase 3: cadena desplazada -->
+    <g data-phase="3" style="display: none">
+      <path d="M 110,65 Q 140,50 160,55 Q 180,60 200,58"
+        stroke="#00e5ff" stroke-width="2" stroke-dasharray="4 3" fill="none" class="displaced" />
+      <text x="155" y="47" fill="#00e5ff" font-size="6.5" font-family="monospace" text-anchor="middle" class="label-disp" opacity="0.8">cadena desplazada</text>
+    </g>
 
-    <!-- New strand synthesis — phase 4 -->
-    <line x1="110" y1="80" x2="200" y2="80" stroke="#39ff14" stroke-width="2.5" stroke-linecap="round" class="new-strand" />
-    <rect x="186" y="72" width="18" height="16" rx="5" fill="rgba(57,255,20,0.18)" stroke="#39ff14" stroke-width="1.2" class="polymerase" />
-    <text x="195" y="82" fill="#39ff14" font-size="6" font-family="monospace" text-anchor="middle" class="polymerase">Pol</text>
-    <path d="M 205,80 L 215,80 L 211,76 M 215,80 L 211,84"
-      stroke="#39ff14" stroke-width="1.5" stroke-linecap="round" class="pol-arrow" />
-    <text x="155" y="97" fill="#39ff14" font-size="6.5" font-family="monospace" text-anchor="middle" class="label-new">nueva cadena</text>
-
-    <!-- Bottom note — phase 4 -->
-    <text x="140" y="150" fill="#64748b" font-size="7" font-family="monospace" text-anchor="middle" class="bottom-note">sin termociclador · ~20 min · temperatura corporal</text>
+    <!-- Fase 4: nueva cadena + polimerasa -->
+    <g data-phase="4" style="display: none">
+      <line x1="110" y1="80" x2="200" y2="80" stroke="#39ff14" stroke-width="2.5" stroke-linecap="round" class="new-strand" />
+      <rect x="186" y="72" width="18" height="16" rx="5" fill="rgba(57,255,20,0.18)" stroke="#39ff14" stroke-width="1.2" class="pol-appear" />
+      <text x="195" y="82" fill="#39ff14" font-size="6" font-family="monospace" text-anchor="middle" class="pol-appear">Pol</text>
+      <path d="M 205,80 L 215,80 L 211,76 M 215,80 L 211,84"
+        stroke="#39ff14" stroke-width="1.5" stroke-linecap="round" class="pol-appear" />
+      <text x="155" y="97" fill="#39ff14" font-size="6.5" font-family="monospace" text-anchor="middle" class="pol-appear">nueva cadena</text>
+      <text x="140" y="150" fill="#64748b" font-size="7" font-family="monospace" text-anchor="middle" class="pol-appear">sin termociclador · ~20 min · temperatura corporal</text>
+    </g>
   </svg>
 
-  <!-- Leyenda estática -->
+  <!-- Leyenda -->
   <div class="legend">
     <span class="leg"><span class="lbar" style="background:#00e5ff"></span>línea doble = dsDNA cerrado</span>
-    <span class="leg"><span class="ldot" style="background:rgba(255,179,0,0.5);border:1px solid #ffb300"></span><strong style="color:#ffb300">R</strong> = proteína recombinasa (invade sin calor)</span>
+    <span class="leg"><span class="ldot" style="background:rgba(255,179,0,0.4);border:1px solid #ffb300"></span><strong style="color:#ffb300">R</strong> = recombinasa (invade sin calor)</span>
     <span class="leg"><span class="ldash" style="border-color:#00e5ff"></span>discontinua = cadena simple desplazada</span>
     <span class="leg"><span class="lbar" style="background:#39ff14"></span>verde = nueva cadena sintetizada</span>
   </div>
 
-  <!-- Pasos sincronizados (loop 12s, 4 fases de 3s) -->
-  <div class="steps">
-    <div class="step s1">
-      <span class="snum">1/4</span>
-      <p>ADN diana a <strong>37°C</strong> — temperatura corporal. Sin termociclador: la reacción funciona con batería o calor corporal.</p>
-    </div>
-    <div class="step s2">
-      <span class="snum">2/4</span>
-      <p>Proteínas <strong>recombinasa (R)</strong> se ensamblan sobre los primers e invaden la doble cadena en el sitio diana específico.</p>
-    </div>
-    <div class="step s3">
-      <span class="snum">3/4</span>
-      <p>Una cadena queda <strong>desplazada</strong> (línea discontinua). La proteína SSB estabiliza la cadena libre expuesta como molde.</p>
-    </div>
-    <div class="step s4">
-      <span class="snum">4/4</span>
-      <p>La <strong>polimerasa (Pol)</strong> sintetiza la nueva cadena complementaria. Amplificación completa en ~20 minutos a temperatura ambiente.</p>
-    </div>
+  <div class="step-text step-text-1">
+    <span class="snum">1/4</span>
+    <p>ADN diana a <strong>37°C</strong> — temperatura corporal. Sin termociclador: la reacción funciona con batería, calor de la mano o resistencia simple. Ideal para trabajo de campo.</p>
+  </div>
+  <div class="step-text step-text-2">
+    <span class="snum">2/4</span>
+    <p>Proteínas <strong>recombinasa (R)</strong> se ensamblan sobre los primers e invaden la doble cadena en el sitio diana específico, sin necesidad de temperatura para abrir el ADN.</p>
+  </div>
+  <div class="step-text step-text-3">
+    <span class="snum">3/4</span>
+    <p>Una cadena queda <strong>desplazada</strong> (línea discontinua). La proteína SSB estabiliza la cadena libre y la mantiene accesible como molde para la síntesis.</p>
+  </div>
+  <div class="step-text step-text-4">
+    <span class="snum">4/4</span>
+    <p>La <strong>polimerasa (Pol)</strong> sintetiza la nueva cadena complementaria desde el extremo 3' del primer. Amplificación completa en <strong>~20 minutos</strong> a temperatura ambiente.</p>
+  </div>
+
+  <div class="step-controls">
+    <button data-action="anim-prev" class="step-btn" disabled>← Anterior</button>
+    <span class="step-indicator">1 / 4</span>
+    <button data-action="anim-next" class="step-btn">Siguiente →</button>
   </div>
 </div>
 
 <style>
-  .wrapper { display: flex; flex-direction: column; gap: 5px; }
+  .anim-wrapper { display: flex; flex-direction: column; gap: 5px; }
   svg { width: 100%; }
 
   .legend {
     display: flex; flex-wrap: wrap; gap: 4px 10px;
-    padding: 4px 7px;
-    background: rgba(255,255,255,0.03);
-    border: 1px solid rgba(255,255,255,0.07);
-    border-radius: 5px;
-    font-family: monospace; font-size: 0.6rem;
-    color: var(--text-muted);
+    padding: 4px 7px; background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.07); border-radius: 5px;
+    font-family: monospace; font-size: 0.6rem; color: var(--text-muted);
   }
   .leg { display: flex; align-items: center; gap: 4px; }
   .lbar { display: inline-block; width: 14px; height: 2px; border-radius: 1px; flex-shrink: 0; }
   .ldash { display: inline-block; width: 14px; height: 0; border-top: 2px dashed; flex-shrink: 0; }
   .ldot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
 
-  .steps { position: relative; height: 5rem; }
-  .step {
-    position: absolute; inset: 0;
-    display: flex; align-items: flex-start; gap: 6px;
-    padding: 5px 7px;
-    background: rgba(57,255,20,0.03);
-    border: 1px solid rgba(57,255,20,0.12);
-    border-radius: 5px;
-    opacity: 0;
-  }
-  .snum {
-    font-family: monospace; font-size: 0.58rem;
-    color: #39ff14; flex-shrink: 0;
-    font-weight: bold; padding-top: 1px;
-  }
-  .step p { font-size: 0.62rem; line-height: 1.42; color: var(--text-primary); margin: 0; }
-  .step strong { color: #39ff14; font-weight: 600; }
+  .step-text { display: none; align-items: flex-start; gap: 6px; padding: 5px 7px; background: rgba(57,255,20,0.03); border: 1px solid rgba(57,255,20,0.12); border-radius: 5px; min-height: 3.5rem; }
+  .step-1 .step-text-1, .step-2 .step-text-2, .step-3 .step-text-3, .step-4 .step-text-4 { display: flex; }
+  .snum { font-family: monospace; font-size: 0.58rem; color: #39ff14; flex-shrink: 0; font-weight: bold; padding-top: 1px; }
+  .step-text p { font-size: 0.62rem; line-height: 1.42; color: var(--text-primary); margin: 0; }
+  .step-text strong { color: #39ff14; font-weight: 600; }
 
-  /* SVG — 12s loop, 4 fases de 3s (25% cada una) */
-  .ds-top, .ds-bot {
-    stroke-dasharray: 85; stroke-dashoffset: 85;
-    animation: rpa-ds 12s ease infinite;
-  }
-  .ds-bot { animation-delay: 0.1s; }
-  .rung   { animation: rpa-rung 12s ease infinite; }
-  .label-ds { animation: rpa-phase1 12s ease infinite; }
+  .step-controls { display: flex; align-items: center; justify-content: space-between; padding-top: 5px; border-top: 1px solid var(--border); }
+  .step-btn { font-family: monospace; font-size: 0.65rem; padding: 4px 10px; border-radius: 5px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text-muted); cursor: pointer; transition: all 0.15s; }
+  .step-btn:hover:not(:disabled) { color: #39ff14; border-color: rgba(57,255,20,0.3); background: rgba(57,255,20,0.06); }
+  .step-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+  .step-indicator { font-family: monospace; font-size: 0.65rem; color: #39ff14; font-weight: bold; }
 
-  .rec-1, .rec-2 { animation: rpa-rec 12s ease infinite; }
-  .rec-2 { animation-delay: 0.2s; }
+  .ds-top { stroke-dasharray: 85; stroke-dashoffset: 85; animation: draw-line 0.8s ease-out forwards; }
+  .ds-bot { stroke-dasharray: 85; stroke-dashoffset: 85; animation: draw-line 0.8s ease-out 0.1s forwards; }
+  .rung { opacity: 0; animation: fade-in 0.3s ease-out 0.6s forwards; }
+  .label-ds { opacity: 0; animation: fade-in 0.4s ease-out 0.7s forwards; }
+  .rec-appear { opacity: 0; animation: scale-in 0.5s ease-out forwards; }
+  .displaced { stroke-dasharray: 120; stroke-dashoffset: 120; animation: draw-line 1s ease-out forwards; }
+  .label-disp { opacity: 0; animation: fade-in 0.4s ease-out 0.8s forwards; }
+  .new-strand { stroke-dasharray: 95; stroke-dashoffset: 95; animation: draw-line 1s ease-out forwards; }
+  .pol-appear { opacity: 0; animation: fade-in 0.4s ease-out 0.8s forwards; }
 
-  .displaced  { stroke-dasharray: 120; stroke-dashoffset: 120; animation: rpa-displaced 12s ease infinite; }
-  .label-disp { animation: rpa-phase3 12s ease infinite; }
-
-  .new-strand { stroke-dasharray: 95; stroke-dashoffset: 95; animation: rpa-newstrand 12s ease infinite; }
-  .polymerase { animation: rpa-phase4 12s ease infinite; }
-  .pol-arrow  { animation: rpa-phase4 12s ease infinite; }
-  .label-new  { animation: rpa-phase4 12s ease infinite; }
-  .bottom-note { animation: rpa-phase4 12s ease infinite; }
-
-  @keyframes rpa-ds {
-    0%     { stroke-dashoffset: 85; opacity: 0; }
-    2%     { opacity: 1; }
-    8%     { stroke-dashoffset: 0; }
-    96%    { stroke-dashoffset: 0; opacity: 1; }
-    100%   { stroke-dashoffset: 85; opacity: 0; }
-  }
-  @keyframes rpa-rung {
-    0%     { opacity: 0; }
-    10%    { opacity: 1; }
-    96%    { opacity: 1; }
-    100%   { opacity: 0; }
-  }
-  @keyframes rpa-phase1 {
-    0%     { opacity: 0; }
-    8%     { opacity: 1; }
-    24%    { opacity: 1; }
-    25%    { opacity: 0; }
-    100%   { opacity: 0; }
-  }
-  @keyframes rpa-rec {
-    0%     { opacity: 0; transform: scale(0.5); }
-    25%    { opacity: 0; transform: scale(0.5); }
-    30%    { opacity: 1; transform: scale(1); }
-    74%    { opacity: 1; transform: scale(1); }
-    75%    { opacity: 0; }
-    100%   { opacity: 0; }
-  }
-  @keyframes rpa-displaced {
-    0%     { stroke-dashoffset: 120; }
-    50%    { stroke-dashoffset: 120; }
-    62%    { stroke-dashoffset: 0; }
-    96%    { stroke-dashoffset: 0; }
-    100%   { stroke-dashoffset: 120; }
-  }
-  @keyframes rpa-phase3 {
-    0%     { opacity: 0; }
-    50%    { opacity: 0; }
-    55%    { opacity: 0.7; }
-    74%    { opacity: 0.7; }
-    75%    { opacity: 0; }
-    100%   { opacity: 0; }
-  }
-  @keyframes rpa-newstrand {
-    0%     { stroke-dashoffset: 95; }
-    75%    { stroke-dashoffset: 95; }
-    86%    { stroke-dashoffset: 0; }
-    96%    { stroke-dashoffset: 0; }
-    100%   { stroke-dashoffset: 95; }
-  }
-  @keyframes rpa-phase4 {
-    0%     { opacity: 0; }
-    75%    { opacity: 0; }
-    80%    { opacity: 1; }
-    96%    { opacity: 1; }
-    100%   { opacity: 0; }
-  }
-
-  /* Pasos de texto — 12s loop, 4 × 25% */
-  @keyframes s1 {
-    0%     { opacity: 0; transform: translateY(3px); }
-    3%     { opacity: 1; transform: translateY(0); }
-    22%    { opacity: 1; }
-    25%    { opacity: 0; transform: translateY(-3px); }
-    100%   { opacity: 0; }
-  }
-  @keyframes s2 {
-    0%     { opacity: 0; }
-    25%    { opacity: 0; transform: translateY(3px); }
-    28%    { opacity: 1; transform: translateY(0); }
-    47%    { opacity: 1; }
-    50%    { opacity: 0; transform: translateY(-3px); }
-    100%   { opacity: 0; }
-  }
-  @keyframes s3 {
-    0%     { opacity: 0; }
-    50%    { opacity: 0; transform: translateY(3px); }
-    53%    { opacity: 1; transform: translateY(0); }
-    72%    { opacity: 1; }
-    75%    { opacity: 0; transform: translateY(-3px); }
-    100%   { opacity: 0; }
-  }
-  @keyframes s4 {
-    0%     { opacity: 0; }
-    75%    { opacity: 0; transform: translateY(3px); }
-    78%    { opacity: 1; transform: translateY(0); }
-    96%    { opacity: 1; }
-    100%   { opacity: 0; transform: translateY(-3px); }
-  }
-  .s1 { animation: s1 12s ease infinite; }
-  .s2 { animation: s2 12s ease infinite; }
-  .s3 { animation: s3 12s ease infinite; }
-  .s4 { animation: s4 12s ease infinite; }
+  @keyframes draw-line { to { stroke-dashoffset: 0; } }
+  @keyframes fade-in   { to { opacity: 1; } }
+  @keyframes scale-in  { from { opacity: 0; transform: scale(0.4); } to { opacity: 1; transform: scale(1); } }
 </style>
+
+<script is:inline>
+  (function () {
+    function toInt(value, fallback) {
+      const n = Number.parseInt(String(value ?? ''), 10);
+      return Number.isFinite(n) ? n : fallback;
+    }
+
+    function setStep(wrapper, step) {
+      const total = toInt(wrapper.dataset.totalSteps, 1);
+      const nextStep = Math.min(Math.max(step, 1), total);
+      wrapper.dataset.currentStep = String(nextStep);
+
+      wrapper.className = wrapper.className
+        .split(/\s+/)
+        .filter((c) => c && !/^step-\d+$/.test(c))
+        .concat(`step-${nextStep}`)
+        .join(' ');
+
+      const prevBtn = wrapper.querySelector('[data-action="anim-prev"]');
+      const nextBtn = wrapper.querySelector('[data-action="anim-next"]');
+      const indicator = wrapper.querySelector('.step-indicator');
+      if (indicator) indicator.textContent = `${nextStep} / ${total}`;
+      if (prevBtn) prevBtn.toggleAttribute('disabled', nextStep <= 1);
+      if (nextBtn) nextBtn.toggleAttribute('disabled', nextStep >= total);
+
+      wrapper.querySelectorAll('[data-phase]').forEach((el) => {
+        const phase = toInt(el.getAttribute('data-phase'), 1);
+        el.style.display = phase <= nextStep ? '' : 'none';
+      });
+    }
+
+    function init(wrapper) {
+      setStep(wrapper, toInt(wrapper.dataset.currentStep, 1));
+      wrapper.addEventListener('click', (e) => {
+        const target = e.target instanceof Element ? e.target.closest('[data-action]') : null;
+        if (!target) return;
+        const action = target.getAttribute('data-action');
+        if (action !== 'anim-prev' && action !== 'anim-next') return;
+        e.preventDefault();
+        setStep(wrapper, toInt(wrapper.dataset.currentStep, 1) + (action === 'anim-next' ? 1 : -1));
+      });
+    }
+
+    document.querySelectorAll('.anim-wrapper[data-total-steps]').forEach((w) => init(w));
+  })();
+</script>
