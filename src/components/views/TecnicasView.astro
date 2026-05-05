@@ -33,14 +33,9 @@ const tecnicas = tecnicasMoleculares
   }
 
   function restartAnimations(el: HTMLElement) {
-    el.style.animation = 'none'
-    void el.offsetWidth
-    el.style.animation = ''
-    el.querySelectorAll<HTMLElement>('*').forEach(child => {
-      child.style.animation = 'none'
-      void child.offsetWidth
-      child.style.animation = ''
-    })
+    const clone = el.cloneNode(true) as HTMLElement
+    el.parentNode!.replaceChild(clone, el)
+    return clone
   }
 
   function setAnimStep(wrapper: HTMLElement, step: number) {
@@ -65,8 +60,12 @@ const tecnicas = tecnicasMoleculares
       const phase = toInt(el.getAttribute('data-phase'), 1)
       const shouldShow = phase <= nextStep
       const wasHidden = el.style.display === 'none'
-      el.style.display = shouldShow ? '' : 'none'
-      if (shouldShow && wasHidden) restartAnimations(el)
+      if (shouldShow && wasHidden) {
+        const fresh = restartAnimations(el)
+        fresh.style.display = ''
+      } else {
+        el.style.display = shouldShow ? '' : 'none'
+      }
     })
   }
 
@@ -85,14 +84,14 @@ const tecnicas = tecnicasMoleculares
   }
 
   function resetAnimWrapper(wrapper: HTMLElement) {
-    // Reset all phase elements to hidden except phase 1
     wrapper.querySelectorAll<HTMLElement>('[data-phase]').forEach(el => {
       const phase = toInt(el.getAttribute('data-phase'), 1)
-      el.style.display = phase === 1 ? '' : 'none'
-    })
-    // Force restart animations on phase 1 elements
-    wrapper.querySelectorAll<HTMLElement>('[data-phase="1"]').forEach(el => {
-      restartAnimations(el)
+      if (phase === 1) {
+        const fresh = restartAnimations(el)
+        fresh.style.display = ''
+      } else {
+        el.style.display = 'none'
+      }
     })
     setAnimStep(wrapper, 1)
   }
